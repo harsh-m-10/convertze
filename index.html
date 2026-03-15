@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Convertze – Free file converter. Images, PDF, JSON, YAML, Base64.</title>
+    <meta name="description" content="Convert images (PNG, JPG, WebP, SVG), PDFs, and dev files (JSON, YAML, Base64) in your browser. No uploads, no sign-up. Fast and private." />
+    <meta name="keywords" content="file converter, image converter, PNG to JPG, JPG to PNG, PDF to JPG, PDF to PNG, PDF to text, images to PDF, JSON to YAML, YAML to JSON, Base64 encode, Base64 decode, free converter, online converter, browser converter, no upload, privacy" />
+    <meta name="author" content="Agent Null" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)" />
+    <link rel="canonical" href="https://convertze.com/" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://convertze.com/" />
+    <meta property="og:title" content="Convertze – Free file converter. Images, PDF, JSON, YAML, Base64." />
+    <meta property="og:description" content="Convert images, PDFs, JSON, YAML, Base64 in your browser. No uploads. Private. No sign-up required." />
+    <meta property="og:image" content="https://convertze.com/favicon.svg" />
+    <meta property="og:image:width" content="32" />
+    <meta property="og:image:height" content="32" />
+    <meta property="og:site_name" content="Convertze" />
+    <meta property="og:locale" content="en_US" />
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@convertze" />
+    <meta name="twitter:title" content="Convertze – Free file converter" />
+    <meta name="twitter:description" content="Convert images, PDFs, JSON, YAML, Base64 in your browser. No uploads. Private." />
+    <meta name="twitter:image" content="https://convertze.com/favicon.svg" />
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Convertze",
+      "url": "https://convertze.com/",
+      "description": "Free in-browser file converter. Convert images (PNG, JPG, WebP, SVG), PDFs, and developer files (JSON, YAML, Base64). No uploads, no sign-up.",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Any",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "author": { "@type": "Person", "name": "Agent Null" },
+      "browserRequirements": "Requires JavaScript. Works in all modern browsers."
+    }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = { darkMode: "class" };
+    </script>
+    <style>
+      .glass {
+        -webkit-backdrop-filter: blur(18px);
+        backdrop-filter: blur(18px);
+        background-color: rgba(255, 255, 255, 0.88);
+      }
+      .dark .glass {
+        background-color: rgba(15, 23, 42, 0.9);
+      }
+      .drop-active {
+        border-color: rgb(56, 189, 248);
+        box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.4);
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+  </head>
+  <body class="h-full bg-gradient-to-br from-sky-50 via-slate-50 to-violet-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 text-slate-900 dark:text-slate-100">
+    <div class="min-h-screen flex flex-col">
+      <header class="px-4 sm:px-8 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <div class="h-9 w-9 rounded-2xl bg-gradient-to-tr from-sky-400 via-blue-500 to-indigo-500 flex items-center justify-center shadow-md shadow-sky-300/40 dark:shadow-sky-900/60">
+            <span class="text-white font-semibold text-lg">C</span>
+          </div>
+          <div>
+            <div class="font-semibold tracking-tight">Convertze</div>
+            <div class="text-xs text-slate-500 dark:text-slate-400">In-browser file & image converter</div>
+          </div>
+        </div>
+        <button id="theme-toggle" type="button" class="relative inline-flex h-9 w-16 items-center rounded-full border border-slate-200 dark:border-slate-700 bg-white/70 dark:bg-slate-900/60 px-1 shadow-sm" aria-label="Toggle light and dark mode">
+          <span id="theme-thumb" class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-900 dark:bg-slate-100 text-[10px] font-medium text-slate-50 dark:text-slate-900 shadow-md transition-transform">L</span>
+          <span id="theme-label" class="absolute text-xs text-slate-500 dark:text-slate-400 select-none">Light</span>
+        </button>
+      </header>
+
+      <main class="flex-1 flex items-center justify-center px-5 pb-10 sm:px-6 sm:pb-12">
+        <div class="glass rounded-3xl shadow-xl shadow-sky-100/70 dark:shadow-slate-950/60 border border-slate-100/70 dark:border-slate-800/80 max-w-[59rem] w-full p-6 sm:p-9 md:p-11">
+          <div class="flex flex-col md:flex-row md:items-start gap-8">
+            <section class="md:w-5/12 space-y-6">
+              <div>
+                <h1 class="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight">Clean, fast file converter.</h1>
+                <p class="mt-2 text-sm sm:text-base text-slate-500 dark:text-slate-400">
+                  Convert images and documents right in your browser. <span class="font-medium text-slate-600 dark:text-slate-300">No uploads. No accounts.</span>
+                </p>
+              </div>
+              <div class="space-y-3">
+                <p class="text-xs uppercase tracking-[0.2em] text-slate-400">Choose tool</p>
+                <div class="inline-flex rounded-2xl bg-slate-100/70 dark:bg-slate-900/70 p-1 gap-1">
+                  <button type="button" id="tab-images" class="tab-btn flex-1 px-3 py-2 rounded-2xl text-xs sm:text-sm font-medium flex items-center justify-center gap-1.5 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-50 shadow-sm">Images</button>
+                  <button type="button" id="tab-pdf" class="tab-btn flex-1 px-3 py-2 rounded-2xl text-xs sm:text-sm font-medium flex items-center justify-center gap-1.5 text-slate-500 dark:text-slate-400">PDF</button>
+                  <button type="button" id="tab-dev" class="tab-btn flex-1 px-3 py-2 rounded-2xl text-xs sm:text-sm font-medium flex items-center justify-center gap-1.5 text-slate-500 dark:text-slate-400">Dev</button>
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-3 text-xs sm:text-sm text-slate-600 dark:text-slate-300">
+                <div class="rounded-2xl border border-slate-100 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 px-3 py-2 flex items-start gap-2">
+                  <span class="mt-0.5 h-2 w-2 rounded-full bg-sky-400"></span>
+                  <div>
+                    <p class="font-medium">Live in your browser</p>
+                    <p class="text-[11px] text-slate-500 dark:text-slate-400">Your files never leave your device.</p>
+                  </div>
+                </div>
+                <div class="rounded-2xl border border-slate-100 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 px-3 py-2 flex items-start gap-2">
+                  <span class="mt-0.5 h-2 w-2 rounded-full bg-violet-400"></span>
+                  <div>
+                    <p class="font-medium">Light & dark modes</p>
+                    <p class="text-[11px] text-slate-500 dark:text-slate-400">Gentle gradients and clear typography.</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="md:w-7/12 space-y-4">
+              <div class="flex items-center justify-between gap-3">
+                <div>
+                  <h2 id="tool-title" class="text-lg sm:text-xl font-semibold tracking-tight">Image converter</h2>
+                  <p id="tool-subtitle" class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">JPG, PNG and WebP with instant preview.</p>
+                </div>
+                <div class="text-[11px] uppercase tracking-[0.2em] text-slate-400 flex items-center gap-2">
+                  <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Local-only
+                </div>
+              </div>
+              <div class="inline-flex items-center gap-2 rounded-full bg-slate-900 text-slate-50 dark:bg-slate-100 dark:text-slate-900 px-3 py-1 text-[11px] font-medium">
+                <span id="status-dot" class="h-1.5 w-1.5 rounded-full bg-sky-400"></span>
+                <span id="status-text">Drop a file to get started</span>
+              </div>
+              <div class="mt-2 rounded-3xl border border-dashed border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/60 p-4 sm:p-5 space-y-4" id="drop-area">
+                <div class="flex flex-col sm:flex-row gap-4 items-start">
+                  <div class="flex-1 space-y-3">
+                    <div>
+                      <p class="text-sm font-medium">Drop your file here</p>
+                      <p class="text-xs text-slate-500 dark:text-slate-400" id="drop-help">Supports JPG, PNG and WebP images.</p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-3">
+                      <button type="button" id="file-button" class="inline-flex items-center gap-2 rounded-2xl bg-slate-900 text-slate-50 dark:bg-slate-100 dark:text-slate-900 px-3 py-2 text-xs font-medium shadow-sm hover:shadow-md hover:-translate-y-0.5 transition">Choose file</button>
+                      <p class="text-[11px] text-slate-500 dark:text-slate-400">or drag & drop into this area</p>
+                    </div>
+                    <div id="image-tool-row" class="space-y-2">
+                      <div class="flex items-center gap-2">
+                        <p class="uppercase tracking-[0.2em] text-slate-400 text-[10px] w-14">Tool</p>
+                        <select id="image-tool" aria-label="Image tool" class="rounded-xl bg-white/90 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 px-2.5 py-1.5 text-xs text-slate-700 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-sky-400">
+                          <option value="format">PNG / JPG / WebP</option>
+                          <option value="resize">Resize</option>
+                          <option value="compress">Compress</option>
+                          <option value="svg2png">SVG to PNG</option>
+                        </select>
+                      </div>
+                      <div id="resize-options" class="hidden flex flex-wrap items-center gap-2">
+                        <label class="flex items-center gap-1.5 text-[11px]">
+                          <span class="text-slate-500">W</span>
+                          <input type="number" id="resize-w" min="1" max="8000" placeholder="width" class="w-16 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-2 py-1 text-xs" />
+                        </label>
+                        <label class="flex items-center gap-1.5 text-[11px]">
+                          <span class="text-slate-500">H</span>
+                          <input type="number" id="resize-h" min="1" max="8000" placeholder="height" class="w-16 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-2 py-1 text-xs" />
+                        </label>
+                        <label class="flex items-center gap-1.5 text-[11px] text-slate-600 dark:text-slate-300">
+                          <input type="checkbox" id="resize-keep-aspect" checked class="rounded" /> Keep ratio
+                        </label>
+                      </div>
+                      <div id="compress-options" class="hidden flex items-center gap-2">
+                        <label class="flex items-center gap-2 text-[11px] text-slate-600 dark:text-slate-300">
+                          <span>Quality</span>
+                          <input type="range" id="compress-quality" min="10" max="100" value="80" class="w-24" />
+                          <span id="compress-quality-value">80</span>%
+                        </label>
+                      </div>
+                    </div>
+                    <div id="dev-tool-row" class="hidden space-y-2">
+                      <div class="flex items-center gap-2">
+                        <p class="uppercase tracking-[0.2em] text-slate-400 text-[10px] w-14">Tool</p>
+                        <select id="dev-tool" aria-label="Dev tool" class="rounded-xl bg-white/90 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 px-2.5 py-1.5 text-xs text-slate-700 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-sky-400">
+                          <option value="json-to-yaml">JSON to YAML</option>
+                          <option value="yaml-to-json">YAML to JSON</option>
+                          <option value="json-pretty">JSON pretty-print</option>
+                          <option value="json-minify">JSON minify</option>
+                          <option value="base64-encode">Base64 encode (file to text)</option>
+                          <option value="base64-decode">Base64 decode (text to file)</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div id="pdf-tool-row" class="hidden space-y-2">
+                      <div class="flex items-center gap-2">
+                        <p class="uppercase tracking-[0.2em] text-slate-400 text-[10px] w-14">Tool</p>
+                        <select id="pdf-tool" aria-label="PDF tool" class="rounded-xl bg-white/90 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 px-2.5 py-1.5 text-xs text-slate-700 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-sky-400">
+                          <option value="text-to-pdf">Text / Markdown to PDF</option>
+                          <option value="html-to-pdf">HTML to PDF</option>
+                          <option value="images-to-pdf">Images to PDF</option>
+                          <option value="pdf-to-jpg">PDF to JPG</option>
+                          <option value="pdf-to-png">PDF to PNG</option>
+                          <option value="pdf-to-text">PDF to Text</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3 text-[11px]">
+                      <div class="space-y-1">
+                        <p class="uppercase tracking-[0.2em] text-slate-400 text-[10px]">Source</p>
+                        <p id="source-label" class="rounded-xl bg-white/90 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 px-2.5 py-1.5 text-slate-700 dark:text-slate-200">—</p>
+                      </div>
+                      <div class="space-y-1" id="target-wrap">
+                        <p class="uppercase tracking-[0.2em] text-slate-400 text-[10px]">Target</p>
+                        <select id="target-format" aria-label="Target format" class="w-full rounded-xl bg-white/90 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 px-2.5 py-1.5 text-xs text-slate-700 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-sky-400">
+                          <option value="png">PNG</option>
+                          <option value="jpg">JPG</option>
+                          <option value="webp">WebP</option>
+                        </select>
+                        <p id="target-fixed" class="hidden rounded-xl bg-white/90 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 px-2.5 py-1.5 text-slate-700 dark:text-slate-200">PNG</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="w-full sm:w-40 aspect-video rounded-2xl bg-slate-900/95 dark:bg-slate-950/90 border border-slate-800 overflow-hidden flex items-center justify-center relative">
+                    <div class="absolute inset-0 opacity-50 bg-[radial-gradient(circle_at_0_0,_rgba(56,189,248,0.4),_transparent_50%),_radial-gradient(circle_at_100%_100%,_rgba(129,140,248,0.35),_transparent_50%)]"></div>
+                    <div class="relative z-10 flex flex-col items-center justify-center text-center px-2">
+                      <canvas id="preview-canvas" class="hidden max-h-20 rounded-lg shadow-md"></canvas>
+                      <div id="preview-placeholder" class="space-y-1.5">
+                        <p class="text-[11px] font-medium text-slate-100">Live preview</p>
+                        <p class="text-[10px] text-slate-400">A preview will appear here when available.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 dark:border-slate-800 pt-3">
+                  <span class="text-[10px] text-slate-500 dark:text-slate-400">Images · PDF · Dev: JSON/YAML, pretty/minify, Base64.</span>
+                  <div class="flex items-center gap-2">
+                    <button type="button" id="remove-button" class="hidden inline-flex items-center gap-2 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white/70 dark:bg-slate-900/70 text-slate-700 dark:text-slate-200 px-3 py-2 text-xs font-medium hover:bg-slate-50 dark:hover:bg-slate-800 transition">Remove file</button>
+                    <button type="button" id="convert-button" class="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-tr from-sky-400 via-blue-500 to-indigo-500 text-white px-3 sm:px-4 py-2 text-xs font-medium shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition disabled:opacity-50 disabled:hover:shadow-none disabled:hover:translate-y-0" disabled>
+                      <span id="convert-label">Convert & download</span>
+                    </button>
+                  </div>
+                </div>
+                <input id="file-input" type="file" accept="image/*,.txt,.md,.markdown" class="hidden" aria-label="Choose file" />
+              </div>
+            </section>
+          </div>
+        </div>
+      </main>
+      <footer class="px-4 sm:px-8 pb-4 text-[11px] text-slate-400 dark:text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2 flex-wrap">
+        <span>Made to be fast, simple and private.</span>
+        <span>All conversions happen in your browser.</span>
+        <span class="text-slate-500 dark:text-slate-400">Created by <span class="font-medium text-slate-600 dark:text-slate-300">Agent Null</span></span>
+      </footer>
+    </div>
+
+    <script>
+      (function () {
+        var root = document.documentElement;
+        var themeToggle = document.getElementById("theme-toggle");
+        var themeThumb = document.getElementById("theme-thumb");
+        var themeLabel = document.getElementById("theme-label");
+
+        function applyTheme(mode) {
+          if (mode === "dark") {
+            root.classList.add("dark");
+            themeThumb.style.transform = "translateX(28px)";
+            themeThumb.textContent = "D";
+            themeLabel.textContent = "Dark";
+            themeLabel.style.left = "0.25rem";
+            themeLabel.style.right = "auto";
+          } else {
+            root.classList.remove("dark");
+            themeThumb.style.transform = "translateX(0)";
+            themeThumb.textContent = "L";
+            themeLabel.textContent = "Light";
+            themeLabel.style.left = "auto";
+            themeLabel.style.right = "0.25rem";
+          }
+        }
+
+        var stored = localStorage.getItem("convertze-theme");
+        var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        applyTheme(stored || (prefersDark ? "dark" : "light"));
+
+        themeToggle.addEventListener("click", function () {
+          var next = root.classList.contains("dark") ? "light" : "dark";
+          applyTheme(next);
+          localStorage.setItem("convertze-theme", next);
+        });
+      })();
+
+      var tabImages = document.getElementById("tab-images");
+      var tabPdf = document.getElementById("tab-pdf");
+      var tabDev = document.getElementById("tab-dev");
+      var pdfTool = document.getElementById("pdf-tool");
+      var pdfToolRow = document.getElementById("pdf-tool-row");
+      var devTool = document.getElementById("dev-tool");
+      var devToolRow = document.getElementById("dev-tool-row");
+      var toolTitle = document.getElementById("tool-title");
+      var toolSubtitle = document.getElementById("tool-subtitle");
+      var dropHelp = document.getElementById("drop-help");
+      var targetFormat = document.getElementById("target-format");
+      var targetWrap = document.getElementById("target-wrap");
+      var targetFixed = document.getElementById("target-fixed");
+      var imageTool = document.getElementById("image-tool");
+      var resizeOptions = document.getElementById("resize-options");
+      var compressOptions = document.getElementById("compress-options");
+      var resizeW = document.getElementById("resize-w");
+      var resizeH = document.getElementById("resize-h");
+      var resizeKeepAspect = document.getElementById("resize-keep-aspect");
+      var compressQuality = document.getElementById("compress-quality");
+      var compressQualityValue = document.getElementById("compress-quality-value");
+      var dropArea = document.getElementById("drop-area");
+      var fileInput = document.getElementById("file-input");
+      var fileButton = document.getElementById("file-button");
+      var convertButton = document.getElementById("convert-button");
+      var removeButton = document.getElementById("remove-button");
+      var statusDot = document.getElementById("status-dot");
+      var statusText = document.getElementById("status-text");
+      var sourceLabel = document.getElementById("source-label");
+      var previewCanvas = document.getElementById("preview-canvas");
+      var previewPlaceholder = document.getElementById("preview-placeholder");
+      var convertLabel = document.getElementById("convert-label");
+
+      var currentFile = null;
+      var currentFiles = null;
+      var activeTab = "images";
+      var activeImageTool = "format";
+      var activePdfTool = "text-to-pdf";
+      var activeDevTool = "json-to-yaml";
+
+      function setStatus(state, msg) {
+        statusText.textContent = msg;
+        statusDot.className = "h-1.5 w-1.5 rounded-full " + (state === "idle" ? "bg-sky-400" : state === "processing" ? "bg-amber-400 animate-pulse" : state === "done" ? "bg-emerald-400" : "bg-rose-400");
+      }
+
+      function resetState() {
+        currentFile = null;
+        currentFiles = null;
+        sourceLabel.textContent = "—";
+        previewCanvas.classList.add("hidden");
+        previewPlaceholder.classList.remove("hidden");
+        convertButton.disabled = true;
+        convertLabel.textContent = "Convert & download";
+        removeButton.classList.add("hidden");
+        setStatus("idle", "Drop a file to get started");
+      }
+
+      function applyImageTool() {
+        activeImageTool = imageTool.value;
+        resizeOptions.classList.add("hidden");
+        compressOptions.classList.add("hidden");
+        targetFormat.classList.remove("hidden");
+        targetFixed.classList.add("hidden");
+        if (activeImageTool === "format") {
+          dropHelp.textContent = "Supports JPG, PNG and WebP images.";
+          fileInput.setAttribute("accept", "image/*");
+        } else if (activeImageTool === "resize") {
+          resizeOptions.classList.remove("hidden");
+          dropHelp.textContent = "Supports JPG, PNG and WebP. Enter width and height.";
+          fileInput.setAttribute("accept", "image/jpeg,image/png,image/webp");
+        } else if (activeImageTool === "compress") {
+          compressOptions.classList.remove("hidden");
+          dropHelp.textContent = "Supports JPG, PNG and WebP. Choose quality below.";
+          fileInput.setAttribute("accept", "image/jpeg,image/png,image/webp");
+        } else {
+          targetFormat.classList.add("hidden");
+          targetFixed.classList.remove("hidden");
+          targetFixed.textContent = "PNG";
+          dropHelp.textContent = "Drop an SVG file to convert to PNG.";
+          fileInput.setAttribute("accept", "image/svg+xml,.svg");
+        }
+      }
+
+      function setTab(tab) {
+        activeTab = tab;
+        try { localStorage.setItem("convertze-tab", tab); } catch (e) {}
+        if (tab === "images") {
+          tabImages.classList.add("bg-white", "dark:bg-slate-800", "text-slate-900", "dark:text-slate-50", "shadow-sm");
+          tabImages.classList.remove("text-slate-500", "dark:text-slate-400");
+          tabPdf.classList.add("text-slate-500", "dark:text-slate-400");
+          tabDev.classList.add("text-slate-500", "dark:text-slate-400");
+          tabPdf.classList.remove("bg-white", "dark:bg-slate-800", "text-slate-900", "dark:text-slate-50", "shadow-sm");
+          tabDev.classList.remove("bg-white", "dark:bg-slate-800", "text-slate-900", "dark:text-slate-50", "shadow-sm");
+          document.getElementById("image-tool-row").classList.remove("hidden");
+          pdfToolRow.classList.add("hidden");
+          devToolRow.classList.add("hidden");
+          toolTitle.textContent = "Image converter";
+          toolSubtitle.textContent = "Format, resize, compress, or SVG to PNG.";
+          targetFormat.value = "png";
+          targetFormat.classList.remove("hidden");
+          targetFixed.classList.add("hidden");
+          targetWrap.style.display = "";
+          fileInput.setAttribute("accept", "image/*");
+          fileInput.removeAttribute("multiple");
+          applyImageTool();
+        } else if (tab === "pdf") {
+          document.getElementById("image-tool-row").classList.add("hidden");
+          pdfToolRow.classList.remove("hidden");
+          devToolRow.classList.add("hidden");
+          targetWrap.style.display = "none";
+          tabPdf.classList.add("bg-white", "dark:bg-slate-800", "text-slate-900", "dark:text-slate-50", "shadow-sm");
+          tabPdf.classList.remove("text-slate-500", "dark:text-slate-400");
+          tabImages.classList.add("text-slate-500", "dark:text-slate-400");
+          tabDev.classList.add("text-slate-500", "dark:text-slate-400");
+          tabImages.classList.remove("bg-white", "dark:bg-slate-800", "text-slate-900", "dark:text-slate-50", "shadow-sm");
+          tabDev.classList.remove("bg-white", "dark:bg-slate-800", "text-slate-900", "dark:text-slate-50", "shadow-sm");
+          toolTitle.textContent = "PDF tools";
+          toolSubtitle.textContent = "Convert to or from PDF.";
+          fileInput.removeAttribute("multiple");
+          applyPdfTool();
+        } else {
+          document.getElementById("image-tool-row").classList.add("hidden");
+          pdfToolRow.classList.add("hidden");
+          devToolRow.classList.remove("hidden");
+          targetWrap.style.display = "none";
+          tabDev.classList.add("bg-white", "dark:bg-slate-800", "text-slate-900", "dark:text-slate-50", "shadow-sm");
+          tabDev.classList.remove("text-slate-500", "dark:text-slate-400");
+          tabImages.classList.add("text-slate-500", "dark:text-slate-400");
+          tabPdf.classList.add("text-slate-500", "dark:text-slate-400");
+          tabImages.classList.remove("bg-white", "dark:bg-slate-800", "text-slate-900", "dark:text-slate-50", "shadow-sm");
+          tabPdf.classList.remove("bg-white", "dark:bg-slate-800", "text-slate-900", "dark:text-slate-50", "shadow-sm");
+          toolTitle.textContent = "Developer tools";
+          toolSubtitle.textContent = "JSON, YAML, Base64.";
+          fileInput.removeAttribute("multiple");
+          applyDevTool();
+        }
+        resetState();
+      }
+
+      function applyPdfTool() {
+        activePdfTool = pdfTool.value;
+        fileInput.removeAttribute("multiple");
+        if (activePdfTool === "text-to-pdf") {
+          dropHelp.textContent = "Upload a .txt or .md file. We’ll create a simple PDF.";
+          fileInput.setAttribute("accept", ".txt,.md,.markdown,text/plain");
+        } else if (activePdfTool === "html-to-pdf") {
+          dropHelp.textContent = "Upload an .html file to convert to PDF.";
+          fileInput.setAttribute("accept", ".html,text/html");
+        } else if (activePdfTool === "images-to-pdf") {
+          dropHelp.textContent = "Drop one or more images (JPG, PNG, WebP). They will be combined into one PDF.";
+          fileInput.setAttribute("accept", "image/jpeg,image/png,image/webp");
+          fileInput.setAttribute("multiple", "multiple");
+        } else {
+          dropHelp.textContent = "Drop a PDF file.";
+          fileInput.setAttribute("accept", "application/pdf");
+        }
+      }
+
+      function applyDevTool() {
+        activeDevTool = devTool.value;
+        if (activeDevTool === "base64-encode") {
+          dropHelp.textContent = "Drop any file to get its Base64 string (downloads as .txt).";
+          fileInput.removeAttribute("accept");
+        } else if (activeDevTool === "base64-decode") {
+          dropHelp.textContent = "Drop a .txt file containing Base64 to decode and download as binary.";
+          fileInput.setAttribute("accept", ".txt,text/plain");
+        } else if (activeDevTool === "json-to-yaml" || activeDevTool === "json-pretty" || activeDevTool === "json-minify") {
+          dropHelp.textContent = "Drop a .json file.";
+          fileInput.setAttribute("accept", ".json,application/json,text/plain");
+        } else {
+          dropHelp.textContent = "Drop a .yml or .yaml file.";
+          fileInput.setAttribute("accept", ".yml,.yaml,text/plain");
+        }
+      }
+
+      imageTool.addEventListener("change", function () { applyImageTool(); resetState(); });
+      pdfTool.addEventListener("change", function () { applyPdfTool(); resetState(); });
+      devTool.addEventListener("change", function () { applyDevTool(); resetState(); });
+      compressQuality.addEventListener("input", function () { compressQualityValue.textContent = compressQuality.value; });
+
+      tabImages.addEventListener("click", function () { setTab("images"); });
+      tabPdf.addEventListener("click", function () { setTab("pdf"); });
+      tabDev.addEventListener("click", function () { setTab("dev"); });
+
+      fileButton.addEventListener("click", function () { fileInput.click(); });
+      removeButton.addEventListener("click", resetState);
+
+      function handleFiles(files) {
+        var file = files && files[0];
+        if (!file) return;
+        currentFile = file;
+        sourceLabel.textContent = file.name + " · " + (file.size / 1024).toFixed(1) + " KB";
+
+        if (activeTab === "images") {
+          var isSvg = file.type === "image/svg+xml" || /\.svg$/i.test(file.name);
+          if (activeImageTool === "svg2png") {
+            if (!isSvg) {
+              setStatus("error", "Please choose an SVG file.");
+              return;
+            }
+            var url = URL.createObjectURL(file);
+            var img = new Image();
+            img.onload = function () {
+              var w = img.naturalWidth || img.width || 400;
+              var h = img.naturalHeight || img.height || 300;
+              if (!w || !h) { w = 400; h = 300; }
+              var scale = Math.min(1, 200 / Math.max(w, h));
+              previewCanvas.width = w * scale;
+              previewCanvas.height = h * scale;
+              previewCanvas.getContext("2d").drawImage(img, 0, 0, previewCanvas.width, previewCanvas.height);
+              previewCanvas.classList.remove("hidden");
+              previewPlaceholder.classList.add("hidden");
+              convertButton.disabled = false;
+              removeButton.classList.remove("hidden");
+              setStatus("idle", "Ready. Click Convert & download.");
+              URL.revokeObjectURL(url);
+            };
+            img.onerror = function () { setStatus("error", "Could not load SVG."); URL.revokeObjectURL(url); };
+            img.src = url;
+            return;
+          }
+          if (!file.type.startsWith("image/") || isSvg) {
+            setStatus("error", "Please choose a raster image (JPG, PNG, WebP).");
+            return;
+          }
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            var img = new Image();
+            img.onload = function () {
+              var ctx = previewCanvas.getContext("2d");
+              var maxW = 200;
+              var scale = Math.min(1, maxW / img.width);
+              previewCanvas.width = img.width * scale;
+              previewCanvas.height = img.height * scale;
+              ctx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+              ctx.drawImage(img, 0, 0, previewCanvas.width, previewCanvas.height);
+              if (activeImageTool === "resize") {
+                resizeW.placeholder = String(img.width);
+                resizeH.placeholder = String(img.height);
+              }
+              previewCanvas.classList.remove("hidden");
+              previewPlaceholder.classList.add("hidden");
+              convertButton.disabled = false;
+              removeButton.classList.remove("hidden");
+              setStatus("idle", "Ready. Choose options and click Convert.");
+            };
+            img.onerror = function () { setStatus("error", "Could not preview image."); };
+            img.src = e.target.result;
+          };
+          reader.readAsDataURL(file);
+        } else if (activeTab === "pdf") {
+          if (activePdfTool === "text-to-pdf") {
+            var ok = file.type.startsWith("text/") || /\.(md|markdown|txt)$/i.test(file.name);
+            if (!ok) { setStatus("error", "Please choose a .txt or .md file."); return; }
+          } else if (activePdfTool === "html-to-pdf") {
+            var ok = file.type === "text/html" || /\.html?$/i.test(file.name);
+            if (!ok) { setStatus("error", "Please choose an .html file."); return; }
+          } else if (activePdfTool === "images-to-pdf") {
+            var files = files && files.length ? Array.from(files) : [file];
+            var allImg = files.every(function (f) { return f.type.startsWith("image/") && !f.type.includes("svg"); });
+            if (!allImg) { setStatus("error", "Please choose image(s) (JPG, PNG, WebP)."); return; }
+            currentFiles = files;
+            sourceLabel.textContent = files.length + " image(s) · " + (file.size / 1024).toFixed(1) + " KB";
+          } else if (activePdfTool === "pdf-to-jpg" || activePdfTool === "pdf-to-png" || activePdfTool === "pdf-to-text") {
+            if (file.type !== "application/pdf") { setStatus("error", "Please choose a PDF file."); return; }
+          }
+          previewCanvas.classList.add("hidden");
+          previewPlaceholder.classList.remove("hidden");
+          convertButton.disabled = false;
+          removeButton.classList.remove("hidden");
+          setStatus("idle", "Ready. Click Convert & download.");
+        } else if (activeTab === "dev") {
+          if (activeDevTool === "base64-decode") {
+            if (!file.type.startsWith("text/") && !/\.(txt)$/i.test(file.name)) {
+              setStatus("error", "Please choose a .txt file with Base64 content.");
+              return;
+            }
+          } else if (activeDevTool === "json-to-yaml" || activeDevTool === "json-pretty" || activeDevTool === "json-minify") {
+            if (!/\.(json)$/i.test(file.name) && file.type !== "application/json") {
+              setStatus("error", "Please choose a .json file.");
+              return;
+            }
+          } else if (activeDevTool === "yaml-to-json") {
+            if (!/\.(yml|yaml)$/i.test(file.name)) {
+              setStatus("error", "Please choose a .yml or .yaml file.");
+              return;
+            }
+          }
+          previewCanvas.classList.add("hidden");
+          previewPlaceholder.classList.remove("hidden");
+          convertButton.disabled = false;
+          removeButton.classList.remove("hidden");
+          setStatus("idle", "Ready. Click Convert & download.");
+        }
+      }
+
+      ["dragenter", "dragover", "dragleave", "drop"].forEach(function (ev) {
+        dropArea.addEventListener(ev, function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          if (ev === "dragover" || ev === "dragenter") dropArea.classList.add("drop-active");
+          else dropArea.classList.remove("drop-active");
+          if (ev === "drop") handleFiles(e.dataTransfer.files);
+        });
+      });
+
+      fileInput.addEventListener("change", function (e) { handleFiles(e.target.files); });
+
+      convertButton.addEventListener("click", function () {
+        if (!currentFile) return;
+        var baseName = currentFile.name.replace(/\.[^/.]+$/, "") || "file";
+
+        if (activeTab === "images") {
+          setStatus("processing", "Converting…");
+          convertButton.disabled = true;
+          convertLabel.textContent = "Converting…";
+
+          if (activeImageTool === "svg2png") {
+            var url = URL.createObjectURL(currentFile);
+            var img = new Image();
+            img.onload = function () {
+              var w = img.naturalWidth || img.width || 400;
+              var h = img.naturalHeight || img.height || 300;
+              if (!w || !h) { w = 400; h = 300; }
+              var canvas = document.createElement("canvas");
+              canvas.width = w;
+              canvas.height = h;
+              canvas.getContext("2d").drawImage(img, 0, 0);
+              var link = document.createElement("a");
+              link.download = baseName + ".png";
+              link.href = canvas.toDataURL("image/png");
+              link.click();
+              URL.revokeObjectURL(url);
+              setStatus("done", "Downloaded.");
+              convertLabel.textContent = "Convert again";
+              convertButton.disabled = false;
+            };
+            img.onerror = function () {
+              setStatus("error", "Conversion failed.");
+              convertLabel.textContent = "Convert & download";
+              convertButton.disabled = false;
+              URL.revokeObjectURL(url);
+            };
+            img.src = url;
+            return;
+          }
+
+          var format = targetFormat.value;
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            var img = new Image();
+            img.onload = function () {
+              var canvas = document.createElement("canvas");
+              var w = img.width;
+              var h = img.height;
+              if (activeImageTool === "resize") {
+                var rw = parseInt(resizeW.value, 10) || parseInt(resizeW.placeholder, 10) || w;
+                var rh = parseInt(resizeH.value, 10) || parseInt(resizeH.placeholder, 10) || h;
+                if (resizeKeepAspect.checked) {
+                  var scale = Math.min(rw / w, rh / h);
+                  rw = Math.round(w * scale);
+                  rh = Math.round(h * scale);
+                }
+                w = Math.max(1, Math.min(8000, rw));
+                h = Math.max(1, Math.min(8000, rh));
+              }
+              canvas.width = w;
+              canvas.height = h;
+              canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+              var mime = format === "jpg" ? "image/jpeg" : format === "webp" ? "image/webp" : "image/png";
+              var quality = activeImageTool === "compress" ? parseInt(compressQuality.value, 10) / 100 : 0.92;
+              var link = document.createElement("a");
+              link.download = baseName + "." + format;
+              link.href = canvas.toDataURL(mime, quality);
+              link.click();
+              setStatus("done", "Downloaded.");
+              convertLabel.textContent = "Convert again";
+              convertButton.disabled = false;
+            };
+            img.onerror = function () {
+              setStatus("error", "Conversion failed.");
+              convertLabel.textContent = "Convert & download";
+              convertButton.disabled = false;
+            };
+            img.src = e.target.result;
+          };
+          reader.readAsDataURL(currentFile);
+        } else if (activeTab === "pdf") {
+          convertButton.disabled = true;
+          convertLabel.textContent = "Converting…";
+          setStatus("processing", "Converting…");
+
+          if (activePdfTool === "text-to-pdf") {
+            var r = new FileReader();
+            r.onload = function () {
+              try {
+                var textContent = r.result;
+                var jsPDF = window.jspdf.jsPDF;
+                var doc = new jsPDF({ unit: "pt", format: "a4" });
+                var margin = 48;
+                var pageWidth = doc.internal.pageSize.getWidth();
+                var maxWidth = pageWidth - margin * 2;
+                var fontSize = 12;
+                doc.setFont("helvetica", "normal");
+                doc.setFontSize(fontSize);
+                var lines = doc.splitTextToSize(textContent, maxWidth);
+                var cursorY = margin;
+                var lineHeight = fontSize * 1.4;
+                var pageHeight = doc.internal.pageSize.getHeight();
+                for (var i = 0; i < lines.length; i++) {
+                  if (cursorY + lineHeight > pageHeight - margin) {
+                    doc.addPage();
+                    cursorY = margin;
+                  }
+                  doc.text(lines[i], margin, cursorY);
+                  cursorY += lineHeight;
+                }
+                doc.save(baseName + ".pdf");
+                setStatus("done", "PDF downloaded.");
+                convertLabel.textContent = "Convert again";
+              } catch (err) {
+                setStatus("error", "Something went wrong.");
+                convertLabel.textContent = "Convert & download";
+              }
+              convertButton.disabled = false;
+            };
+            r.onerror = function () { setStatus("error", "Could not read file."); convertButton.disabled = false; };
+            r.readAsText(currentFile);
+          } else if (activePdfTool === "html-to-pdf") {
+            var r2 = new FileReader();
+            r2.onload = function () {
+              var htmlContent = r2.result;
+              var div = document.createElement("div");
+              div.innerHTML = htmlContent;
+              div.style.width = "210mm";
+              div.style.position = "absolute";
+              div.style.left = "-9999px";
+              document.body.appendChild(div);
+              var doc = new window.jspdf.jsPDF("p", "pt", "a4");
+              doc.html(div, { callback: function () {
+                document.body.removeChild(div);
+                doc.save(baseName + ".pdf");
+                setStatus("done", "PDF downloaded.");
+                convertLabel.textContent = "Convert again";
+                convertButton.disabled = false;
+              }, x: 15, y: 15, width: 570, windowWidth: 800 });
+            };
+            r2.onerror = function () { setStatus("error", "Could not read file."); convertButton.disabled = false; };
+            r2.readAsText(currentFile);
+          } else if (activePdfTool === "images-to-pdf") {
+            var fileList = (currentFiles && currentFiles.length) ? currentFiles : [currentFile];
+            var imgs = fileList.filter(function (f) { return f.type.startsWith("image/"); });
+            var doc = new window.jspdf.jsPDF("p", "pt", "a4");
+            var pageW = doc.internal.pageSize.getWidth();
+            var pageH = doc.internal.pageSize.getHeight();
+            var margin = 20;
+            var idx = 0;
+            function addNext() {
+              if (idx >= imgs.length) {
+                doc.save(baseName + ".pdf");
+                setStatus("done", "PDF downloaded.");
+                convertLabel.textContent = "Convert again";
+                convertButton.disabled = false;
+                return;
+              }
+              var fr = new FileReader();
+              fr.onload = function () {
+                var img = new Image();
+                img.onload = function () {
+                  if (idx > 0) doc.addPage();
+                  var w = pageW - 2 * margin;
+                  var h = (img.height * w) / img.width;
+                  var fmt = fr.result.indexOf("image/png") !== -1 ? "PNG" : "JPEG";
+                  if (h > pageH - 2 * margin) {
+                    var scale = (pageH - 2 * margin) / h;
+                    doc.addImage(fr.result, fmt, margin, margin, w * scale, pageH - 2 * margin);
+                  } else {
+                    doc.addImage(fr.result, fmt, margin, margin, w, h);
+                  }
+                  idx++;
+                  addNext();
+                };
+                img.onerror = function () { idx++; addNext(); };
+                img.src = fr.result;
+              };
+              fr.readAsDataURL(imgs[idx]);
+            }
+            addNext();
+          } else if (activePdfTool === "pdf-to-jpg" || activePdfTool === "pdf-to-png") {
+            var pdfUrl = URL.createObjectURL(currentFile);
+            if (typeof pdfjsLib === "undefined") {
+              setStatus("error", "PDF library not loaded.");
+              convertButton.disabled = false;
+              return;
+            }
+            pdfjsLib.getDocument(pdfUrl).promise.then(function (pdf) {
+              var numPages = pdf.numPages;
+              var mime = activePdfTool === "pdf-to-jpg" ? "image/jpeg" : "image/png";
+              var ext = activePdfTool === "pdf-to-jpg" ? "jpg" : "png";
+              var pageNum = 0;
+              function renderNext() {
+                pageNum++;
+                if (pageNum > numPages) {
+                  setStatus("done", "Downloaded.");
+                  convertLabel.textContent = "Convert again";
+                  convertButton.disabled = false;
+                  URL.revokeObjectURL(pdfUrl);
+                  return;
+                }
+                pdf.getPage(pageNum).then(function (page) {
+                  var viewport = page.getViewport({ scale: 2 });
+                  var canvas = document.createElement("canvas");
+                  canvas.width = viewport.width;
+                  canvas.height = viewport.height;
+                  page.render({ canvasContext: canvas.getContext("2d"), viewport: viewport }).promise.then(function () {
+                    var link = document.createElement("a");
+                    link.download = numPages > 1 ? baseName + "_page" + pageNum + "." + ext : baseName + "." + ext;
+                    link.href = canvas.toDataURL(mime, 0.92);
+                    link.click();
+                    renderNext();
+                  });
+                });
+              }
+              renderNext();
+            }).catch(function () {
+              setStatus("error", "Could not load PDF.");
+              convertButton.disabled = false;
+              URL.revokeObjectURL(pdfUrl);
+            });
+          } else if (activePdfTool === "pdf-to-text") {
+            var pdfUrl2 = URL.createObjectURL(currentFile);
+            if (typeof pdfjsLib === "undefined") {
+              setStatus("error", "PDF library not loaded.");
+              convertButton.disabled = false;
+              return;
+            }
+            pdfjsLib.getDocument(pdfUrl2).promise.then(function (pdf) {
+              var texts = [];
+              var p = 0;
+              function nextPage() {
+                p++;
+                if (p > pdf.numPages) {
+                  var link = document.createElement("a");
+                  link.download = baseName + ".txt";
+                  link.href = "data:text/plain;charset=utf-8," + encodeURIComponent(texts.join("\n"));
+                  link.click();
+                  setStatus("done", "Downloaded.");
+                  convertLabel.textContent = "Convert again";
+                  convertButton.disabled = false;
+                  URL.revokeObjectURL(pdfUrl2);
+                  return;
+                }
+                pdf.getPage(p).then(function (page) {
+                  return page.getTextContent();
+                }).then(function (content) {
+                  texts.push(content.items.map(function (it) { return it.str; }).join(" "));
+                  nextPage();
+                });
+              }
+              nextPage();
+            }).catch(function () {
+              setStatus("error", "Could not load PDF.");
+              convertButton.disabled = false;
+              URL.revokeObjectURL(pdfUrl2);
+            });
+          }
+        } else if (activeTab === "dev") {
+          setStatus("processing", "Converting…");
+          convertButton.disabled = true;
+          convertLabel.textContent = "Converting…";
+          var r = new FileReader();
+          if (activeDevTool === "base64-encode") {
+            r.onload = function () {
+              var arr = new Uint8Array(r.result);
+              var binary = "";
+              for (var i = 0; i < arr.length; i++) binary += String.fromCharCode(arr[i]);
+              var b64 = btoa(binary);
+              var link = document.createElement("a");
+              link.download = baseName + "_base64.txt";
+              link.href = "data:text/plain;charset=utf-8," + encodeURIComponent(b64);
+              link.click();
+              setStatus("done", "Downloaded.");
+              convertLabel.textContent = "Convert again";
+              convertButton.disabled = false;
+            };
+            r.readAsArrayBuffer(currentFile);
+          } else if (activeDevTool === "base64-decode") {
+            r.onload = function () {
+              try {
+                var b64 = (r.result || "").replace(/\s/g, "");
+                var binary = atob(b64);
+                var bytes = new Uint8Array(binary.length);
+                for (var i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+                var link = document.createElement("a");
+                link.download = baseName + "_decoded.bin";
+                link.href = URL.createObjectURL(new Blob([bytes]));
+                link.click();
+                URL.revokeObjectURL(link.href);
+                setStatus("done", "Downloaded.");
+                convertLabel.textContent = "Convert again";
+              } catch (e) {
+                setStatus("error", "Invalid Base64.");
+                convertLabel.textContent = "Convert & download";
+              }
+              convertButton.disabled = false;
+            };
+            r.readAsText(currentFile);
+          } else if (activeDevTool === "json-to-yaml") {
+            r.onload = function () {
+              try {
+                var obj = JSON.parse(r.result);
+                var yaml = (typeof jsyaml !== "undefined" && jsyaml.dump) ? jsyaml.dump(obj) : "";
+                if (yaml) {
+                  var link = document.createElement("a");
+                  link.download = baseName + ".yml";
+                  link.href = "data:text/plain;charset=utf-8," + encodeURIComponent(yaml);
+                  link.click();
+                  setStatus("done", "Downloaded.");
+                  convertLabel.textContent = "Convert again";
+                } else { setStatus("error", "YAML library not loaded."); convertLabel.textContent = "Convert & download"; }
+              } catch (e) {
+                setStatus("error", "Invalid JSON.");
+                convertLabel.textContent = "Convert & download";
+              }
+              convertButton.disabled = false;
+            };
+            r.readAsText(currentFile);
+          } else if (activeDevTool === "yaml-to-json") {
+            r.onload = function () {
+              try {
+                var obj = (typeof jsyaml !== "undefined" && jsyaml.load) ? jsyaml.load(r.result) : undefined;
+                if (obj === undefined) { setStatus("error", "YAML library not loaded."); convertButton.disabled = false; return; }
+                var json = JSON.stringify(obj, null, 2);
+                var link = document.createElement("a");
+                link.download = baseName + ".json";
+                link.href = "data:application/json;charset=utf-8," + encodeURIComponent(json);
+                link.click();
+                setStatus("done", "Downloaded.");
+                convertLabel.textContent = "Convert again";
+              } catch (e) {
+                setStatus("error", "Invalid YAML.");
+                convertLabel.textContent = "Convert & download";
+              }
+              convertButton.disabled = false;
+            };
+            r.readAsText(currentFile);
+          } else if (activeDevTool === "json-pretty") {
+            r.onload = function () {
+              try {
+                var obj = JSON.parse(r.result);
+                var pretty = JSON.stringify(obj, null, 2);
+                var link = document.createElement("a");
+                link.download = baseName + "_pretty.json";
+                link.href = "data:application/json;charset=utf-8," + encodeURIComponent(pretty);
+                link.click();
+                setStatus("done", "Downloaded.");
+                convertLabel.textContent = "Convert again";
+              } catch (e) {
+                setStatus("error", "Invalid JSON.");
+                convertLabel.textContent = "Convert & download";
+              }
+              convertButton.disabled = false;
+            };
+            r.readAsText(currentFile);
+          } else if (activeDevTool === "json-minify") {
+            r.onload = function () {
+              try {
+                var obj = JSON.parse(r.result);
+                var min = JSON.stringify(obj);
+                var link = document.createElement("a");
+                link.download = baseName + "_min.json";
+                link.href = "data:application/json;charset=utf-8," + encodeURIComponent(min);
+                link.click();
+                setStatus("done", "Downloaded.");
+                convertLabel.textContent = "Convert again";
+              } catch (e) {
+                setStatus("error", "Invalid JSON.");
+                convertLabel.textContent = "Convert & download";
+              }
+              convertButton.disabled = false;
+            };
+            r.readAsText(currentFile);
+          }
+        }
+      });
+
+      if (typeof pdfjsLib !== "undefined") {
+        pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+      }
+      var savedTab = localStorage.getItem("convertze-tab");
+      setTab(savedTab === "pdf" ? "pdf" : savedTab === "dev" ? "dev" : "images");
+    </script>
+  </body>
+</html>
