@@ -12,20 +12,23 @@ Free file converter that runs **entirely in your browser** — no uploads, no ac
 
 | Tool | Description |
 |------|-------------|
-| **PNG / JPG / WebP** | Convert between raster formats (single or **batch**). |
-| **Resize** | Set width/height with optional aspect ratio (**batch** supported). |
-| **Compress** | Adjust quality (**batch** supported). |
-| **SVG → PNG** | Rasterize SVG to PNG. |
+| **PNG / JPG / WebP** | Convert between raster formats. **Batch:** select multiple files; 2+ outputs are packaged in **`convertze_images.zip`** (when JSZip loads). |
+| **Resize** | Set width/height with optional aspect ratio. Batch + zip same as above. |
+| **Compress** | Adjust quality. Batch + zip same as above. |
+| **Rotate** | Rotate by angle (e.g. 90°, 180°, 270°). Batch + zip same as above. |
+| **Crop (center)** | Center-crop to a chosen width and height. Batch + zip same as above. |
+| **SVG → PNG** | Rasterize a single SVG to PNG. |
 
 ### PDF
 
 | Tool | Description |
 |------|-------------|
 | **Text / Markdown → PDF** | Turn `.txt` / `.md` into a simple PDF. |
-| **HTML → PDF** | Render `.html` to PDF. |
+| **HTML → PDF** | Render `.html` to PDF (uses html2canvas + jsPDF). |
 | **Images → PDF** | Combine multiple JPG/PNG/WebP into one PDF. |
-| **Merge PDFs** | Combine two or more PDFs into one file. |
-| **PDF → JPG / PNG** | Export pages as images. |
+| **Merge PDFs** | Combine two or more PDFs into one file (`pdf-lib`). |
+| **Split PDF pages** | One PDF → one PDF per page, delivered as **`basename_split.zip`**. |
+| **PDF → JPG / PNG** | Export each page as an image. |
 | **PDF → Text** | Extract text to `.txt`. |
 
 ### Developer & data
@@ -40,13 +43,15 @@ Free file converter that runs **entirely in your browser** — no uploads, no ac
 | **JSON minify** | Compact JSON. |
 | **Base64 encode** | File → Base64 text (`.txt` download). |
 | **Base64 decode** | Base64 text file → binary download. |
-| **Timestamp converter** | `.txt` with Unix time (10/13 digits) or date string → human-readable summary. |
+| **Timestamp converter** | `.txt` with Unix time (10/13 digits) or date string → readable summary. |
 | **SHA-256 hash** | File → SHA-256 hex (`.txt` download). |
+| **JWT decode** | `.txt` containing a JWT → decoded header & payload (`.txt`). **Does not verify signatures** — for debugging only. |
 
 ### UX
 
 - Light / dark theme (saved in the browser).
 - Drag-and-drop or file picker.
+- **Contribute** link in the header → GitHub repo.
 
 ---
 
@@ -56,9 +61,11 @@ Single `index.html` with vanilla JavaScript. Libraries loaded from CDN:
 
 - [Tailwind CSS](https://tailwindcss.com)
 - [jsPDF](https://github.com/parallax/jsPDF)
+- [html2canvas](https://html2canvas.hertzen.com/) (HTML → PDF path)
 - [pdf.js](https://mozilla.github.io/pdf.js/)
 - [js-yaml](https://github.com/nodeca/js-yaml)
-- [pdf-lib](https://github.com/Hopding/pdf-lib) (PDF merge)
+- [pdf-lib](https://github.com/Hopding/pdf-lib) — PDF merge & split
+- [JSZip](https://stuk.github.io/jszip/) — batch image zip & split-PDF zip
 
 ---
 

@@ -69,6 +69,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
   </head>
   <body class="h-full bg-gradient-to-br from-sky-50 via-slate-50 to-violet-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 text-slate-900 dark:text-slate-100">
     <div class="min-h-screen flex flex-col">
@@ -171,6 +172,8 @@
                           <option value="format">PNG / JPG / WebP</option>
                           <option value="resize">Resize</option>
                           <option value="compress">Compress</option>
+                          <option value="rotate">Rotate</option>
+                          <option value="crop">Crop (center)</option>
                           <option value="svg2png">SVG to PNG</option>
                         </select>
                       </div>
@@ -194,6 +197,22 @@
                           <span id="compress-quality-value">80</span>%
                         </label>
                       </div>
+                      <div id="rotate-options" class="hidden flex items-center gap-2">
+                        <label class="flex items-center gap-1.5 text-[11px]">
+                          <span class="text-slate-500">Angle</span>
+                          <input type="number" id="rotate-angle" step="90" value="90" class="w-20 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-2 py-1 text-xs" />
+                        </label>
+                      </div>
+                      <div id="crop-options" class="hidden flex flex-wrap items-center gap-2">
+                        <label class="flex items-center gap-1.5 text-[11px]">
+                          <span class="text-slate-500">W</span>
+                          <input type="number" id="crop-w" min="1" max="8000" placeholder="width" class="w-16 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-2 py-1 text-xs" />
+                        </label>
+                        <label class="flex items-center gap-1.5 text-[11px]">
+                          <span class="text-slate-500">H</span>
+                          <input type="number" id="crop-h" min="1" max="8000" placeholder="height" class="w-16 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-2 py-1 text-xs" />
+                        </label>
+                      </div>
                     </div>
                     <div id="dev-tool-row" class="hidden space-y-2">
                       <div class="flex items-center gap-2">
@@ -209,6 +228,7 @@
                           <option value="base64-decode">Base64 decode (text to file)</option>
                           <option value="timestamp-convert">Timestamp converter (txt)</option>
                           <option value="sha256-hash">SHA-256 hash (file)</option>
+                          <option value="jwt-decode">JWT decode</option>
                         </select>
                       </div>
                     </div>
@@ -220,6 +240,7 @@
                           <option value="html-to-pdf">HTML to PDF</option>
                           <option value="images-to-pdf">Images to PDF</option>
                           <option value="pdf-merge">Merge PDFs</option>
+                          <option value="pdf-split">Split PDF pages</option>
                           <option value="pdf-to-jpg">PDF to JPG</option>
                           <option value="pdf-to-png">PDF to PNG</option>
                           <option value="pdf-to-text">PDF to Text</option>
@@ -327,8 +348,13 @@
       var imageTool = document.getElementById("image-tool");
       var resizeOptions = document.getElementById("resize-options");
       var compressOptions = document.getElementById("compress-options");
+      var rotateOptions = document.getElementById("rotate-options");
+      var cropOptions = document.getElementById("crop-options");
       var resizeW = document.getElementById("resize-w");
       var resizeH = document.getElementById("resize-h");
+      var cropW = document.getElementById("crop-w");
+      var cropH = document.getElementById("crop-h");
+      var rotateAngle = document.getElementById("rotate-angle");
       var resizeKeepAspect = document.getElementById("resize-keep-aspect");
       var compressQuality = document.getElementById("compress-quality");
       var compressQualityValue = document.getElementById("compress-quality-value");
@@ -373,6 +399,8 @@
         fileInput.removeAttribute("multiple");
         resizeOptions.classList.add("hidden");
         compressOptions.classList.add("hidden");
+        rotateOptions.classList.add("hidden");
+        cropOptions.classList.add("hidden");
         targetFormat.classList.remove("hidden");
         targetFixed.classList.add("hidden");
         if (activeImageTool === "format") {
@@ -387,6 +415,16 @@
         } else if (activeImageTool === "compress") {
           compressOptions.classList.remove("hidden");
           dropHelp.textContent = "Supports JPG, PNG and WebP. Choose quality below.";
+          fileInput.setAttribute("accept", "image/jpeg,image/png,image/webp");
+          fileInput.setAttribute("multiple", "multiple");
+        } else if (activeImageTool === "rotate") {
+          rotateOptions.classList.remove("hidden");
+          dropHelp.textContent = "Rotate images by angle (90, 180, 270).";
+          fileInput.setAttribute("accept", "image/jpeg,image/png,image/webp");
+          fileInput.setAttribute("multiple", "multiple");
+        } else if (activeImageTool === "crop") {
+          cropOptions.classList.remove("hidden");
+          dropHelp.textContent = "Center crop images to chosen width and height.";
           fileInput.setAttribute("accept", "image/jpeg,image/png,image/webp");
           fileInput.setAttribute("multiple", "multiple");
         } else {
@@ -471,6 +509,9 @@
           dropHelp.textContent = "Drop two or more PDF files to merge into one PDF.";
           fileInput.setAttribute("accept", "application/pdf");
           fileInput.setAttribute("multiple", "multiple");
+        } else if (activePdfTool === "pdf-split") {
+          dropHelp.textContent = "Drop a PDF file to split each page into separate PDFs.";
+          fileInput.setAttribute("accept", "application/pdf");
         } else {
           dropHelp.textContent = "Drop a PDF file.";
           fileInput.setAttribute("accept", "application/pdf");
@@ -497,6 +538,9 @@
         } else if (activeDevTool === "sha256-hash") {
           dropHelp.textContent = "Drop any file to generate SHA-256 hash (downloads as .txt).";
           fileInput.removeAttribute("accept");
+        } else if (activeDevTool === "jwt-decode") {
+          dropHelp.textContent = "Drop a .txt file containing a JWT token.";
+          fileInput.setAttribute("accept", ".txt,text/plain");
         } else {
           dropHelp.textContent = "Drop a .yml or .yaml file.";
           fileInput.setAttribute("accept", ".yml,.yaml,text/plain");
@@ -572,6 +616,12 @@
         return rows.join("\n");
       }
 
+      function decodeBase64Url(input) {
+        var safe = (input || "").replace(/-/g, "+").replace(/_/g, "/");
+        while (safe.length % 4) safe += "=";
+        return atob(safe);
+      }
+
       function handleFiles(files) {
         var file = files && files[0];
         if (!file) return;
@@ -628,6 +678,9 @@
               if (activeImageTool === "resize") {
                 resizeW.placeholder = String(img.width);
                 resizeH.placeholder = String(img.height);
+              } else if (activeImageTool === "crop") {
+                cropW.placeholder = String(img.width);
+                cropH.placeholder = String(img.height);
               }
               previewCanvas.classList.remove("hidden");
               previewPlaceholder.classList.add("hidden");
@@ -658,6 +711,8 @@
             if (!allPdf || pdfFiles.length < 2) { setStatus("error", "Choose at least 2 PDF files."); return; }
             currentFiles = pdfFiles;
             sourceLabel.textContent = pdfFiles.length + " PDF files selected for merge";
+          } else if (activePdfTool === "pdf-split") {
+            if (file.type !== "application/pdf" && !/\.pdf$/i.test(file.name)) { setStatus("error", "Please choose a PDF file."); return; }
           } else if (activePdfTool === "pdf-to-jpg" || activePdfTool === "pdf-to-png" || activePdfTool === "pdf-to-text") {
             if (file.type !== "application/pdf") { setStatus("error", "Please choose a PDF file."); return; }
           }
@@ -690,6 +745,11 @@
           } else if (activeDevTool === "timestamp-convert") {
             if (!file.type.startsWith("text/") && !/\.(txt)$/i.test(file.name)) {
               setStatus("error", "Please choose a .txt file.");
+              return;
+            }
+          } else if (activeDevTool === "jwt-decode") {
+            if (!file.type.startsWith("text/") && !/\.(txt)$/i.test(file.name)) {
+              setStatus("error", "Please choose a .txt file containing JWT.");
               return;
             }
           }
@@ -754,56 +814,117 @@
 
           var format = targetFormat.value;
           var imageFiles = (currentFiles && currentFiles.length) ? currentFiles : [currentFile];
-          var imageIndex = 0;
-          function processNextImage() {
-            if (imageIndex >= imageFiles.length) {
+          var useZip = imageFiles.length > 1 && typeof JSZip !== "undefined";
+          (async function () {
+            try {
+              var zip = useZip ? new JSZip() : null;
+              for (var ii = 0; ii < imageFiles.length; ii++) {
+                var activeFile = imageFiles[ii];
+                var activeBaseName = activeFile.name.replace(/\.[^/.]+$/, "") || ("file_" + (ii + 1));
+                var dataUrl = await new Promise(function (resolve, reject) {
+                  var reader = new FileReader();
+                  reader.onload = function (ev) {
+                    var img = new Image();
+                    img.onload = function () {
+                      try {
+                        var canvas = document.createElement("canvas");
+                        var ctx = canvas.getContext("2d");
+                        var w = img.width;
+                        var h = img.height;
+                        var drawX = 0;
+                        var drawY = 0;
+                        var drawW = w;
+                        var drawH = h;
+                        if (activeImageTool === "resize") {
+                          var rw = parseInt(resizeW.value, 10) || parseInt(resizeW.placeholder, 10) || w;
+                          var rh = parseInt(resizeH.value, 10) || parseInt(resizeH.placeholder, 10) || h;
+                          if (resizeKeepAspect.checked) {
+                            var scale = Math.min(rw / w, rh / h);
+                            rw = Math.round(w * scale);
+                            rh = Math.round(h * scale);
+                          }
+                          w = Math.max(1, Math.min(8000, rw));
+                          h = Math.max(1, Math.min(8000, rh));
+                        } else if (activeImageTool === "rotate") {
+                          var ang = ((parseInt(rotateAngle.value, 10) || 0) % 360 + 360) % 360;
+                          if (ang === 90 || ang === 270) {
+                            canvas.width = h;
+                            canvas.height = w;
+                            ctx.save();
+                            ctx.translate(canvas.width / 2, canvas.height / 2);
+                            ctx.rotate((ang * Math.PI) / 180);
+                            ctx.drawImage(img, -w / 2, -h / 2);
+                            ctx.restore();
+                            var outFmtR = format === "jpg" ? "jpg" : format === "webp" ? "webp" : "png";
+                            var outMimeR = outFmtR === "jpg" ? "image/jpeg" : outFmtR === "webp" ? "image/webp" : "image/png";
+                            var qualityR = activeImageTool === "compress" ? parseInt(compressQuality.value, 10) / 100 : 0.92;
+                            resolve(canvas.toDataURL(outMimeR, qualityR));
+                            return;
+                          } else if (ang === 180) {
+                            canvas.width = w;
+                            canvas.height = h;
+                            ctx.save();
+                            ctx.translate(w / 2, h / 2);
+                            ctx.rotate(Math.PI);
+                            ctx.drawImage(img, -w / 2, -h / 2);
+                            ctx.restore();
+                            var outFmtR2 = format === "jpg" ? "jpg" : format === "webp" ? "webp" : "png";
+                            var outMimeR2 = outFmtR2 === "jpg" ? "image/jpeg" : outFmtR2 === "webp" ? "image/webp" : "image/png";
+                            resolve(canvas.toDataURL(outMimeR2, 0.92));
+                            return;
+                          }
+                        } else if (activeImageTool === "crop") {
+                          var cw = Math.max(1, Math.min(w, parseInt(cropW.value, 10) || w));
+                          var ch = Math.max(1, Math.min(h, parseInt(cropH.value, 10) || h));
+                          drawX = Math.floor((w - cw) / 2);
+                          drawY = Math.floor((h - ch) / 2);
+                          drawW = cw;
+                          drawH = ch;
+                          w = cw;
+                          h = ch;
+                        }
+                        canvas.width = w;
+                        canvas.height = h;
+                        ctx.drawImage(img, drawX, drawY, drawW, drawH, 0, 0, w, h);
+                        var outFmt = format === "jpg" ? "jpg" : format === "webp" ? "webp" : "png";
+                        var outMime = outFmt === "jpg" ? "image/jpeg" : outFmt === "webp" ? "image/webp" : "image/png";
+                        var quality = activeImageTool === "compress" ? parseInt(compressQuality.value, 10) / 100 : 0.92;
+                        resolve(canvas.toDataURL(outMime, quality));
+                      } catch (errDraw) { reject(errDraw); }
+                    };
+                    img.onerror = function () { reject(new Error("image load failed")); };
+                    img.src = ev.target.result;
+                  };
+                  reader.onerror = function () { reject(new Error("file read failed")); };
+                  reader.readAsDataURL(activeFile);
+                });
+                var outExt = format;
+                if (useZip) {
+                  var blob = await (await fetch(dataUrl)).blob();
+                  zip.file(activeBaseName + "." + outExt, blob);
+                } else {
+                  var link = document.createElement("a");
+                  link.download = activeBaseName + "." + outExt;
+                  link.href = dataUrl;
+                  link.click();
+                }
+              }
+              if (useZip) {
+                var zipBlob = await zip.generateAsync({ type: "blob" });
+                var zipLink = document.createElement("a");
+                zipLink.download = "convertze_images.zip";
+                zipLink.href = URL.createObjectURL(zipBlob);
+                zipLink.click();
+                URL.revokeObjectURL(zipLink.href);
+              }
               setStatus("done", imageFiles.length > 1 ? "Batch conversion downloaded." : "Downloaded.");
               convertLabel.textContent = "Convert again";
-              convertButton.disabled = false;
-              return;
+            } catch (errBatch) {
+              setStatus("error", "One image failed during conversion.");
+              convertLabel.textContent = "Convert & download";
             }
-            var activeFile = imageFiles[imageIndex];
-            var activeBaseName = activeFile.name.replace(/\.[^/.]+$/, "") || ("file_" + (imageIndex + 1));
-            var reader = new FileReader();
-            reader.onload = function (e) {
-              var img = new Image();
-              img.onload = function () {
-                var canvas = document.createElement("canvas");
-                var w = img.width;
-                var h = img.height;
-                if (activeImageTool === "resize") {
-                  var rw = parseInt(resizeW.value, 10) || parseInt(resizeW.placeholder, 10) || w;
-                  var rh = parseInt(resizeH.value, 10) || parseInt(resizeH.placeholder, 10) || h;
-                  if (resizeKeepAspect.checked) {
-                    var scale = Math.min(rw / w, rh / h);
-                    rw = Math.round(w * scale);
-                    rh = Math.round(h * scale);
-                  }
-                  w = Math.max(1, Math.min(8000, rw));
-                  h = Math.max(1, Math.min(8000, rh));
-                }
-                canvas.width = w;
-                canvas.height = h;
-                canvas.getContext("2d").drawImage(img, 0, 0, w, h);
-                var mime = format === "jpg" ? "image/jpeg" : format === "webp" ? "image/webp" : "image/png";
-                var quality = activeImageTool === "compress" ? parseInt(compressQuality.value, 10) / 100 : 0.92;
-                var link = document.createElement("a");
-                link.download = activeBaseName + "." + format;
-                link.href = canvas.toDataURL(mime, quality);
-                link.click();
-                imageIndex++;
-                processNextImage();
-              };
-              img.onerror = function () {
-                setStatus("error", "One image failed during conversion.");
-                convertLabel.textContent = "Convert & download";
-                convertButton.disabled = false;
-              };
-              img.src = e.target.result;
-            };
-            reader.readAsDataURL(activeFile);
-          }
-          processNextImage();
+            convertButton.disabled = false;
+          })();
         } else if (activeTab === "pdf") {
           convertButton.disabled = true;
           convertLabel.textContent = "Converting…";
@@ -938,6 +1059,51 @@
                 convertLabel.textContent = "Convert again";
               } catch (err) {
                 setStatus("error", "Could not merge PDFs.");
+                convertLabel.textContent = "Convert & download";
+              }
+              convertButton.disabled = false;
+            })();
+          } else if (activePdfTool === "pdf-split") {
+            if (typeof PDFLib === "undefined" || !PDFLib.PDFDocument) {
+              setStatus("error", "PDF split library not loaded.");
+              convertButton.disabled = false;
+              convertLabel.textContent = "Convert & download";
+              return;
+            }
+            (async function () {
+              try {
+                var srcBytes = await currentFile.arrayBuffer();
+                var srcPdf = await PDFLib.PDFDocument.load(srcBytes);
+                var total = srcPdf.getPageCount();
+                if (total < 1) throw new Error("empty pdf");
+                var splitZip = typeof JSZip !== "undefined" ? new JSZip() : null;
+                for (var sp = 0; sp < total; sp++) {
+                  var newPdf = await PDFLib.PDFDocument.create();
+                  var copied = await newPdf.copyPages(srcPdf, [sp]);
+                  newPdf.addPage(copied[0]);
+                  var oneBytes = await newPdf.save();
+                  if (splitZip) {
+                    splitZip.file(baseName + "_page" + (sp + 1) + ".pdf", oneBytes);
+                  } else {
+                    var singleLink = document.createElement("a");
+                    singleLink.download = baseName + "_page" + (sp + 1) + ".pdf";
+                    singleLink.href = URL.createObjectURL(new Blob([oneBytes], { type: "application/pdf" }));
+                    singleLink.click();
+                    URL.revokeObjectURL(singleLink.href);
+                  }
+                }
+                if (splitZip) {
+                  var splitBlob = await splitZip.generateAsync({ type: "blob" });
+                  var splitLink = document.createElement("a");
+                  splitLink.download = baseName + "_split.zip";
+                  splitLink.href = URL.createObjectURL(splitBlob);
+                  splitLink.click();
+                  URL.revokeObjectURL(splitLink.href);
+                }
+                setStatus("done", "Split PDF downloaded.");
+                convertLabel.textContent = "Convert again";
+              } catch (err) {
+                setStatus("error", "Could not split PDF.");
                 convertLabel.textContent = "Convert & download";
               }
               convertButton.disabled = false;
@@ -1188,6 +1354,37 @@
               convertButton.disabled = false;
             };
             r.readAsArrayBuffer(currentFile);
+          } else if (activeDevTool === "jwt-decode") {
+            r.onload = function () {
+              try {
+                var token = String(r.result || "").trim();
+                var parts = token.split(".");
+                if (parts.length < 2) throw new Error("bad jwt");
+                var header = JSON.parse(decodeURIComponent(escape(decodeBase64Url(parts[0]))));
+                var payload = JSON.parse(decodeURIComponent(escape(decodeBase64Url(parts[1]))));
+                var outJwt = [
+                  "Header:",
+                  JSON.stringify(header, null, 2),
+                  "",
+                  "Payload:",
+                  JSON.stringify(payload, null, 2),
+                  "",
+                  "Signature present: " + (parts.length > 2 ? "yes" : "no"),
+                  "Note: Signature is not verified in this tool."
+                ].join("\n");
+                var jwtLink = document.createElement("a");
+                jwtLink.download = baseName + "_jwt_decoded.txt";
+                jwtLink.href = "data:text/plain;charset=utf-8," + encodeURIComponent(outJwt);
+                jwtLink.click();
+                setStatus("done", "Downloaded.");
+                convertLabel.textContent = "Convert again";
+              } catch (e) {
+                setStatus("error", "Invalid JWT token.");
+                convertLabel.textContent = "Convert & download";
+              }
+              convertButton.disabled = false;
+            };
+            r.readAsText(currentFile);
           } else if (activeDevTool === "json-pretty") {
             r.onload = function () {
               try {
