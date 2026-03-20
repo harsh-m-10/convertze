@@ -10,7 +10,10 @@
     <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)" />
     <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <link rel="canonical" href="https://convertze.com/" />
+    <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
@@ -174,6 +177,7 @@
                           <option value="compress">Compress</option>
                           <option value="rotate">Rotate</option>
                           <option value="crop">Crop (center)</option>
+                          <option value="favicon-pack">Favicon generator</option>
                           <option value="svg2png">SVG to PNG</option>
                         </select>
                       </div>
@@ -213,6 +217,12 @@
                           <input type="number" id="crop-h" min="1" max="8000" placeholder="height" class="w-16 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-2 py-1 text-xs" />
                         </label>
                       </div>
+                      <div id="favicon-options" class="hidden flex items-center gap-2">
+                        <label class="flex items-center gap-2 text-[11px] text-slate-600 dark:text-slate-300">
+                          <span>Sizes</span>
+                          <input type="text" id="favicon-sizes" value="16,32,48,180,192,512" class="w-40 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-2 py-1 text-xs" />
+                        </label>
+                      </div>
                     </div>
                     <div id="dev-tool-row" class="hidden space-y-2">
                       <div class="flex items-center gap-2">
@@ -245,6 +255,12 @@
                           <option value="pdf-to-png">PDF to PNG</option>
                           <option value="pdf-to-text">PDF to Text</option>
                         </select>
+                      </div>
+                      <div id="pdf-split-options" class="hidden">
+                        <label class="flex items-center gap-2 text-[11px] text-slate-600 dark:text-slate-300">
+                          <span>Pages</span>
+                          <input type="text" id="pdf-split-range" placeholder="all or 1-3,5,8" class="w-40 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-2 py-1 text-xs" />
+                        </label>
                       </div>
                     </div>
                     <div class="grid grid-cols-2 gap-3 text-[11px]">
@@ -350,11 +366,13 @@
       var compressOptions = document.getElementById("compress-options");
       var rotateOptions = document.getElementById("rotate-options");
       var cropOptions = document.getElementById("crop-options");
+      var faviconOptions = document.getElementById("favicon-options");
       var resizeW = document.getElementById("resize-w");
       var resizeH = document.getElementById("resize-h");
       var cropW = document.getElementById("crop-w");
       var cropH = document.getElementById("crop-h");
       var rotateAngle = document.getElementById("rotate-angle");
+      var faviconSizes = document.getElementById("favicon-sizes");
       var resizeKeepAspect = document.getElementById("resize-keep-aspect");
       var compressQuality = document.getElementById("compress-quality");
       var compressQualityValue = document.getElementById("compress-quality-value");
@@ -369,6 +387,8 @@
       var previewCanvas = document.getElementById("preview-canvas");
       var previewPlaceholder = document.getElementById("preview-placeholder");
       var convertLabel = document.getElementById("convert-label");
+      var pdfSplitOptions = document.getElementById("pdf-split-options");
+      var pdfSplitRange = document.getElementById("pdf-split-range");
 
       var currentFile = null;
       var currentFiles = null;
@@ -401,6 +421,7 @@
         compressOptions.classList.add("hidden");
         rotateOptions.classList.add("hidden");
         cropOptions.classList.add("hidden");
+        faviconOptions.classList.add("hidden");
         targetFormat.classList.remove("hidden");
         targetFixed.classList.add("hidden");
         if (activeImageTool === "format") {
@@ -427,6 +448,13 @@
           dropHelp.textContent = "Center crop images to chosen width and height.";
           fileInput.setAttribute("accept", "image/jpeg,image/png,image/webp");
           fileInput.setAttribute("multiple", "multiple");
+        } else if (activeImageTool === "favicon-pack") {
+          faviconOptions.classList.remove("hidden");
+          targetFormat.classList.add("hidden");
+          targetFixed.classList.remove("hidden");
+          targetFixed.textContent = "PNG";
+          dropHelp.textContent = "Generate favicon PNG sizes from one image.";
+          fileInput.setAttribute("accept", "image/*");
         } else {
           targetFormat.classList.add("hidden");
           targetFixed.classList.remove("hidden");
@@ -495,6 +523,7 @@
       function applyPdfTool() {
         activePdfTool = pdfTool.value;
         fileInput.removeAttribute("multiple");
+        pdfSplitOptions.classList.add("hidden");
         if (activePdfTool === "text-to-pdf") {
           dropHelp.textContent = "Upload a .txt or .md file. We’ll create a simple PDF.";
           fileInput.setAttribute("accept", ".txt,.md,.markdown,text/plain");
@@ -512,6 +541,7 @@
         } else if (activePdfTool === "pdf-split") {
           dropHelp.textContent = "Drop a PDF file to split each page into separate PDFs.";
           fileInput.setAttribute("accept", "application/pdf");
+          pdfSplitOptions.classList.remove("hidden");
         } else {
           dropHelp.textContent = "Drop a PDF file.";
           fileInput.setAttribute("accept", "application/pdf");
@@ -622,6 +652,38 @@
         return atob(safe);
       }
 
+      function parsePageRange(rangeText, totalPages) {
+        if (!rangeText || !rangeText.trim() || rangeText.trim().toLowerCase() === "all") {
+          return Array.from({ length: totalPages }, function (_, i) { return i; });
+        }
+        var used = {};
+        var out = [];
+        var parts = rangeText.split(",");
+        for (var i = 0; i < parts.length; i++) {
+          var token = parts[i].trim();
+          if (!token) continue;
+          if (token.indexOf("-") !== -1) {
+            var bounds = token.split("-");
+            var start = parseInt(bounds[0], 10);
+            var end = parseInt(bounds[1], 10);
+            if (!isFinite(start) || !isFinite(end)) throw new Error("Invalid page range.");
+            if (start > end) { var t = start; start = end; end = t; }
+            for (var p = start; p <= end; p++) {
+              if (p < 1 || p > totalPages) throw new Error("Page out of bounds.");
+              var idx = p - 1;
+              if (!used[idx]) { used[idx] = true; out.push(idx); }
+            }
+          } else {
+            var single = parseInt(token, 10);
+            if (!isFinite(single) || single < 1 || single > totalPages) throw new Error("Invalid page number.");
+            var sidx = single - 1;
+            if (!used[sidx]) { used[sidx] = true; out.push(sidx); }
+          }
+        }
+        if (!out.length) throw new Error("No pages selected.");
+        return out;
+      }
+
       function handleFiles(files) {
         var file = files && files[0];
         if (!file) return;
@@ -654,6 +716,10 @@
             };
             img.onerror = function () { setStatus("error", "Could not load SVG."); URL.revokeObjectURL(url); };
             img.src = url;
+            return;
+          }
+          if (activeImageTool === "favicon-pack" && files && files.length > 1) {
+            setStatus("error", "Please choose one image for favicon generation.");
             return;
           }
           if (!file.type.startsWith("image/") || isSvg) {
@@ -809,6 +875,54 @@
               URL.revokeObjectURL(url);
             };
             img.src = url;
+            return;
+          }
+          if (activeImageTool === "favicon-pack") {
+            (async function () {
+              try {
+                if (typeof JSZip === "undefined") throw new Error("zip missing");
+                var imgData = await new Promise(function (resolve, reject) {
+                  var rFav = new FileReader();
+                  rFav.onload = function (evFav) {
+                    var imgFav = new Image();
+                    imgFav.onload = function () { resolve(imgFav); };
+                    imgFav.onerror = function () { reject(new Error("image load failed")); };
+                    imgFav.src = evFav.target.result;
+                  };
+                  rFav.onerror = function () { reject(new Error("file read failed")); };
+                  rFav.readAsDataURL(currentFile);
+                });
+                var sizesText = (faviconSizes.value || "").trim();
+                var sizes = sizesText.split(",").map(function (s) { return parseInt(s.trim(), 10); }).filter(function (n) { return isFinite(n) && n > 0 && n <= 1024; });
+                if (!sizes.length) throw new Error("invalid sizes");
+                var zipFav = new JSZip();
+                for (var si = 0; si < sizes.length; si++) {
+                  var sz = sizes[si];
+                  var cFav = document.createElement("canvas");
+                  cFav.width = sz;
+                  cFav.height = sz;
+                  var ctxFav = cFav.getContext("2d");
+                  var side = Math.min(imgData.width, imgData.height);
+                  var sx = Math.floor((imgData.width - side) / 2);
+                  var sy = Math.floor((imgData.height - side) / 2);
+                  ctxFav.drawImage(imgData, sx, sy, side, side, 0, 0, sz, sz);
+                  var blobFav = await (await fetch(cFav.toDataURL("image/png"))).blob();
+                  zipFav.file("favicon-" + sz + "x" + sz + ".png", blobFav);
+                }
+                var favBlob = await zipFav.generateAsync({ type: "blob" });
+                var favLink = document.createElement("a");
+                favLink.download = baseName + "_favicons.zip";
+                favLink.href = URL.createObjectURL(favBlob);
+                favLink.click();
+                URL.revokeObjectURL(favLink.href);
+                setStatus("done", "Favicon pack downloaded.");
+                convertLabel.textContent = "Convert again";
+              } catch (e) {
+                setStatus("error", "Could not generate favicon pack.");
+                convertLabel.textContent = "Convert & download";
+              }
+              convertButton.disabled = false;
+            })();
             return;
           }
 
@@ -1076,8 +1190,10 @@
                 var srcPdf = await PDFLib.PDFDocument.load(srcBytes);
                 var total = srcPdf.getPageCount();
                 if (total < 1) throw new Error("empty pdf");
+                var selectedPages = parsePageRange(pdfSplitRange.value, total);
                 var splitZip = typeof JSZip !== "undefined" ? new JSZip() : null;
-                for (var sp = 0; sp < total; sp++) {
+                for (var spi = 0; spi < selectedPages.length; spi++) {
+                  var sp = selectedPages[spi];
                   var newPdf = await PDFLib.PDFDocument.create();
                   var copied = await newPdf.copyPages(srcPdf, [sp]);
                   newPdf.addPage(copied[0]);
@@ -1430,6 +1546,12 @@
       }
       var savedTab = localStorage.getItem("convertze-tab");
       setTab(savedTab === "pdf" ? "pdf" : savedTab === "dev" ? "dev" : "images");
+
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function () {
+          navigator.serviceWorker.register("/sw.js").catch(function () {});
+        });
+      }
     </script>
   <script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
   <script defer src="/_vercel/speed-insights/script.js"></script>
