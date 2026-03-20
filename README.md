@@ -17,6 +17,7 @@ Free file converter that runs **entirely in your browser** — no uploads, no ac
 | **Compress** | Adjust quality. Batch + zip same as above. |
 | **Rotate** | Rotate by angle (e.g. 90°, 180°, 270°). Batch + zip same as above. |
 | **Crop (center)** | Center-crop to a chosen width and height. Batch + zip same as above. |
+| **Favicon generator** | Generate a favicon pack from one image (default sizes: `16,32,48,180,192,512`) as zip. |
 | **SVG → PNG** | Rasterize a single SVG to PNG. |
 
 ### PDF
@@ -27,7 +28,7 @@ Free file converter that runs **entirely in your browser** — no uploads, no ac
 | **HTML → PDF** | Render `.html` to PDF (uses html2canvas + jsPDF). |
 | **Images → PDF** | Combine multiple JPG/PNG/WebP into one PDF. |
 | **Merge PDFs** | Combine two or more PDFs into one file (`pdf-lib`). |
-| **Split PDF pages** | One PDF → one PDF per page, delivered as **`basename_split.zip`**. |
+| **Split PDF pages** | Split by page range (`all` or `1-3,5,8`), delivered as **`basename_split.zip`**. |
 | **PDF → JPG / PNG** | Export each page as an image. |
 | **PDF → Text** | Extract text to `.txt`. |
 
@@ -52,6 +53,7 @@ Free file converter that runs **entirely in your browser** — no uploads, no ac
 - Light / dark theme (saved in the browser).
 - Drag-and-drop or file picker.
 - **Contribute** link in the header → GitHub repo.
+- Installable **PWA** with offline support after first load (service worker + manifest).
 
 ---
 
