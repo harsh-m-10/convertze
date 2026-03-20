@@ -68,6 +68,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
   </head>
   <body class="h-full bg-gradient-to-br from-sky-50 via-slate-50 to-violet-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 text-slate-900 dark:text-slate-100">
     <div class="min-h-screen flex flex-col">
@@ -81,10 +82,25 @@
             <div class="text-xs text-slate-500 dark:text-slate-400">In-browser file & image converter</div>
           </div>
         </div>
+        <div class="flex items-center gap-2 sm:gap-3">
+        <a
+          href="https://github.com/harsh-m-10/convertze"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex h-9 items-center gap-2 rounded-full border border-slate-200 dark:border-slate-700 bg-white/70 dark:bg-slate-900/60 px-2.5 sm:px-3 text-slate-700 dark:text-slate-200 shadow-sm hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+          aria-label="Contribute — open source on GitHub"
+          title="View source, report issues, or contribute on GitHub"
+        >
+          <svg class="h-4 w-4 shrink-0 sm:h-5 sm:w-5" viewBox="0 0 98 96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z"/>
+          </svg>
+          <span class="text-xs font-medium sm:text-sm whitespace-nowrap">Contribute</span>
+        </a>
         <button id="theme-toggle" type="button" class="relative inline-flex h-9 w-16 items-center rounded-full border border-slate-200 dark:border-slate-700 bg-white/70 dark:bg-slate-900/60 px-1 shadow-sm" aria-label="Toggle light and dark mode">
           <span id="theme-thumb" class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-900 dark:bg-slate-100 text-[10px] font-medium text-slate-50 dark:text-slate-900 shadow-md transition-transform">L</span>
           <span id="theme-label" class="absolute text-xs text-slate-500 dark:text-slate-400 select-none">Light</span>
         </button>
+        </div>
       </header>
 
       <main class="flex-1 flex items-center justify-center px-5 pb-10 sm:px-6 sm:pb-12">
@@ -185,10 +201,14 @@
                         <select id="dev-tool" aria-label="Dev tool" class="rounded-xl bg-white/90 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 px-2.5 py-1.5 text-xs text-slate-700 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-sky-400">
                           <option value="json-to-yaml">JSON to YAML</option>
                           <option value="yaml-to-json">YAML to JSON</option>
+                          <option value="csv-to-json">CSV to JSON</option>
+                          <option value="json-to-csv">JSON to CSV</option>
                           <option value="json-pretty">JSON pretty-print</option>
                           <option value="json-minify">JSON minify</option>
                           <option value="base64-encode">Base64 encode (file to text)</option>
                           <option value="base64-decode">Base64 decode (text to file)</option>
+                          <option value="timestamp-convert">Timestamp converter (txt)</option>
+                          <option value="sha256-hash">SHA-256 hash (file)</option>
                         </select>
                       </div>
                     </div>
@@ -199,6 +219,7 @@
                           <option value="text-to-pdf">Text / Markdown to PDF</option>
                           <option value="html-to-pdf">HTML to PDF</option>
                           <option value="images-to-pdf">Images to PDF</option>
+                          <option value="pdf-merge">Merge PDFs</option>
                           <option value="pdf-to-jpg">PDF to JPG</option>
                           <option value="pdf-to-png">PDF to PNG</option>
                           <option value="pdf-to-text">PDF to Text</option>
@@ -233,7 +254,7 @@
                   </div>
                 </div>
                 <div class="flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 dark:border-slate-800 pt-3">
-                  <span class="text-[10px] text-slate-500 dark:text-slate-400">Images · PDF · Dev: JSON/YAML, pretty/minify, Base64.</span>
+                  <span class="text-[10px] text-slate-500 dark:text-slate-400">Images · PDF · Dev: JSON/YAML/CSV, timestamp, hash, Base64.</span>
                   <div class="flex items-center gap-2">
                     <button type="button" id="remove-button" class="hidden inline-flex items-center gap-2 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white/70 dark:bg-slate-900/70 text-slate-700 dark:text-slate-200 px-3 py-2 text-xs font-medium hover:bg-slate-50 dark:hover:bg-slate-800 transition">Remove file</button>
                     <button type="button" id="convert-button" class="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-tr from-sky-400 via-blue-500 to-indigo-500 text-white px-3 sm:px-4 py-2 text-xs font-medium shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition disabled:opacity-50 disabled:hover:shadow-none disabled:hover:translate-y-0" disabled>
@@ -349,6 +370,7 @@
 
       function applyImageTool() {
         activeImageTool = imageTool.value;
+        fileInput.removeAttribute("multiple");
         resizeOptions.classList.add("hidden");
         compressOptions.classList.add("hidden");
         targetFormat.classList.remove("hidden");
@@ -356,14 +378,17 @@
         if (activeImageTool === "format") {
           dropHelp.textContent = "Supports JPG, PNG and WebP images.";
           fileInput.setAttribute("accept", "image/*");
+          fileInput.setAttribute("multiple", "multiple");
         } else if (activeImageTool === "resize") {
           resizeOptions.classList.remove("hidden");
           dropHelp.textContent = "Supports JPG, PNG and WebP. Enter width and height.";
           fileInput.setAttribute("accept", "image/jpeg,image/png,image/webp");
+          fileInput.setAttribute("multiple", "multiple");
         } else if (activeImageTool === "compress") {
           compressOptions.classList.remove("hidden");
           dropHelp.textContent = "Supports JPG, PNG and WebP. Choose quality below.";
           fileInput.setAttribute("accept", "image/jpeg,image/png,image/webp");
+          fileInput.setAttribute("multiple", "multiple");
         } else {
           targetFormat.classList.add("hidden");
           targetFixed.classList.remove("hidden");
@@ -442,6 +467,10 @@
           dropHelp.textContent = "Drop one or more images (JPG, PNG, WebP). They will be combined into one PDF.";
           fileInput.setAttribute("accept", "image/jpeg,image/png,image/webp");
           fileInput.setAttribute("multiple", "multiple");
+        } else if (activePdfTool === "pdf-merge") {
+          dropHelp.textContent = "Drop two or more PDF files to merge into one PDF.";
+          fileInput.setAttribute("accept", "application/pdf");
+          fileInput.setAttribute("multiple", "multiple");
         } else {
           dropHelp.textContent = "Drop a PDF file.";
           fileInput.setAttribute("accept", "application/pdf");
@@ -456,9 +485,18 @@
         } else if (activeDevTool === "base64-decode") {
           dropHelp.textContent = "Drop a .txt file containing Base64 to decode and download as binary.";
           fileInput.setAttribute("accept", ".txt,text/plain");
-        } else if (activeDevTool === "json-to-yaml" || activeDevTool === "json-pretty" || activeDevTool === "json-minify") {
+        } else if (activeDevTool === "json-to-yaml" || activeDevTool === "json-pretty" || activeDevTool === "json-minify" || activeDevTool === "json-to-csv") {
           dropHelp.textContent = "Drop a .json file.";
           fileInput.setAttribute("accept", ".json,application/json,text/plain");
+        } else if (activeDevTool === "csv-to-json") {
+          dropHelp.textContent = "Drop a .csv file.";
+          fileInput.setAttribute("accept", ".csv,text/csv,text/plain");
+        } else if (activeDevTool === "timestamp-convert") {
+          dropHelp.textContent = "Drop a .txt file with a unix timestamp or date/time string.";
+          fileInput.setAttribute("accept", ".txt,text/plain");
+        } else if (activeDevTool === "sha256-hash") {
+          dropHelp.textContent = "Drop any file to generate SHA-256 hash (downloads as .txt).";
+          fileInput.removeAttribute("accept");
         } else {
           dropHelp.textContent = "Drop a .yml or .yaml file.";
           fileInput.setAttribute("accept", ".yml,.yaml,text/plain");
@@ -476,6 +514,63 @@
 
       fileButton.addEventListener("click", function () { fileInput.click(); });
       removeButton.addEventListener("click", resetState);
+
+      function parseCsvLine(line) {
+        var result = [];
+        var cur = "";
+        var inQuotes = false;
+        for (var i = 0; i < line.length; i++) {
+          var ch = line[i];
+          if (ch === '"') {
+            if (inQuotes && line[i + 1] === '"') {
+              cur += '"';
+              i++;
+            } else {
+              inQuotes = !inQuotes;
+            }
+          } else if (ch === "," && !inQuotes) {
+            result.push(cur);
+            cur = "";
+          } else {
+            cur += ch;
+          }
+        }
+        result.push(cur);
+        return result;
+      }
+
+      function parseCsv(text) {
+        var lines = (text || "").replace(/\r/g, "").split("\n").filter(function (l) { return l.trim().length > 0; });
+        if (!lines.length) return [];
+        var headers = parseCsvLine(lines[0]);
+        var out = [];
+        for (var i = 1; i < lines.length; i++) {
+          var vals = parseCsvLine(lines[i]);
+          var row = {};
+          for (var j = 0; j < headers.length; j++) row[headers[j] || ("col_" + (j + 1))] = vals[j] != null ? vals[j] : "";
+          out.push(row);
+        }
+        return out;
+      }
+
+      function jsonToCsv(arr) {
+        if (!Array.isArray(arr)) throw new Error("JSON must be an array of objects.");
+        if (!arr.length) return "";
+        var headers = Object.keys(arr[0]);
+        function esc(v) {
+          var s = v == null ? "" : String(v);
+          if (s.indexOf('"') !== -1 || s.indexOf(",") !== -1 || s.indexOf("\n") !== -1) {
+            return '"' + s.replace(/"/g, '""') + '"';
+          }
+          return s;
+        }
+        var rows = [headers.map(esc).join(",")];
+        for (var i = 0; i < arr.length; i++) {
+          var row = headers.map(function (h) { return esc(arr[i][h]); }).join(",");
+          rows.push(row);
+        }
+        return rows.join("\n");
+      }
 
       function handleFiles(files) {
         var file = files && files[0];
@@ -515,6 +610,10 @@
             setStatus("error", "Please choose a raster image (JPG, PNG, WebP).");
             return;
           }
+          currentFiles = files && files.length ? Array.from(files) : [file];
+          if (currentFiles.length > 1) {
+            sourceLabel.textContent = currentFiles.length + " image(s) selected for batch convert";
+          }
           var reader = new FileReader();
           reader.onload = function (e) {
             var img = new Image();
@@ -553,6 +652,12 @@
             if (!allImg) { setStatus("error", "Please choose image(s) (JPG, PNG, WebP)."); return; }
             currentFiles = files;
             sourceLabel.textContent = files.length + " image(s) · " + (file.size / 1024).toFixed(1) + " KB";
+          } else if (activePdfTool === "pdf-merge") {
+            var pdfFiles = files && files.length ? Array.from(files) : [file];
+            var allPdf = pdfFiles.every(function (f) { return f.type === "application/pdf" || /\.pdf$/i.test(f.name); });
+            if (!allPdf || pdfFiles.length < 2) { setStatus("error", "Choose at least 2 PDF files."); return; }
+            currentFiles = pdfFiles;
+            sourceLabel.textContent = pdfFiles.length + " PDF files selected for merge";
           } else if (activePdfTool === "pdf-to-jpg" || activePdfTool === "pdf-to-png" || activePdfTool === "pdf-to-text") {
             if (file.type !== "application/pdf") { setStatus("error", "Please choose a PDF file."); return; }
           }
@@ -567,14 +672,24 @@
               setStatus("error", "Please choose a .txt file with Base64 content.");
               return;
             }
-          } else if (activeDevTool === "json-to-yaml" || activeDevTool === "json-pretty" || activeDevTool === "json-minify") {
+          } else if (activeDevTool === "json-to-yaml" || activeDevTool === "json-pretty" || activeDevTool === "json-minify" || activeDevTool === "json-to-csv") {
             if (!/\.(json)$/i.test(file.name) && file.type !== "application/json") {
               setStatus("error", "Please choose a .json file.");
+              return;
+            }
+          } else if (activeDevTool === "csv-to-json") {
+            if (!/\.(csv)$/i.test(file.name) && file.type !== "text/csv") {
+              setStatus("error", "Please choose a .csv file.");
               return;
             }
           } else if (activeDevTool === "yaml-to-json") {
             if (!/\.(yml|yaml)$/i.test(file.name)) {
               setStatus("error", "Please choose a .yml or .yaml file.");
+              return;
+            }
+          } else if (activeDevTool === "timestamp-convert") {
+            if (!file.type.startsWith("text/") && !/\.(txt)$/i.test(file.name)) {
+              setStatus("error", "Please choose a .txt file.");
               return;
             }
           }
@@ -638,45 +753,57 @@
           }
 
           var format = targetFormat.value;
-          var reader = new FileReader();
-          reader.onload = function (e) {
-            var img = new Image();
-            img.onload = function () {
-              var canvas = document.createElement("canvas");
-              var w = img.width;
-              var h = img.height;
-              if (activeImageTool === "resize") {
-                var rw = parseInt(resizeW.value, 10) || parseInt(resizeW.placeholder, 10) || w;
-                var rh = parseInt(resizeH.value, 10) || parseInt(resizeH.placeholder, 10) || h;
-                if (resizeKeepAspect.checked) {
-                  var scale = Math.min(rw / w, rh / h);
-                  rw = Math.round(w * scale);
-                  rh = Math.round(h * scale);
-                }
-                w = Math.max(1, Math.min(8000, rw));
-                h = Math.max(1, Math.min(8000, rh));
-              }
-              canvas.width = w;
-              canvas.height = h;
-              canvas.getContext("2d").drawImage(img, 0, 0, w, h);
-              var mime = format === "jpg" ? "image/jpeg" : format === "webp" ? "image/webp" : "image/png";
-              var quality = activeImageTool === "compress" ? parseInt(compressQuality.value, 10) / 100 : 0.92;
-              var link = document.createElement("a");
-              link.download = baseName + "." + format;
-              link.href = canvas.toDataURL(mime, quality);
-              link.click();
-              setStatus("done", "Downloaded.");
+          var imageFiles = (currentFiles && currentFiles.length) ? currentFiles : [currentFile];
+          var imageIndex = 0;
+          function processNextImage() {
+            if (imageIndex >= imageFiles.length) {
+              setStatus("done", imageFiles.length > 1 ? "Batch conversion downloaded." : "Downloaded.");
               convertLabel.textContent = "Convert again";
               convertButton.disabled = false;
+              return;
+            }
+            var activeFile = imageFiles[imageIndex];
+            var activeBaseName = activeFile.name.replace(/\.[^/.]+$/, "") || ("file_" + (imageIndex + 1));
+            var reader = new FileReader();
+            reader.onload = function (e) {
+              var img = new Image();
+              img.onload = function () {
+                var canvas = document.createElement("canvas");
+                var w = img.width;
+                var h = img.height;
+                if (activeImageTool === "resize") {
+                  var rw = parseInt(resizeW.value, 10) || parseInt(resizeW.placeholder, 10) || w;
+                  var rh = parseInt(resizeH.value, 10) || parseInt(resizeH.placeholder, 10) || h;
+                  if (resizeKeepAspect.checked) {
+                    var scale = Math.min(rw / w, rh / h);
+                    rw = Math.round(w * scale);
+                    rh = Math.round(h * scale);
+                  }
+                  w = Math.max(1, Math.min(8000, rw));
+                  h = Math.max(1, Math.min(8000, rh));
+                }
+                canvas.width = w;
+                canvas.height = h;
+                canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+                var mime = format === "jpg" ? "image/jpeg" : format === "webp" ? "image/webp" : "image/png";
+                var quality = activeImageTool === "compress" ? parseInt(compressQuality.value, 10) / 100 : 0.92;
+                var link = document.createElement("a");
+                link.download = activeBaseName + "." + format;
+                link.href = canvas.toDataURL(mime, quality);
+                link.click();
+                imageIndex++;
+                processNextImage();
+              };
+              img.onerror = function () {
+                setStatus("error", "One image failed during conversion.");
+                convertLabel.textContent = "Convert & download";
+                convertButton.disabled = false;
+              };
+              img.src = e.target.result;
             };
-            img.onerror = function () {
-              setStatus("error", "Conversion failed.");
-              convertLabel.textContent = "Convert & download";
-              convertButton.disabled = false;
-            };
-            img.src = e.target.result;
-          };
-          reader.readAsDataURL(currentFile);
+            reader.readAsDataURL(activeFile);
+          }
+          processNextImage();
         } else if (activeTab === "pdf") {
           convertButton.disabled = true;
           convertLabel.textContent = "Converting…";
@@ -778,6 +905,43 @@
               fr.readAsDataURL(imgs[idx]);
             }
             addNext();
+          } else if (activePdfTool === "pdf-merge") {
+            if (typeof PDFLib === "undefined" || !PDFLib.PDFDocument) {
+              setStatus("error", "PDF merge library not loaded.");
+              convertButton.disabled = false;
+              convertLabel.textContent = "Convert & download";
+              return;
+            }
+            var mergeFiles = (currentFiles && currentFiles.length) ? currentFiles : [currentFile];
+            if (mergeFiles.length < 2) {
+              setStatus("error", "Select at least 2 PDF files.");
+              convertButton.disabled = false;
+              convertLabel.textContent = "Convert & download";
+              return;
+            }
+            (async function () {
+              try {
+                var mergedPdf = await PDFLib.PDFDocument.create();
+                for (var m = 0; m < mergeFiles.length; m++) {
+                  var bytes = await mergeFiles[m].arrayBuffer();
+                  var src = await PDFLib.PDFDocument.load(bytes);
+                  var pages = await mergedPdf.copyPages(src, src.getPageIndices());
+                  for (var p = 0; p < pages.length; p++) mergedPdf.addPage(pages[p]);
+                }
+                var out = await mergedPdf.save();
+                var outLink = document.createElement("a");
+                outLink.download = baseName + "_merged.pdf";
+                outLink.href = URL.createObjectURL(new Blob([out], { type: "application/pdf" }));
+                outLink.click();
+                URL.revokeObjectURL(outLink.href);
+                setStatus("done", "Merged PDF downloaded.");
+                convertLabel.textContent = "Convert again";
+              } catch (err) {
+                setStatus("error", "Could not merge PDFs.");
+                convertLabel.textContent = "Convert & download";
+              }
+              convertButton.disabled = false;
+            })();
           } else if (activePdfTool === "pdf-to-jpg" || activePdfTool === "pdf-to-png") {
             var pdfUrl = URL.createObjectURL(currentFile);
             if (typeof pdfjsLib === "undefined") {
@@ -936,6 +1100,94 @@
               convertButton.disabled = false;
             };
             r.readAsText(currentFile);
+          } else if (activeDevTool === "csv-to-json") {
+            r.onload = function () {
+              try {
+                var rows = parseCsv(String(r.result || ""));
+                var jsonCsv = JSON.stringify(rows, null, 2);
+                var link = document.createElement("a");
+                link.download = baseName + ".json";
+                link.href = "data:application/json;charset=utf-8," + encodeURIComponent(jsonCsv);
+                link.click();
+                setStatus("done", "Downloaded.");
+                convertLabel.textContent = "Convert again";
+              } catch (e) {
+                setStatus("error", "Invalid CSV.");
+                convertLabel.textContent = "Convert & download";
+              }
+              convertButton.disabled = false;
+            };
+            r.readAsText(currentFile);
+          } else if (activeDevTool === "json-to-csv") {
+            r.onload = function () {
+              try {
+                var list = JSON.parse(r.result);
+                var csv = jsonToCsv(list);
+                var link = document.createElement("a");
+                link.download = baseName + ".csv";
+                link.href = "data:text/csv;charset=utf-8," + encodeURIComponent(csv);
+                link.click();
+                setStatus("done", "Downloaded.");
+                convertLabel.textContent = "Convert again";
+              } catch (e) {
+                setStatus("error", "JSON must be an array of objects.");
+                convertLabel.textContent = "Convert & download";
+              }
+              convertButton.disabled = false;
+            };
+            r.readAsText(currentFile);
+          } else if (activeDevTool === "timestamp-convert") {
+            r.onload = function () {
+              try {
+                var raw = String(r.result || "").trim();
+                var ms;
+                if (/^\d{10,13}$/.test(raw)) {
+                  ms = raw.length === 13 ? parseInt(raw, 10) : parseInt(raw, 10) * 1000;
+                } else {
+                  ms = Date.parse(raw);
+                }
+                if (!isFinite(ms)) throw new Error("bad date");
+                var d = new Date(ms);
+                var outText = [
+                  "Input: " + raw,
+                  "Unix (seconds): " + Math.floor(ms / 1000),
+                  "Unix (milliseconds): " + ms,
+                  "ISO UTC: " + d.toISOString(),
+                  "Local: " + d.toString()
+                ].join("\n");
+                var link = document.createElement("a");
+                link.download = baseName + "_timestamp.txt";
+                link.href = "data:text/plain;charset=utf-8," + encodeURIComponent(outText);
+                link.click();
+                setStatus("done", "Downloaded.");
+                convertLabel.textContent = "Convert again";
+              } catch (e) {
+                setStatus("error", "Invalid timestamp/date.");
+                convertLabel.textContent = "Convert & download";
+              }
+              convertButton.disabled = false;
+            };
+            r.readAsText(currentFile);
+          } else if (activeDevTool === "sha256-hash") {
+            r.onload = async function () {
+              try {
+                var digest = await crypto.subtle.digest("SHA-256", r.result);
+                var bytes = new Uint8Array(digest);
+                var hex = Array.from(bytes).map(function (b) { return b.toString(16).padStart(2, "0"); }).join("");
+                var output = "SHA-256 (" + currentFile.name + "):\n" + hex + "\n";
+                var link = document.createElement("a");
+                link.download = baseName + "_sha256.txt";
+                link.href = "data:text/plain;charset=utf-8," + encodeURIComponent(output);
+                link.click();
+                setStatus("done", "Downloaded.");
+                convertLabel.textContent = "Convert again";
+              } catch (e) {
+                setStatus("error", "Could not generate hash.");
+                convertLabel.textContent = "Convert & download";
+              }
+              convertButton.disabled = false;
+            };
+            r.readAsArrayBuffer(currentFile);
           } else if (activeDevTool === "json-pretty") {
             r.onload = function () {
               try {
