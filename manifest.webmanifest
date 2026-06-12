@@ -1,11 +1,11 @@
 {
   "name": "Convertze",
   "short_name": "Convertze",
-  "description": "In-browser file converter for images, PDF, and developer formats.",
+  "description": "Free in-browser file and developer tools. Images, PDF, JSON and more, no uploads, no accounts.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#f8fafc",
+  "background_color": "#0f172a",
   "theme_color": "#0f172a",
   "icons": [
     {

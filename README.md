@@ -1,75 +1,88 @@
 # Convertze
 
-Free file converter that runs **entirely in your browser** — no uploads, no accounts, no backend.
+Free file & developer tools that run **entirely in your browser**, no uploads, no accounts, no backend.
 
 **Live:** [convertze.com](https://convertze.com) · **Source & contribute:** [github.com/harsh-m-10/convertze](https://github.com/harsh-m-10/convertze)
 
 ---
 
-## What it does
+## Tools
 
-### Images
+### Image tools (`/images`)
+| Tool | URL |
+|------|-----|
+| Image Converter (PNG / JPG / WebP, batch + zip) | `/images/convert` |
+| Image Resizer | `/images/resize` |
+| Image Compressor (quality or target-KB mode) | `/images/compress` |
+| Image Cropper (center) | `/images/crop` |
+| Image Rotator | `/images/rotate` |
+| Favicon Generator | `/images/favicon` |
+| SVG to PNG | `/images/svg-to-png` |
 
-| Tool | Description |
-|------|-------------|
-| **PNG / JPG / WebP** | Convert between raster formats. **Batch:** select multiple files; 2+ outputs are packaged in **`convertze_images.zip`** (when JSZip loads). |
-| **Resize** | Set width/height with optional aspect ratio. Batch + zip same as above. |
-| **Compress** | Adjust quality. Batch + zip same as above. |
-| **Rotate** | Rotate by angle (e.g. 90°, 180°, 270°). Batch + zip same as above. |
-| **Crop (center)** | Center-crop to a chosen width and height. Batch + zip same as above. |
-| **Favicon generator** | Generate a favicon pack from one image (default sizes: `16,32,48,180,192,512`) as zip. |
-| **SVG → PNG** | Rasterize a single SVG to PNG. |
+### PDF tools (`/pdf`)
+| Tool | URL |
+|------|-----|
+| Merge PDF (reorderable) | `/pdf/merge` |
+| Split PDF (ranges, zip) | `/pdf/split` |
+| Compress PDF | `/pdf/compress` |
+| Images to PDF | `/pdf/images-to-pdf` |
+| PDF to Images (JPG/PNG, zip) | `/pdf/pdf-to-images` |
+| PDF to Text | `/pdf/pdf-to-text` |
+| HTML to PDF | `/pdf/html-to-pdf` |
+| Markdown to PDF | `/pdf/markdown-to-pdf` |
 
-### PDF
-
-| Tool | Description |
-|------|-------------|
-| **Text / Markdown → PDF** | Turn `.txt` / `.md` into a simple PDF. |
-| **HTML → PDF** | Render `.html` to PDF (uses html2canvas + jsPDF). |
-| **Images → PDF** | Combine multiple JPG/PNG/WebP into one PDF. |
-| **Merge PDFs** | Combine two or more PDFs into one file (`pdf-lib`). |
-| **Split PDF pages** | Split by page range (`all` or `1-3,5,8`), delivered as **`basename_split.zip`**. |
-| **PDF → JPG / PNG** | Export each page as an image. |
-| **PDF → Text** | Extract text to `.txt`. |
-
-### Developer & data
-
-| Tool | Description |
-|------|-------------|
-| **JSON → YAML** | Convert JSON to YAML. |
-| **YAML → JSON** | Convert YAML to JSON. |
-| **CSV → JSON** | Parse CSV (header row) to a JSON array of objects. |
-| **JSON → CSV** | Array of objects → CSV (first object defines columns). |
-| **JSON pretty-print** | Format JSON with indentation. |
-| **JSON minify** | Compact JSON. |
-| **Base64 encode** | File → Base64 text (`.txt` download). |
-| **Base64 decode** | Base64 text file → binary download. |
-| **Timestamp converter** | `.txt` with Unix time (10/13 digits) or date string → readable summary. |
-| **SHA-256 hash** | File → SHA-256 hex (`.txt` download). |
-| **JWT decode** | `.txt` containing a JWT → decoded header & payload (`.txt`). **Does not verify signatures** — for debugging only. |
+### Developer tools (`/dev`), textarea-first, live output
+| Tool | URL |
+|------|-----|
+| JSON Formatter / Minifier | `/dev/json-formatter` |
+| JSON to YAML | `/dev/json-yaml` |
+| CSV to JSON | `/dev/csv-json` |
+| Base64 (text + file) | `/dev/base64` |
+| Hash (SHA-256, MD5; text + file) | `/dev/hash` |
+| JWT Decoder | `/dev/jwt` |
+| Timestamp Converter | `/dev/timestamp` |
+| Text Diff | `/dev/diff` |
+| Regex Tester | `/dev/regex` |
+| Color Converter (HEX/RGB/HSL) | `/dev/color` |
+| URL Encode / Decode | `/dev/url` |
+| Markdown Preview | `/dev/markdown-preview` |
 
 ### UX
-
-- Light / dark theme (saved in the browser).
-- Drag-and-drop or file picker.
-- **Contribute** link in the header → GitHub repo.
-- Installable **PWA** with offline support after first load (service worker + manifest).
-
----
-
-## Tech stack
-
-Single `index.html` with vanilla JavaScript. Libraries loaded from CDN:
-
-- [Tailwind CSS](https://tailwindcss.com)
-- [jsPDF](https://github.com/parallax/jsPDF)
-- [html2canvas](https://html2canvas.hertzen.com/) (HTML → PDF path)
-- [pdf.js](https://mozilla.github.io/pdf.js/)
-- [js-yaml](https://github.com/nodeca/js-yaml)
-- [pdf-lib](https://github.com/Hopding/pdf-lib) — PDF merge & split
-- [JSZip](https://stuk.github.io/jszip/) — batch image zip & split-PDF zip
+- Dark mode by default, light toggle (saved locally)
+- Tool search in the header and on the homepage; "Recently used" on the homepage (localStorage)
+- Dev tools: live output, copy-first actions, `Ctrl+Enter` to run, `Esc` to clear, shareable URL hash state
+- Toast notifications, loading states, drag-and-drop everywhere
+- Installable PWA with offline support (service worker + manifest)
 
 ---
+
+## Structure
+
+```
+index.html                 # generated homepage
+images|pdf|dev/            # generated hub + tool pages (<path>/index.html)
+assets/site.css            # design system (dark default, light via html.light)
+assets/app.js              # shell: theme, search, toasts, recent, shared helpers
+assets/tools-image.js      # image tool implementations
+assets/tools-pdf.js        # PDF tool implementations
+assets/tools-dev.js        # dev tool implementations
+data/tools.json            # single source of truth: metadata + SEO copy per tool
+scripts/generate.js        # static page generator
+sw.js, manifest.webmanifest, sitemap.xml, robots.txt, 404.html, vercel.json
+```
+
+**To add or edit a tool page:** edit `data/tools.json` (and the matching module in `assets/`), then:
+
+```bash
+node scripts/generate.js
+```
+
+Generated pages carry a marker comment, don't edit them by hand.
+
+## Tech
+
+Vanilla JS, no build step. Libraries from CDN, loaded only on pages that need them:
+[jsPDF](https://github.com/parallax/jsPDF), [pdf.js](https://mozilla.github.io/pdf.js/), [pdf-lib](https://github.com/Hopding/pdf-lib), [JSZip](https://stuk.github.io/jszip/), [html2canvas](https://html2canvas.hertzen.com/), [js-yaml](https://github.com/nodeca/js-yaml), [marked](https://marked.js.org/), [spark-md5](https://github.com/satazor/js-spark-md5). Fonts: Inter + JetBrains Mono.
 
 ## Run locally
 
@@ -79,10 +92,6 @@ cd convertze
 npx serve .
 ```
 
-Open the URL shown (e.g. `http://localhost:3000`). Use a static server so file APIs behave reliably.
-
----
-
 ## Contributing
 
-Issues and pull requests are welcome on [GitHub](https://github.com/harsh-m-10/convertze).
+Issues and pull requests welcome on [GitHub](https://github.com/harsh-m-10/convertze).

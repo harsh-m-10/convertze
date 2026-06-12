@@ -4,17 +4,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Page not found, Convertze</title>
-  <meta name="description" content="That page doesn't exist. Search Convertze's free in-browser file and developer tools.">
+  <title>Developer tools, Free, Online, No Upload | Convertze</title>
+  <meta name="description" content="Textarea-first utilities for JSON, YAML, CSV, Base64, hashes, JWTs, regex, diffs and more. Paste, see the result live, copy out. Free and private, no uploads, no sign-up.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://convertze.com/404.html">
+  <link rel="canonical" href="https://convertze.com/dev">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="manifest" href="/manifest.webmanifest">
   <meta name="theme-color" content="#0f172a">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://convertze.com/404.html">
-  <meta property="og:title" content="Page not found, Convertze">
-  <meta property="og:description" content="That page doesn't exist. Search Convertze's free in-browser file and developer tools.">
+  <meta property="og:url" content="https://convertze.com/dev">
+  <meta property="og:title" content="Developer tools, Free, Online, No Upload | Convertze">
+  <meta property="og:description" content="Textarea-first utilities for JSON, YAML, CSV, Base64, hashes, JWTs, regex, diffs and more. Paste, see the result live, copy out. Free and private, no uploads, no sign-up.">
   <meta property="og:site_name" content="Convertze">
   <meta name="twitter:card" content="summary">
   <script>try{if(localStorage.getItem("convertze-theme")==="light")document.documentElement.classList.add("light")}catch(e){}</script>
@@ -28,7 +28,7 @@
   <header class="site-header">
     <div class="wrap bar">
       <a class="brand" href="/"><span class="brand-mark">C</span><b>Convertze</b></a>
-      <nav class="nav-links" aria-label="Categories"><a href="/images">Images</a><a href="/pdf">PDF</a><a href="/dev">Dev Tools</a></nav>
+      <nav class="nav-links" aria-label="Categories"><a href="/images">Images</a><a href="/pdf">PDF</a><a href="/dev" aria-current="true">Dev Tools</a></nav>
       <span class="header-spacer"></span>
       <div class="header-search" data-tool-search>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
@@ -40,16 +40,25 @@
     </div>
   </header>
   <main class="wrap">
-    <div class="err-page">
-      <h1>404</h1>
-      <p>That page doesn't exist, but the tool you wanted probably does.</p>
-      <div class="header-search" data-tool-search>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
-        <input type="text" placeholder="Search tools..." aria-label="Search tools">
-        <div class="search-pop"></div>
-      </div>
-      <p style="margin-top:18px"><a class="btn" href="/">Browse all tools</a></p>
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › Developer tools</nav>
+    <h1 class="tool-h1">Developer tools</h1>
+    <p class="tool-tagline">Textarea-first utilities for JSON, YAML, CSV, Base64, hashes, JWTs, regex, diffs and more. Paste, see the result live, copy out.</p>
+    <p class="privacy-line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg> No uploads. No accounts. Runs in your browser.</p>
+    <div class="grid" style="margin-top:8px">
+      <a class="tool-card" href="/dev/json-formatter"><b>JSON Formatter</b><span>Beautify or minify JSON live, with clear errors.</span></a>
+      <a class="tool-card" href="/dev/json-yaml"><b>JSON to YAML Converter</b><span>Both directions, live, with validation.</span></a>
+      <a class="tool-card" href="/dev/csv-json"><b>CSV to JSON Converter</b><span>Header-row CSV ⇄ JSON array of objects.</span></a>
+      <a class="tool-card" href="/dev/base64"><b>Base64 Encode / Decode</b><span>Text and file modes, both directions.</span></a>
+      <a class="tool-card" href="/dev/hash"><b>Hash Generator</b><span>Checksum any text or file instantly.</span></a>
+      <a class="tool-card" href="/dev/jwt"><b>JWT Decoder</b><span>Inspect tokens locally; expiry made readable.</span></a>
+      <a class="tool-card" href="/dev/timestamp"><b>Timestamp Converter</b><span>Seconds, millis, ISO and local, live.</span></a>
+      <a class="tool-card" href="/dev/diff"><b>Text Diff</b><span>Side-by-side inputs, green/red line diff.</span></a>
+      <a class="tool-card" href="/dev/regex"><b>Regex Tester</b><span>Live match highlighting, flags, groups.</span></a>
+      <a class="tool-card" href="/dev/color"><b>Color Converter</b><span>Paste any CSS color, get every format.</span></a>
+      <a class="tool-card" href="/dev/url"><b>URL Encode / Decode</b><span>Percent-encoding, both directions, live.</span></a>
+      <a class="tool-card" href="/dev/markdown-preview"><b>Markdown Preview</b><span>Type Markdown, see rendered HTML instantly.</span></a>
     </div>
+    <p style="margin-top:26px;color:var(--muted);font-size:13.5px">More: <a href="/images">Image tools</a> · <a href="/pdf">PDF tools</a></p>
   </main>
   <footer class="site-footer">
     <div class="wrap cols">

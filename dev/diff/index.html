@@ -4,17 +4,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Page not found, Convertze</title>
-  <meta name="description" content="That page doesn't exist. Search Convertze's free in-browser file and developer tools.">
+  <title>Text Diff, Free, Online, No Upload | Convertze</title>
+  <meta name="description" content="Compare two texts for free in your browser with a clear green/red line diff. Configs, code, documents, nothing is uploaded.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://convertze.com/404.html">
+  <link rel="canonical" href="https://convertze.com/dev/diff">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="manifest" href="/manifest.webmanifest">
   <meta name="theme-color" content="#0f172a">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://convertze.com/404.html">
-  <meta property="og:title" content="Page not found, Convertze">
-  <meta property="og:description" content="That page doesn't exist. Search Convertze's free in-browser file and developer tools.">
+  <meta property="og:url" content="https://convertze.com/dev/diff">
+  <meta property="og:title" content="Text Diff, Free, Online, No Upload | Convertze">
+  <meta property="og:description" content="Compare two texts for free in your browser with a clear green/red line diff. Configs, code, documents, nothing is uploaded.">
   <meta property="og:site_name" content="Convertze">
   <meta name="twitter:card" content="summary">
   <script>try{if(localStorage.getItem("convertze-theme")==="light")document.documentElement.classList.add("light")}catch(e){}</script>
@@ -28,7 +28,7 @@
   <header class="site-header">
     <div class="wrap bar">
       <a class="brand" href="/"><span class="brand-mark">C</span><b>Convertze</b></a>
-      <nav class="nav-links" aria-label="Categories"><a href="/images">Images</a><a href="/pdf">PDF</a><a href="/dev">Dev Tools</a></nav>
+      <nav class="nav-links" aria-label="Categories"><a href="/images">Images</a><a href="/pdf">PDF</a><a href="/dev" aria-current="true">Dev Tools</a></nav>
       <span class="header-spacer"></span>
       <div class="header-search" data-tool-search>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
@@ -40,17 +40,56 @@
     </div>
   </header>
   <main class="wrap">
-    <div class="err-page">
-      <h1>404</h1>
-      <p>That page doesn't exist, but the tool you wanted probably does.</p>
-      <div class="header-search" data-tool-search>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
-        <input type="text" placeholder="Search tools..." aria-label="Search tools">
-        <div class="search-pop"></div>
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/dev">Developer tools</a> › Text Diff</nav>
+    <h1 class="tool-h1">Compare two texts, line diff</h1>
+    <p class="tool-tagline">Side-by-side inputs, green/red line diff.</p>
+    <p class="privacy-line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg> No uploads. No accounts. Runs in your browser.</p>
+    <div class="page-grid">
+      <div>
+        <div class="panel" id="tool-root" data-tool="dev/diff">
+          <noscript>This tool runs entirely in your browser and needs JavaScript enabled.</noscript>
+          <p style="color:var(--muted);font-size:13.5px;margin:0">Loading tool...</p>
+        </div>
+        <div class="panel about">
+          <h2>About this tool</h2>
+          <p>Paste the original on the left and the changed version on the right; the diff below shows added lines in green and removed lines in red, computed with a proper longest-common-subsequence algorithm.</p>
+          <p>Use it for config drift, reviewing edits, comparing API responses or checking what a colleague changed in a snippet, without pasting your text into someone else's server. The comparison runs locally.</p>
+        </div>
+        <div class="panel">
+          <h2>How it works</h2>
+          <ol class="steps">
+          <li>Paste your input, or drop a text file onto the box.</li>
+          <li>The output updates live as you type.</li>
+          <li>Copy it to the clipboard, or download it as a file.</li>
+          </ol>
+        </div>
+        <div class="panel">
+          <h2>Related tools</h2>
+          <ul class="related-list">
+          <li><a href="/dev/json-formatter">JSON Formatter</a> <span style="color:var(--muted);font-weight:400">- Beautify or minify JSON live, with clear errors.</span></li>
+          <li><a href="/dev/csv-json">CSV to JSON Converter</a> <span style="color:var(--muted);font-weight:400">- Header-row CSV ⇄ JSON array of objects.</span></li>
+          <li><a href="/dev/regex">Regex Tester</a> <span style="color:var(--muted);font-weight:400">- Live match highlighting, flags, groups.</span></li>
+          </ul>
+        </div>
       </div>
-      <p style="margin-top:18px"><a class="btn" href="/">Browse all tools</a></p>
+      <aside class="side-nav" aria-label="Developer tools">
+        <h3>Developer tools</h3>
+        <a href="/dev/json-formatter">JSON Formatter</a>
+        <a href="/dev/json-yaml">JSON to YAML Converter</a>
+        <a href="/dev/csv-json">CSV to JSON Converter</a>
+        <a href="/dev/base64">Base64 Encode / Decode</a>
+        <a href="/dev/hash">Hash Generator</a>
+        <a href="/dev/jwt">JWT Decoder</a>
+        <a href="/dev/timestamp">Timestamp Converter</a>
+        <a href="/dev/diff" aria-current="true">Text Diff</a>
+        <a href="/dev/regex">Regex Tester</a>
+        <a href="/dev/color">Color Converter</a>
+        <a href="/dev/url">URL Encode / Decode</a>
+        <a href="/dev/markdown-preview">Markdown Preview</a>
+      </aside>
     </div>
   </main>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Text Diff","url":"https://convertze.com/dev/diff","description":"Compare two texts for free in your browser with a clear green/red line diff. Configs, code, documents, nothing is uploaded.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
   <footer class="site-footer">
     <div class="wrap cols">
       <span>Convertze, free file &amp; developer tools. No uploads, no accounts: everything runs in your browser.</span>
@@ -58,6 +97,6 @@
     </div>
   </footer>
   <script src="/assets/app.js" defer></script>
-
+  <script src="/assets/tools-dev.js" defer></script>
 </body>
 </html>

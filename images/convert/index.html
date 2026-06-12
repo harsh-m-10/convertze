@@ -4,17 +4,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Page not found, Convertze</title>
-  <meta name="description" content="That page doesn't exist. Search Convertze's free in-browser file and developer tools.">
+  <title>Image Converter, Free, Online, No Upload | Convertze</title>
+  <meta name="description" content="Convert images between PNG, JPG and WebP for free in your browser. Batch convert with zip download. No upload, no watermark, no sign-up.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://convertze.com/404.html">
+  <link rel="canonical" href="https://convertze.com/images/convert">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="manifest" href="/manifest.webmanifest">
   <meta name="theme-color" content="#0f172a">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://convertze.com/404.html">
-  <meta property="og:title" content="Page not found, Convertze">
-  <meta property="og:description" content="That page doesn't exist. Search Convertze's free in-browser file and developer tools.">
+  <meta property="og:url" content="https://convertze.com/images/convert">
+  <meta property="og:title" content="Image Converter, Free, Online, No Upload | Convertze">
+  <meta property="og:description" content="Convert images between PNG, JPG and WebP for free in your browser. Batch convert with zip download. No upload, no watermark, no sign-up.">
   <meta property="og:site_name" content="Convertze">
   <meta name="twitter:card" content="summary">
   <script>try{if(localStorage.getItem("convertze-theme")==="light")document.documentElement.classList.add("light")}catch(e){}</script>
@@ -28,7 +28,7 @@
   <header class="site-header">
     <div class="wrap bar">
       <a class="brand" href="/"><span class="brand-mark">C</span><b>Convertze</b></a>
-      <nav class="nav-links" aria-label="Categories"><a href="/images">Images</a><a href="/pdf">PDF</a><a href="/dev">Dev Tools</a></nav>
+      <nav class="nav-links" aria-label="Categories"><a href="/images" aria-current="true">Images</a><a href="/pdf">PDF</a><a href="/dev">Dev Tools</a></nav>
       <span class="header-spacer"></span>
       <div class="header-search" data-tool-search>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
@@ -40,17 +40,51 @@
     </div>
   </header>
   <main class="wrap">
-    <div class="err-page">
-      <h1>404</h1>
-      <p>That page doesn't exist, but the tool you wanted probably does.</p>
-      <div class="header-search" data-tool-search>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
-        <input type="text" placeholder="Search tools..." aria-label="Search tools">
-        <div class="search-pop"></div>
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/images">Image tools</a> › Image Converter</nav>
+    <h1 class="tool-h1">Convert PNG, JPG and WebP</h1>
+    <p class="tool-tagline">Convert between PNG, JPG and WebP, alone or in batches.</p>
+    <p class="privacy-line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg> No uploads. No accounts. Runs in your browser.</p>
+    <div class="page-grid">
+      <div>
+        <div class="panel" id="tool-root" data-tool="images/convert">
+          <noscript>This tool runs entirely in your browser and needs JavaScript enabled.</noscript>
+          <p style="color:var(--muted);font-size:13.5px;margin:0">Loading tool...</p>
+        </div>
+        <div class="panel about">
+          <h2>About this tool</h2>
+          <p>Pick an output format and drop any mix of PNG, JPG and WebP files, each one is redrawn and re-encoded by your browser. Transparent areas turn white when exporting to JPG; quality is adjustable for lossy formats.</p>
+          <p>Use it when a portal rejects WebP, an email needs smaller JPGs, or an editor wants lossless PNG. Two or more results are packaged into a single zip automatically. Because conversion is local, your images never travel over the network.</p>
+        </div>
+        <div class="panel">
+          <h2>How it works</h2>
+          <ol class="steps">
+          <li>Drop one or more images, they stay on your device.</li>
+          <li>Pick your options and convert.</li>
+          <li>Download the result; multiple files arrive as a single zip.</li>
+          </ol>
+        </div>
+        <div class="panel">
+          <h2>Related tools</h2>
+          <ul class="related-list">
+          <li><a href="/images/compress">Image Compressor</a> <span style="color:var(--muted);font-weight:400">- Compress by quality, or hit an exact KB target.</span></li>
+          <li><a href="/images/resize">Image Resizer</a> <span style="color:var(--muted);font-weight:400">- Resize to exact pixels, with or without aspect lock.</span></li>
+          <li><a href="/pdf/images-to-pdf">Images to PDF</a> <span style="color:var(--muted);font-weight:400">- Combine JPG, PNG or WebP photos into one A4 PDF.</span></li>
+          </ul>
+        </div>
       </div>
-      <p style="margin-top:18px"><a class="btn" href="/">Browse all tools</a></p>
+      <aside class="side-nav" aria-label="Image tools">
+        <h3>Image tools</h3>
+        <a href="/images/convert" aria-current="true">Image Converter</a>
+        <a href="/images/resize">Image Resizer</a>
+        <a href="/images/compress">Image Compressor</a>
+        <a href="/images/crop">Image Cropper</a>
+        <a href="/images/rotate">Image Rotator</a>
+        <a href="/images/favicon">Favicon Generator</a>
+        <a href="/images/svg-to-png">SVG to PNG Converter</a>
+      </aside>
     </div>
   </main>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Image Converter","url":"https://convertze.com/images/convert","description":"Convert images between PNG, JPG and WebP for free in your browser. Batch convert with zip download. No upload, no watermark, no sign-up.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
   <footer class="site-footer">
     <div class="wrap cols">
       <span>Convertze, free file &amp; developer tools. No uploads, no accounts: everything runs in your browser.</span>
@@ -58,6 +92,7 @@
     </div>
   </footer>
   <script src="/assets/app.js" defer></script>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" defer></script>
+  <script src="/assets/tools-image.js" defer></script>
 </body>
 </html>

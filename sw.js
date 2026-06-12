@@ -1,20 +1,28 @@
-const CACHE_NAME = "convertze-v1";
+const CACHE_NAME = "convertze-v3";
 const APP_SHELL = [
   "/",
-  "/index.html",
+  "/images",
+  "/pdf",
+  "/dev",
   "/favicon.svg",
-  "/manifest.webmanifest"
+  "/manifest.webmanifest",
+  "/assets/site.css",
+  "/assets/app.js",
+  "/assets/tools-image.js",
+  "/assets/tools-pdf.js",
+  "/assets/tools-dev.js"
 ];
 
 const CDN_ASSETS = [
-  "https://cdn.tailwindcss.com",
-  "https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js",
+  "https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js",
+  "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js",
   "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js",
   "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js",
   "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js",
-  "https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js",
-  "https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js",
-  "https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"
+  "https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js",
+  "https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js",
+  "https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js",
+  "https://cdnjs.cloudflare.com/ajax/libs/spark-md5/3.0.2/spark-md5.min.js"
 ];
 
 self.addEventListener("install", (event) => {
@@ -27,7 +35,7 @@ self.addEventListener("install", (event) => {
           const response = await fetch(url, { mode: "no-cors" });
           await cache.put(url, response);
         } catch (e) {
-          // Ignore failed precache for optional CDN assets.
+          // Optional precache; ignore failures.
         }
       }
       self.skipWaiting();
@@ -47,20 +55,47 @@ self.addEventListener("activate", (event) => {
 
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
+
+  // Pages: network-first so deployed updates reach returning visitors; cache is the offline fallback.
+  if (event.request.mode === "navigate") {
+    event.respondWith(
+      (async () => {
+        try {
+          const response = await fetch(event.request);
+          const cache = await caches.open(CACHE_NAME);
+          cache.put(event.request, response.clone());
+          return response;
+        } catch (e) {
+          const cached = await caches.match(event.request);
+          if (cached) return cached;
+          const fallback = await caches.match("/");
+          return fallback || Response.error();
+        }
+      })()
+    );
+    return;
+  }
+
+  // Assets: cache-first, with runtime caching for same-origin files, listed CDNs and fonts.
   event.respondWith(
     (async () => {
       const cached = await caches.match(event.request);
       if (cached) return cached;
       try {
         const response = await fetch(event.request);
-        const cache = await caches.open(CACHE_NAME);
-        if (event.request.url.startsWith(self.location.origin) || CDN_ASSETS.includes(event.request.url)) {
+        const url = event.request.url;
+        const cacheable =
+          url.startsWith(self.location.origin) ||
+          CDN_ASSETS.includes(url) ||
+          url.startsWith("https://fonts.googleapis.com") ||
+          url.startsWith("https://fonts.gstatic.com");
+        if (cacheable) {
+          const cache = await caches.open(CACHE_NAME);
           cache.put(event.request, response.clone());
         }
         return response;
       } catch (e) {
-        const fallback = await caches.match("/index.html");
-        return fallback || Response.error();
+        return Response.error();
       }
     })()
   );

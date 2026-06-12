@@ -4,17 +4,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Page not found, Convertze</title>
-  <meta name="description" content="That page doesn't exist. Search Convertze's free in-browser file and developer tools.">
+  <title>Regex Tester, Free, Online, No Upload | Convertze</title>
+  <meta name="description" content="Test regular expressions for free in your browser with live match highlighting, flag toggles and match count. JavaScript regex, no upload.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://convertze.com/404.html">
+  <link rel="canonical" href="https://convertze.com/dev/regex">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="manifest" href="/manifest.webmanifest">
   <meta name="theme-color" content="#0f172a">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://convertze.com/404.html">
-  <meta property="og:title" content="Page not found, Convertze">
-  <meta property="og:description" content="That page doesn't exist. Search Convertze's free in-browser file and developer tools.">
+  <meta property="og:url" content="https://convertze.com/dev/regex">
+  <meta property="og:title" content="Regex Tester, Free, Online, No Upload | Convertze">
+  <meta property="og:description" content="Test regular expressions for free in your browser with live match highlighting, flag toggles and match count. JavaScript regex, no upload.">
   <meta property="og:site_name" content="Convertze">
   <meta name="twitter:card" content="summary">
   <script>try{if(localStorage.getItem("convertze-theme")==="light")document.documentElement.classList.add("light")}catch(e){}</script>
@@ -28,7 +28,7 @@
   <header class="site-header">
     <div class="wrap bar">
       <a class="brand" href="/"><span class="brand-mark">C</span><b>Convertze</b></a>
-      <nav class="nav-links" aria-label="Categories"><a href="/images">Images</a><a href="/pdf">PDF</a><a href="/dev">Dev Tools</a></nav>
+      <nav class="nav-links" aria-label="Categories"><a href="/images">Images</a><a href="/pdf">PDF</a><a href="/dev" aria-current="true">Dev Tools</a></nav>
       <span class="header-spacer"></span>
       <div class="header-search" data-tool-search>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
@@ -40,17 +40,56 @@
     </div>
   </header>
   <main class="wrap">
-    <div class="err-page">
-      <h1>404</h1>
-      <p>That page doesn't exist, but the tool you wanted probably does.</p>
-      <div class="header-search" data-tool-search>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
-        <input type="text" placeholder="Search tools..." aria-label="Search tools">
-        <div class="search-pop"></div>
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/dev">Developer tools</a> › Regex Tester</nav>
+    <h1 class="tool-h1">Test regular expressions live</h1>
+    <p class="tool-tagline">Live match highlighting, flags, groups.</p>
+    <p class="privacy-line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg> No uploads. No accounts. Runs in your browser.</p>
+    <div class="page-grid">
+      <div>
+        <div class="panel" id="tool-root" data-tool="dev/regex">
+          <noscript>This tool runs entirely in your browser and needs JavaScript enabled.</noscript>
+          <p style="color:var(--muted);font-size:13.5px;margin:0">Loading tool...</p>
+        </div>
+        <div class="panel about">
+          <h2>About this tool</h2>
+          <p>Type a pattern, toggle flags (g, i, m, s), and watch matches highlight live in your test string with a running match count and capture-group breakdown. Errors in the pattern are shown as you type instead of silently matching nothing.</p>
+          <p>The engine is JavaScript's own RegExp, exactly what runs in Node and the browser, so what matches here matches in your code. Your test data stays on your machine.</p>
+        </div>
+        <div class="panel">
+          <h2>How it works</h2>
+          <ol class="steps">
+          <li>Paste your input, or drop a text file onto the box.</li>
+          <li>The output updates live as you type.</li>
+          <li>Copy it to the clipboard, or download it as a file.</li>
+          </ol>
+        </div>
+        <div class="panel">
+          <h2>Related tools</h2>
+          <ul class="related-list">
+          <li><a href="/dev/diff">Text Diff</a> <span style="color:var(--muted);font-weight:400">- Side-by-side inputs, green/red line diff.</span></li>
+          <li><a href="/dev/json-formatter">JSON Formatter</a> <span style="color:var(--muted);font-weight:400">- Beautify or minify JSON live, with clear errors.</span></li>
+          <li><a href="/dev/url">URL Encode / Decode</a> <span style="color:var(--muted);font-weight:400">- Percent-encoding, both directions, live.</span></li>
+          </ul>
+        </div>
       </div>
-      <p style="margin-top:18px"><a class="btn" href="/">Browse all tools</a></p>
+      <aside class="side-nav" aria-label="Developer tools">
+        <h3>Developer tools</h3>
+        <a href="/dev/json-formatter">JSON Formatter</a>
+        <a href="/dev/json-yaml">JSON to YAML Converter</a>
+        <a href="/dev/csv-json">CSV to JSON Converter</a>
+        <a href="/dev/base64">Base64 Encode / Decode</a>
+        <a href="/dev/hash">Hash Generator</a>
+        <a href="/dev/jwt">JWT Decoder</a>
+        <a href="/dev/timestamp">Timestamp Converter</a>
+        <a href="/dev/diff">Text Diff</a>
+        <a href="/dev/regex" aria-current="true">Regex Tester</a>
+        <a href="/dev/color">Color Converter</a>
+        <a href="/dev/url">URL Encode / Decode</a>
+        <a href="/dev/markdown-preview">Markdown Preview</a>
+      </aside>
     </div>
   </main>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Regex Tester","url":"https://convertze.com/dev/regex","description":"Test regular expressions for free in your browser with live match highlighting, flag toggles and match count. JavaScript regex, no upload.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
   <footer class="site-footer">
     <div class="wrap cols">
       <span>Convertze, free file &amp; developer tools. No uploads, no accounts: everything runs in your browser.</span>
@@ -58,6 +97,6 @@
     </div>
   </footer>
   <script src="/assets/app.js" defer></script>
-
+  <script src="/assets/tools-dev.js" defer></script>
 </body>
 </html>

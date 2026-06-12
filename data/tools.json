@@ -1,0 +1,351 @@
+{
+  "site": "https://convertze.com",
+  "categories": [
+    {
+      "id": "images",
+      "nav": "Images",
+      "label": "Image tools",
+      "blurb": "Convert, resize, compress, crop and rotate images, with batch support and zip downloads. Processed by your browser, never uploaded."
+    },
+    {
+      "id": "pdf",
+      "nav": "PDF",
+      "label": "PDF tools",
+      "blurb": "Merge, split, compress and convert PDFs locally. Your documents stay on your device, there is no server to upload them to."
+    },
+    {
+      "id": "dev",
+      "nav": "Dev Tools",
+      "label": "Developer tools",
+      "blurb": "Textarea-first utilities for JSON, YAML, CSV, Base64, hashes, JWTs, regex, diffs and more. Paste, see the result live, copy out."
+    }
+  ],
+  "tools": [
+    {
+      "path": "images/convert", "cat": "images", "name": "Image Converter",
+      "h1": "Convert PNG, JPG and WebP",
+      "short": "Convert between PNG, JPG and WebP, alone or in batches.",
+      "metaDescription": "Convert images between PNG, JPG and WebP for free in your browser. Batch convert with zip download. No upload, no watermark, no sign-up.",
+      "about": [
+        "Pick an output format and drop any mix of PNG, JPG and WebP files, each one is redrawn and re-encoded by your browser. Transparent areas turn white when exporting to JPG; quality is adjustable for lossy formats.",
+        "Use it when a portal rejects WebP, an email needs smaller JPGs, or an editor wants lossless PNG. Two or more results are packaged into a single zip automatically. Because conversion is local, your images never travel over the network."
+      ],
+      "libs": ["jszip"],
+      "related": ["images/compress", "images/resize", "pdf/images-to-pdf"]
+    },
+    {
+      "path": "images/resize", "cat": "images", "name": "Image Resizer",
+      "h1": "Resize images to exact dimensions",
+      "short": "Resize to exact pixels, with or without aspect lock.",
+      "metaDescription": "Resize images to exact pixel dimensions for free in your browser. Keep aspect ratio or set width and height exactly. Batch resize, no upload.",
+      "about": [
+        "Set a width and height in pixels and the tool resizes your image to match, keeping the original proportions if you ask it to, or filling the exact box if you don't. Output as PNG, JPG or WebP.",
+        "Use it for avatars, thumbnails, form uploads with pixel requirements, or just making screenshots manageable. Batches are resized with the same settings and zipped. Everything runs in your browser, so nothing is uploaded anywhere."
+      ],
+      "libs": ["jszip"],
+      "related": ["images/crop", "images/compress", "images/convert"]
+    },
+    {
+      "path": "images/compress", "cat": "images", "name": "Image Compressor",
+      "h1": "Compress images, by quality or to a target size",
+      "short": "Compress by quality, or hit an exact KB target.",
+      "metaDescription": "Compress images for free in your browser. Choose a quality level or a target file size in KB and get the best quality that fits. No upload.",
+      "about": [
+        "Two modes. Pick a quality level yourself, or enter a target size in KB and the tool binary-searches for the highest quality that fits under it, shrinking dimensions only when quality alone isn't enough. That second mode is built for upload forms with strict size limits.",
+        "Compress one photo or a whole batch with the same settings; multiple results download as a zip. Your images are processed by your own browser and never leave your device."
+      ],
+      "libs": ["jszip"],
+      "related": ["images/resize", "images/convert", "pdf/compress"]
+    },
+    {
+      "path": "images/crop", "cat": "images", "name": "Image Cropper",
+      "h1": "Center-crop images to an exact frame",
+      "short": "Center-crop images to an exact frame size.",
+      "metaDescription": "Center-crop images to exact pixel dimensions for free in your browser. Ideal for avatars, thumbnails and fixed-frame uploads. No upload.",
+      "about": [
+        "Enter the frame you need, 500×500 for an avatar, 1280×720 for a thumbnail, and the tool scales your image to fill it, then cuts that exact region from the centre. The frame is always filled edge to edge.",
+        "It works on batches too, applying the same frame to every file and zipping the results. Like every Convertze tool, cropping happens locally in your browser tab."
+      ],
+      "libs": ["jszip"],
+      "related": ["images/resize", "images/rotate", "images/favicon"]
+    },
+    {
+      "path": "images/rotate", "cat": "images", "name": "Image Rotator",
+      "h1": "Rotate images 90°, 180° or 270°",
+      "short": "Fix sideways photos in exact 90° steps.",
+      "metaDescription": "Rotate images by 90, 180 or 270 degrees for free in your browser. Batch rotate with zip download. No upload, no quality loss games.",
+      "about": [
+        "Fix sideways phone photos and scans by rotating them in exact 90-degree steps, then export in the format you choose. The geometry is exact, no resampling artifacts from arbitrary angles.",
+        "Rotate a single file or a batch in one click; multiple results arrive as a zip. Processing is local to your browser, no upload, no account, no watermark."
+      ],
+      "libs": ["jszip"],
+      "related": ["images/crop", "images/resize", "images/compress"]
+    },
+    {
+      "path": "images/favicon", "cat": "images", "name": "Favicon Generator",
+      "h1": "Generate a favicon pack from one image",
+      "short": "Turn one image into a full favicon pack.",
+      "metaDescription": "Generate a complete favicon pack (16-512 px) from one image, free in your browser. Downloads as a zip. No upload, no sign-up.",
+      "about": [
+        "Give it one logo or icon and it produces the standard favicon set, 16, 32 and 48 px for browsers, 180 px for Apple touch, 192 and 512 px for PWA manifests, centre-cropped to square automatically. The size list is editable if you need extras.",
+        "The whole pack downloads as a single zip, generated locally. Your logo never touches a server, which also means there's no rate limit and no branding added."
+      ],
+      "libs": ["jszip"],
+      "related": ["images/crop", "images/svg-to-png", "images/resize"]
+    },
+    {
+      "path": "images/svg-to-png", "cat": "images", "name": "SVG to PNG Converter",
+      "h1": "Convert SVG to PNG at any scale",
+      "short": "Rasterize SVG vectors at 1× to 8× scale.",
+      "metaDescription": "Convert SVG to PNG for free in your browser, at 1x to 8x scale for crisp high-resolution output. Your vector never leaves your device.",
+      "about": [
+        "Rasterize any SVG into a PNG at the resolution you need, pick a scale factor up to 8× for crisp exports of icons and logos headed for documents, slides or app stores.",
+        "Rendering uses your browser's own SVG engine, so the output matches exactly what you see in a browser tab, and the file never leaves your machine."
+      ],
+      "libs": [],
+      "related": ["images/favicon", "images/convert", "images/resize"]
+    },
+
+    {
+      "path": "pdf/merge", "cat": "pdf", "name": "Merge PDF",
+      "h1": "Merge PDF files into one",
+      "short": "Combine multiple PDFs, in the order you choose.",
+      "metaDescription": "Merge PDF files for free in your browser, combine two or more PDFs into one, reorder before merging. No upload, no limits, no watermark.",
+      "about": [
+        "Combine contracts, scans, chapters or statements into a single PDF. Files merge in the order listed, use the arrows next to each file to reorder before you merge.",
+        "Merging runs on pdf-lib inside your browser, which matters for exactly the kind of documents people merge: agreements, IDs, financial statements. There is no server in this pipeline, so they cannot leak."
+      ],
+      "libs": ["pdflib"],
+      "related": ["pdf/split", "pdf/compress", "pdf/images-to-pdf"]
+    },
+    {
+      "path": "pdf/split", "cat": "pdf", "name": "Split PDF",
+      "h1": "Split a PDF into separate pages",
+      "short": "Extract pages or ranges into separate PDFs.",
+      "metaDescription": "Split PDF pages for free in your browser, extract all pages or a range like 1-3,5 into separate PDFs, zipped. No upload required.",
+      "about": [
+        "Pull pages out of a PDF by typing a range, '1-3,5,8' or 'all', and each selected page becomes its own PDF, packaged together in a zip.",
+        "Use it to extract a signature page, separate scanned documents that were combined, or share one chapter without the rest. The source document is read locally by pdf-lib and never transmitted."
+      ],
+      "libs": ["pdflib", "jszip"],
+      "related": ["pdf/merge", "pdf/pdf-to-images", "pdf/pdf-to-text"]
+    },
+    {
+      "path": "pdf/compress", "cat": "pdf", "name": "Compress PDF",
+      "h1": "Compress a PDF in your browser",
+      "short": "Shrink heavy PDFs to a fraction of their size.",
+      "metaDescription": "Compress a PDF online for free with no upload, runs entirely in your browser. Reduce PDF file size for email and portal limits.",
+      "about": [
+        "Shrinks heavy PDFs, especially scanned documents, by re-rendering each page as an optimised JPEG at the quality you choose and rebuilding the file. Compression of 60-90% is typical for scans.",
+        "The trade-off: pages become images, so text stops being selectable. For scanned PDFs that's no loss at all; for text-heavy digital PDFs, try a lighter setting and check the result. Either way the document is processed locally and never uploaded."
+      ],
+      "libs": ["pdfjs", "jspdf"],
+      "related": ["images/compress", "pdf/merge", "pdf/pdf-to-images"]
+    },
+    {
+      "path": "pdf/images-to-pdf", "cat": "pdf", "name": "Images to PDF",
+      "h1": "Combine images into one PDF",
+      "short": "Combine JPG, PNG or WebP photos into one A4 PDF.",
+      "metaDescription": "Convert images to PDF for free in your browser, combine JPG, PNG and WebP photos into one A4 PDF, one image per page. No upload.",
+      "about": [
+        "Select one or many images and get a single PDF with one image per A4 page, scaled to fit with clean margins, the standard way offices and portals want photographed documents submitted.",
+        "JPG, PNG and WebP all work; every image is re-encoded safely before being placed in the document, so formats that normally break PDF generators won't. Assembly happens locally in your browser with jsPDF."
+      ],
+      "libs": ["jspdf"],
+      "related": ["pdf/merge", "pdf/compress", "images/convert"]
+    },
+    {
+      "path": "pdf/pdf-to-images", "cat": "pdf", "name": "PDF to Images",
+      "h1": "Convert PDF pages to JPG or PNG",
+      "short": "Every page rendered as a JPG or PNG.",
+      "metaDescription": "Convert PDF to JPG or PNG for free in your browser, every page rendered at 2x resolution, multi-page output zipped. No upload.",
+      "about": [
+        "Renders each page of your PDF at 2× resolution and exports it as JPG (smaller) or PNG (lossless, better for text and line art). Single pages download directly; multi-page documents arrive as one zip rather than a stream of blocked downloads.",
+        "Rendering uses Mozilla's pdf.js inside your browser, the same engine Firefox uses, your document never goes anywhere."
+      ],
+      "libs": ["pdfjs", "jszip"],
+      "related": ["pdf/pdf-to-text", "pdf/split", "pdf/compress"]
+    },
+    {
+      "path": "pdf/pdf-to-text", "cat": "pdf", "name": "PDF to Text",
+      "h1": "Extract text from a PDF",
+      "short": "Pull the text layer out; copy or download it.",
+      "metaDescription": "Extract text from a PDF for free in your browser. View and copy it directly or download as .txt. Digital PDFs only; nothing uploaded.",
+      "about": [
+        "Extracts the embedded text layer from a PDF, read and copy it right on this page, or download the whole thing as a .txt file. Page breaks are kept as blank lines.",
+        "One caveat: scanned PDFs are photographs of text with no text layer, so they come back empty, that requires OCR, which would mean either a heavyweight download or a server, and Convertze refuses to add a server."
+      ],
+      "libs": ["pdfjs"],
+      "related": ["pdf/pdf-to-images", "pdf/split", "pdf/markdown-to-pdf"]
+    },
+    {
+      "path": "pdf/html-to-pdf", "cat": "pdf", "name": "HTML to PDF",
+      "h1": "Convert an HTML file to PDF",
+      "short": "Render an .html file into a paged A4 PDF.",
+      "metaDescription": "Convert HTML files to PDF for free in your browser. The page is rendered visually with styles and split across A4 pages. No upload.",
+      "about": [
+        "Renders your .html file visually, inline styles included, then slices the result across A4 pages. Good for invoices, reports, receipts and pages you want frozen as documents.",
+        "Rendering uses html2canvas plus jsPDF inside your browser. Very complex layouts may differ slightly from the browser's own print dialog, but the file itself never leaves your machine."
+      ],
+      "libs": ["jspdf", "html2canvas"],
+      "related": ["pdf/markdown-to-pdf", "pdf/images-to-pdf", "pdf/merge"]
+    },
+    {
+      "path": "pdf/markdown-to-pdf", "cat": "pdf", "name": "Markdown to PDF",
+      "h1": "Convert Markdown or text to PDF",
+      "short": "Turn .md and .txt files into clean PDFs.",
+      "metaDescription": "Convert Markdown to PDF for free in your browser, headings, lists, code and tables rendered into a clean A4 document. No upload.",
+      "about": [
+        "Drop a .md (or plain .txt) file and get an A4 PDF with headings, lists, code blocks and tables properly rendered, useful for sharing READMEs, notes and documentation with people who don't read raw Markdown.",
+        "Markdown is parsed by marked, styled, rendered, and paged into a PDF, all inside your browser tab. Nothing is uploaded at any point."
+      ],
+      "libs": ["jspdf", "html2canvas", "marked"],
+      "related": ["dev/markdown-preview", "pdf/html-to-pdf", "pdf/pdf-to-text"]
+    },
+
+    {
+      "path": "dev/json-formatter", "cat": "dev", "name": "JSON Formatter",
+      "h1": "Format, validate & minify JSON",
+      "short": "Beautify or minify JSON live, with clear errors.",
+      "metaDescription": "Format, validate and minify JSON for free in your browser. Live as you type, with error messages that point at the problem line. No upload.",
+      "about": [
+        "Paste JSON and see it pretty-printed live as you type, with a one-click toggle to minified output. Invalid JSON gets a precise error, including the line where parsing failed, which makes this a quick validator too.",
+        "Because parsing happens in your browser, API payloads and config files with secrets in them never leave your machine. Copy the result, download it, or share it via the URL."
+      ],
+      "libs": [],
+      "related": ["dev/json-yaml", "dev/csv-json", "dev/jwt"]
+    },
+    {
+      "path": "dev/json-yaml", "cat": "dev", "name": "JSON to YAML Converter",
+      "h1": "Convert between JSON and YAML",
+      "short": "Both directions, live, with validation.",
+      "metaDescription": "Convert JSON to YAML and YAML to JSON for free in your browser. Live conversion with validation errors. Nothing is uploaded.",
+      "about": [
+        "Converts in both directions, paste JSON to get YAML, or flip the direction and paste YAML to get JSON. The output updates live, and parse errors tell you what's wrong rather than failing silently.",
+        "The usual use case: moving config between JSON-first tools and YAML-first ones like Kubernetes, GitHub Actions and CI pipelines. Conversion runs locally via js-yaml."
+      ],
+      "libs": ["jsyaml"],
+      "related": ["dev/json-formatter", "dev/csv-json", "dev/markdown-preview"]
+    },
+    {
+      "path": "dev/csv-json", "cat": "dev", "name": "CSV to JSON Converter",
+      "h1": "Convert between CSV and JSON",
+      "short": "Header-row CSV ⇄ JSON array of objects.",
+      "metaDescription": "Convert CSV to JSON and JSON to CSV for free in your browser. Quoted fields handled correctly, live output, no upload.",
+      "about": [
+        "CSV with a header row becomes a JSON array of objects; a JSON array of objects becomes properly quoted CSV. Embedded commas, quotes and line breaks inside fields are handled correctly in both directions.",
+        "The standard bridge between spreadsheets and code: export from Excel or Sheets, convert here, feed to your script, or the reverse. Your data is parsed locally and never uploaded."
+      ],
+      "libs": [],
+      "related": ["dev/json-formatter", "dev/json-yaml", "dev/diff"]
+    },
+    {
+      "path": "dev/base64", "cat": "dev", "name": "Base64 Encode / Decode",
+      "h1": "Base64 encode and decode, text or files",
+      "short": "Text and file modes, both directions.",
+      "metaDescription": "Base64 encode and decode text or files for free in your browser. UTF-8 safe, URL-safe variants handled. Nothing is uploaded.",
+      "about": [
+        "Encode text or any file to Base64, or decode a Base64 string back, as text on screen, or as a downloadable binary file when the content isn't text. UTF-8 and URL-safe variants with missing padding are handled automatically.",
+        "Useful for data URIs, basic-auth headers, API payloads and config values. Everything runs on your device, so credentials you encode here stay yours."
+      ],
+      "libs": [],
+      "related": ["dev/url", "dev/jwt", "dev/hash"]
+    },
+    {
+      "path": "dev/hash", "cat": "dev", "name": "Hash Generator",
+      "h1": "SHA-256 and MD5 hashes, text or files",
+      "short": "Checksum any text or file instantly.",
+      "metaDescription": "Generate SHA-256 and MD5 hashes of text or any file, free in your browser. Verify downloads and checksums privately, no upload.",
+      "about": [
+        "Computes SHA-256 (via your browser's Web Crypto API) and MD5 digests of any text or file, the standard way to verify a download against a published checksum or to fingerprint a file.",
+        "Because hashing is local you can safely checksum sensitive files; the bytes never leave your machine. MD5 is provided for legacy checksums only, don't use it for anything security-critical."
+      ],
+      "libs": ["sparkmd5"],
+      "related": ["dev/base64", "dev/jwt", "dev/json-formatter"]
+    },
+    {
+      "path": "dev/jwt", "cat": "dev", "name": "JWT Decoder",
+      "h1": "Decode a JWT, header, payload, signature",
+      "short": "Inspect tokens locally; expiry made readable.",
+      "metaDescription": "Decode JWT tokens for free in your browser, header, payload and signature in separate panes, expiry translated to readable dates. Private.",
+      "about": [
+        "Paste a JWT and see its header, payload and signature in three labelled panes, with exp, iat and nbf timestamps translated into readable dates and an at-a-glance expired/valid note. Purely for debugging, the signature is not verified.",
+        "This matters more than it sounds: a live JWT is a credential, and most online decoders send it to their server. This one decodes entirely in your browser."
+      ],
+      "libs": [],
+      "related": ["dev/base64", "dev/timestamp", "dev/json-formatter"]
+    },
+    {
+      "path": "dev/timestamp", "cat": "dev", "name": "Timestamp Converter",
+      "h1": "Unix timestamp ⇄ human-readable date",
+      "short": "Seconds, millis, ISO and local, live.",
+      "metaDescription": "Convert Unix timestamps to readable dates and back, free in your browser. Seconds or milliseconds, ISO 8601 and local time, live as you type.",
+      "about": [
+        "Type a Unix timestamp, seconds or milliseconds, auto-detected, or any date string, and see every useful form at once: Unix seconds, milliseconds, ISO 8601 UTC, your local time, and relative time. One click loads the current moment.",
+        "A small tool you reach for constantly when reading logs, debugging APIs and writing queries. Runs entirely in your browser."
+      ],
+      "libs": [],
+      "related": ["dev/jwt", "dev/json-formatter", "dev/regex"]
+    },
+    {
+      "path": "dev/diff", "cat": "dev", "name": "Text Diff",
+      "h1": "Compare two texts, line diff",
+      "short": "Side-by-side inputs, green/red line diff.",
+      "metaDescription": "Compare two texts for free in your browser with a clear green/red line diff. Configs, code, documents, nothing is uploaded.",
+      "about": [
+        "Paste the original on the left and the changed version on the right; the diff below shows added lines in green and removed lines in red, computed with a proper longest-common-subsequence algorithm.",
+        "Use it for config drift, reviewing edits, comparing API responses or checking what a colleague changed in a snippet, without pasting your text into someone else's server. The comparison runs locally."
+      ],
+      "libs": [],
+      "related": ["dev/json-formatter", "dev/csv-json", "dev/regex"]
+    },
+    {
+      "path": "dev/regex", "cat": "dev", "name": "Regex Tester",
+      "h1": "Test regular expressions live",
+      "short": "Live match highlighting, flags, groups.",
+      "metaDescription": "Test regular expressions for free in your browser with live match highlighting, flag toggles and match count. JavaScript regex, no upload.",
+      "about": [
+        "Type a pattern, toggle flags (g, i, m, s), and watch matches highlight live in your test string with a running match count and capture-group breakdown. Errors in the pattern are shown as you type instead of silently matching nothing.",
+        "The engine is JavaScript's own RegExp, exactly what runs in Node and the browser, so what matches here matches in your code. Your test data stays on your machine."
+      ],
+      "libs": [],
+      "related": ["dev/diff", "dev/json-formatter", "dev/url"]
+    },
+    {
+      "path": "dev/color", "cat": "dev", "name": "Color Converter",
+      "h1": "Convert colors, HEX ⇄ RGB ⇄ HSL",
+      "short": "Paste any CSS color, get every format.",
+      "metaDescription": "Convert colors between HEX, RGB and HSL for free in your browser, with a live swatch preview. Paste any CSS color format.",
+      "about": [
+        "Paste a color in any common CSS form, #2563EB, rgb(37, 99, 235), hsl(221, 83%, 53%), and get all the others instantly, with a live swatch so you can see what you're working with. Shorthand hex and alpha channels are understood.",
+        "Handy when a design tool hands you HSL but your stylesheet wants hex, or you need rgb() components for an rgba() overlay. Runs entirely client-side."
+      ],
+      "libs": [],
+      "related": ["dev/regex", "dev/url", "dev/markdown-preview"]
+    },
+    {
+      "path": "dev/url", "cat": "dev", "name": "URL Encode / Decode",
+      "h1": "URL encode and decode text",
+      "short": "Percent-encoding, both directions, live.",
+      "metaDescription": "URL encode and decode text for free in your browser, full encodeURIComponent or query-safe modes, live output. Nothing uploaded.",
+      "about": [
+        "Encode text for safe use in URLs and query strings, or decode percent-encoded strings back to readable text, live as you type, in both directions. Choose full component encoding or URI-preserving mode depending on whether you're encoding a value or a whole URL.",
+        "Constant companion when debugging query strings, webhooks, OAuth redirects and log lines full of %2F. Local-only, like everything here."
+      ],
+      "libs": [],
+      "related": ["dev/base64", "dev/regex", "dev/jwt"]
+    },
+    {
+      "path": "dev/markdown-preview", "cat": "dev", "name": "Markdown Preview",
+      "h1": "Preview Markdown live",
+      "short": "Type Markdown, see rendered HTML instantly.",
+      "metaDescription": "Preview Markdown live in your browser for free, GitHub-style rendering of headings, lists, tables and code. Nothing is uploaded.",
+      "about": [
+        "Type or paste Markdown on the left and see it rendered on the right, live, headings, lists, tables, code blocks, links and images, in a clean GitHub-style presentation.",
+        "Use it to sanity-check a README before pushing, draft release notes, or write docs without leaving the browser. Rendering happens locally via marked; you can also download the rendered HTML."
+      ],
+      "libs": ["marked"],
+      "related": ["pdf/markdown-to-pdf", "dev/diff", "dev/json-formatter"]
+    }
+  ]
+}
