@@ -51,6 +51,36 @@ const ICONS = {
   shield: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>'
 };
 
+/* Per-tool icons (lucide-style strokes). */
+const stroke = (inner) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${inner}</svg>`;
+const TOOL_ICONS = {
+  image: stroke('<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>'),
+  swap: stroke('<polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>'),
+  maximize: stroke('<polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>'),
+  minimize: stroke('<polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/>'),
+  crop: stroke('<path d="M6 2v14a2 2 0 0 0 2 2h14"/><path d="M18 22V8a2 2 0 0 0-2-2H2"/>'),
+  rotate: stroke('<polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>'),
+  star: stroke('<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>'),
+  layers: stroke('<polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>'),
+  files: stroke('<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>'),
+  scissors: stroke('<circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/>'),
+  archive: stroke('<polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5" rx="1"/><line x1="10" y1="12" x2="14" y2="12"/>'),
+  filetext: stroke('<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>'),
+  code: stroke('<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>'),
+  braces: stroke('<path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5c0 1.1.9 2 2 2h1"/><path d="M16 21h1a2 2 0 0 0 2-2v-5c0-1.1.9-2 2-2a2 2 0 0 1-2-2V5a2 2 0 0 0-2-2h-1"/>'),
+  table: stroke('<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/>'),
+  key: stroke('<path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m3 3L22 7l-3-3"/>'),
+  hash: stroke('<line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/>'),
+  clock: stroke('<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>'),
+  diff: stroke('<circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7"/><path d="M11 18H8a2 2 0 0 1-2-2V9"/>'),
+  asterisk: stroke('<line x1="12" y1="3" x2="12" y2="21"/><line x1="5.6" y1="7.5" x2="18.4" y2="16.5"/><line x1="18.4" y1="7.5" x2="5.6" y2="16.5"/>'),
+  droplet: stroke('<path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>'),
+  link: stroke('<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>'),
+  eye: stroke('<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>')
+};
+const toolIcon = (t, lg) =>
+  `<span class="t-icon${lg ? " lg" : ""} c-${t.cat}">${TOOL_ICONS[t.icon] || TOOL_ICONS.image}</span>`;
+
 function head({ title, desc, canonicalPath }) {
   const url = canonicalPath ? `${SITE}/${canonicalPath}` : `${SITE}/`;
   return `<head>
@@ -101,7 +131,7 @@ function header(activeCat) {
 function footer() {
   return `<footer class="site-footer">
     <div class="wrap cols">
-      <span>Convertze, free file &amp; developer tools. No uploads, no accounts: everything runs in your browser.</span>
+      <span>Convertze is a free, open source side project. Your files stay on your device. Found a bug? Tell us on GitHub.</span>
       <span>${cats.map((c) => `<a href="/${c.id}">${esc(c.label)}</a>`).join(" · ")} · <a href="https://github.com/harsh-m-10/convertze" rel="noopener noreferrer" target="_blank">GitHub</a></span>
     </div>
   </footer>`;
@@ -129,7 +159,7 @@ ${(scripts || []).map((s) => `  <script src="${s}" defer></script>`).join("\n")}
 function homepage() {
   const sections = cats.map((c) => {
     const cards = byCat[c.id].map((t) =>
-      `<a class="tool-card" data-name="${esc((t.name + " " + t.short).toLowerCase())}" href="/${t.path}"><b>${esc(t.name)}</b><span>${esc(t.short)}</span></a>`
+      `<a class="tool-card" data-name="${esc((t.name + " " + t.short).toLowerCase())}" href="/${t.path}">${toolIcon(t)}<span class="t-text"><b>${esc(t.name)}</b><span>${esc(t.short)}</span></span></a>`
     ).join("\n        ");
     return `<section class="cat-section">
       <div class="cat-head">
@@ -144,8 +174,8 @@ function homepage() {
 
   const body = `<main class="wrap">
     <section class="hero">
-      <h1>Every file tool you need.<br>None of your files leave the browser.</h1>
-      <p>Convert images, work with PDFs, and debug data formats, fast, free, and private. There is no server: your files are processed on your own device.</p>
+      <h1>Convert anything.<br><span class="grad">Upload nothing.</span></h1>
+      <p>Free, fast tools for images, PDFs and everyday dev work. Everything runs right here in your browser, so your files never leave your hands.</p>
       <span class="trust-badge">${ICONS.shield} No uploads · No accounts · Open source</span>
     </section>
     <div class="header-search" style="max-width:430px;margin:18px 0 6px">
@@ -154,7 +184,7 @@ function homepage() {
     </div>
     <p class="no-results">No tools match that search.</p>
     <section class="cat-section" id="recent-tools" style="display:none">
-      <div class="cat-head"><h2>Recently used</h2></div>
+      <div class="cat-head"><h2>Pick up where you left off</h2></div>
       <div class="grid"></div>
     </section>
     ${sections}
@@ -171,7 +201,7 @@ function homepage() {
 /* ---------- Category hubs ---------- */
 function hubPage(cat) {
   const cards = byCat[cat.id].map((t) =>
-    `<a class="tool-card" href="/${t.path}"><b>${esc(t.name)}</b><span>${esc(t.short)}</span></a>`
+    `<a class="tool-card" href="/${t.path}">${toolIcon(t)}<span class="t-text"><b>${esc(t.name)}</b><span>${esc(t.short)}</span></span></a>`
   ).join("\n      ");
   const others = cats.filter((c) => c.id !== cat.id)
     .map((c) => `<a href="/${c.id}">${esc(c.label)}</a>`).join(" · ");
@@ -236,7 +266,7 @@ function toolPage(t) {
 
   const body = `<main class="wrap">
     <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/${cat.id}">${esc(cat.label)}</a> › ${esc(t.name)}</nav>
-    <h1 class="tool-h1">${esc(t.h1)}</h1>
+    <div class="h1-row">${toolIcon(t, true)}<h1 class="tool-h1">${esc(t.h1)}</h1></div>
     <p class="tool-tagline">${esc(t.short)}</p>
     ${privacyBadge}
     <div class="page-grid">
