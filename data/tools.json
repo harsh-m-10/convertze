@@ -385,7 +385,7 @@
       "cat": "dev",
       "name": "CSV to JSON Converter",
       "h1": "Convert between CSV and JSON",
-      "short": "Header-row CSV ⇄ JSON array of objects.",
+      "short": "Header-row CSV to a JSON array, and back.",
       "metaDescription": "Convert CSV to JSON and JSON to CSV for free in your browser. Quoted fields handled correctly, live output, no upload.",
       "about": [
         "CSV with a header row becomes a JSON array of objects; a JSON array of objects becomes properly quoted CSV. Embedded commas, quotes and line breaks inside fields are handled correctly in both directions.",

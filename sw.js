@@ -1,4 +1,4 @@
-const CACHE_NAME = "convertze-v3";
+const CACHE_NAME = "convertze-1f2d9c70";
 const APP_SHELL = [
   "/",
   "/images",
