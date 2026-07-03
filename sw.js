@@ -1,16 +1,18 @@
-const CACHE_NAME = "convertze-1f2d9c70";
+const CACHE_NAME = "convertze-f8f8fa9a";
 const APP_SHELL = [
   "/",
   "/images",
   "/pdf",
   "/dev",
+  "/text",
   "/favicon.svg",
   "/manifest.webmanifest",
   "/assets/site.css",
   "/assets/app.js",
   "/assets/tools-image.js",
   "/assets/tools-pdf.js",
-  "/assets/tools-dev.js"
+  "/assets/tools-dev.js",
+  "/assets/tools-text.js"
 ];
 
 const CDN_ASSETS = [
@@ -22,7 +24,8 @@ const CDN_ASSETS = [
   "https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js",
   "https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js",
   "https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js",
-  "https://cdnjs.cloudflare.com/ajax/libs/spark-md5/3.0.2/spark-md5.min.js"
+  "https://cdnjs.cloudflare.com/ajax/libs/spark-md5/3.0.2/spark-md5.min.js",
+  "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"
 ];
 
 self.addEventListener("install", (event) => {

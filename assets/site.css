@@ -79,7 +79,7 @@ main { flex: 1; width: 100%; }
 a { color: var(--accent-2); }
 ::selection { background: var(--mark); }
 
-.wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+.wrap { max-width: 1360px; margin: 0 auto; padding: 0 24px; }
 
 /* ---------- Header ---------- */
 .site-header {
@@ -190,6 +190,7 @@ html.light .icon-btn .moon { display: block; }
 .t-icon.c-images { background: linear-gradient(135deg, #0ea5e9, #2563eb); }
 .t-icon.c-pdf { background: linear-gradient(135deg, #8b5cf6, #6366f1); }
 .t-icon.c-dev { background: linear-gradient(135deg, #10b981, #0d9488); }
+.t-icon.c-text { background: linear-gradient(135deg, #f59e0b, #ea580c); }
 .h1-row { display: flex; align-items: center; gap: 13px; margin: 6px 0 4px; }
 .h1-row .tool-h1 { margin: 0; }
 .no-results { color: var(--muted); font-size: 14px; padding: 20px 2px; display: none; }
@@ -224,6 +225,8 @@ html.light .icon-btn .moon { display: block; }
   background: var(--surface); padding: 20px; margin-bottom: 18px;
 }
 .panel h2 { margin: 0 0 12px; font-size: 1rem; letter-spacing: -0.01em; }
+/* Keep prose readable now that the layout is wide; tool UIs use the full width. */
+.panel.about p, .panel .steps li { max-width: 78ch; }
 
 /* Dropzone */
 .dz {
@@ -329,6 +332,9 @@ kbd {
 
 /* ---------- Dev tools ---------- */
 .duo { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
+/* Grid items default to min-width:auto, so unwrappable content in one pane
+   (code blocks, tables, images) would widen its column and crush the other. */
+.duo > * { min-width: 0; }
 .duo.stack-out { grid-template-columns: 1fr; }
 @media (max-width: 760px) { .duo { grid-template-columns: 1fr; } }
 .ta-label { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); margin-bottom: 6px; font-weight: 550; min-height: 26px; flex-wrap: wrap; }
@@ -363,9 +369,41 @@ textarea.ta[readonly] { background: var(--surface-2); }
 html.light .outbox, html.light textarea.ta { background: #fff; }
 html.light textarea.ta[readonly] { background: var(--surface-2); }
 .outbox mark { background: var(--mark); color: inherit; border-radius: 3px; padding: 0 1px; }
+
+/* Markdown preview: the pane holds rendered HTML, not preformatted text, so
+   undo the .outbox pre-wrap (it turns source newlines into phantom breaks)
+   and keep wide content scrolling inside the pane instead of stretching it. */
+.md-preview { white-space: normal; word-break: normal; overflow-wrap: break-word; }
+.md-preview h1, .md-preview h2, .md-preview h3, .md-preview h4 { margin: 18px 0 10px; letter-spacing: -0.01em; }
+.md-preview h1 { font-size: 1.5em; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+.md-preview h2 { font-size: 1.25em; }
+.md-preview h3 { font-size: 1.1em; }
+.md-preview > :first-child { margin-top: 0; }
+.md-preview pre { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--r-sm); padding: 10px 12px; overflow-x: auto; }
+.md-preview code { font-family: var(--mono); font-size: 0.92em; }
+.md-preview img { max-width: 100%; height: auto; }
+.md-preview table { border-collapse: collapse; display: block; max-width: 100%; overflow-x: auto; }
+.md-preview th, .md-preview td { border: 1px solid var(--border); padding: 6px 10px; text-align: left; }
+.md-preview th { background: var(--surface-2); }
+.md-preview blockquote { margin: 0 0 14px; padding: 2px 14px; border-left: 3px solid var(--border); color: var(--muted); }
+.md-preview hr { border: 0; border-top: 1px solid var(--border); margin: 16px 0; }
 .outbox .add { background: var(--add-bg); display: block; }
 .outbox .del { background: var(--del-bg); display: block; }
 .outbox .ctx { display: block; color: var(--muted); }
+
+/* FAQ accordions on tool pages */
+.faq-item { border-bottom: 1px solid var(--border); }
+.faq-item:last-child { border-bottom: 0; }
+.faq-item summary {
+  cursor: pointer; padding: 11px 0; font-size: 13.8px; font-weight: 550; color: var(--ink-2);
+  list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 10px;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after { content: "+"; color: var(--muted); font-size: 15px; flex-shrink: 0; }
+.faq-item[open] summary { color: var(--ink); }
+.faq-item[open] summary::after { content: "\2212"; }
+.faq-item summary:hover { color: var(--ink); }
+.faq-item p { margin: 0 0 13px; font-size: 13.2px; line-height: 1.65; color: var(--muted); max-width: 78ch; }
 
 .kv { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 13px; }
 .kv th, .kv td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); }

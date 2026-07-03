@@ -1,5 +1,6 @@
 /* Convertze developer tools: textarea-first, live output, copy-first actions.
-   json-formatter, json-yaml, csv-json, base64, hash, jwt, timestamp, diff, regex, color, url, markdown-preview. */
+   json-formatter, json-yaml, csv-json, base64, hash, jwt, timestamp, diff, regex,
+   color, url, markdown-preview, uuid, password, qr-code. */
 (function () {
   "use strict";
   var C = window.Convertze;
@@ -833,6 +834,159 @@
     C.onRun(run);
     C.onClear(function () { input.value = ""; run(); });
     run();
+  });
+
+  /* ---------- UUID generator ---------- */
+  C.register("dev/uuid", function (root) {
+    var count = h("input", { type: "number", value: "1", min: "1", max: "1000", "aria-label": "How many UUIDs" });
+    var genBtn = h("button", { class: "mini primary", type: "button", text: "Generate" });
+    var copyBtn = h("button", { class: "mini", type: "button", text: "Copy" });
+    var out = h("pre", { class: "outbox", style: "max-height:none" });
+
+    root.appendChild(h("div", { class: "opts", style: "margin:0 0 13px" }, [
+      h("label", { class: "field" }, ["Count ", count]), genBtn
+    ]));
+    root.appendChild(h("div", { class: "ta-label" }, [h("span", { text: "UUIDs" }), h("span", { class: "mini-btns" }, [copyBtn])]));
+    root.appendChild(out);
+
+    function uuid() {
+      if (crypto.randomUUID) return crypto.randomUUID();
+      var b = crypto.getRandomValues(new Uint8Array(16));
+      b[6] = (b[6] & 0x0f) | 0x40;
+      b[8] = (b[8] & 0x3f) | 0x80;
+      var s = Array.prototype.map.call(b, function (x) { return x.toString(16).padStart(2, "0"); }).join("");
+      return s.slice(0, 8) + "-" + s.slice(8, 12) + "-" + s.slice(12, 16) + "-" + s.slice(16, 20) + "-" + s.slice(20);
+    }
+    function run() {
+      var n = Math.max(1, Math.min(1000, parseInt(count.value, 10) || 1));
+      var list = [];
+      for (var i = 0; i < n; i++) list.push(uuid());
+      out.textContent = list.join("\n");
+    }
+    genBtn.addEventListener("click", run);
+    count.addEventListener("change", run);
+    copyBtn.addEventListener("click", function () { if (out.textContent) C.copyText(out.textContent); });
+    C.onRun(run);
+    C.onClear(function () { out.textContent = ""; });
+    run();
+  });
+
+  /* ---------- Password generator ---------- */
+  C.register("dev/password", function (root) {
+    var length = h("input", { type: "range", min: "8", max: "64", value: "16", "aria-label": "Password length" });
+    var lenLabel = h("b", { text: "16" });
+    function check(label, on) {
+      var box = h("input", { type: "checkbox" });
+      box.checked = on;
+      return { box: box, wrap: h("label", { class: "field" }, [box, label]) };
+    }
+    var upper = check("A-Z", true), lower = check("a-z", true), digits = check("0-9", true), symbols = check("!@#$", true);
+    var genBtn = h("button", { class: "mini primary", type: "button", text: "Generate" });
+    var copyBtn = h("button", { class: "mini", type: "button", text: "Copy" });
+    var out = h("input", { class: "single-input", type: "text", readonly: "readonly", style: "font-family:var(--mono)", "aria-label": "Generated password" });
+    var strength = h("p", { class: "kbd-hint", style: "margin:10px 0 0" });
+
+    root.appendChild(h("div", { class: "opts", style: "margin:0 0 13px" }, [
+      h("label", { class: "field" }, ["Length ", length, lenLabel]),
+      upper.wrap, lower.wrap, digits.wrap, symbols.wrap, genBtn
+    ]));
+    root.appendChild(h("div", { class: "ta-label" }, [h("span", { text: "Password" }), h("span", { class: "mini-btns" }, [copyBtn])]));
+    root.appendChild(out);
+    root.appendChild(strength);
+
+    var SETS = {
+      upper: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+      lower: "abcdefghijklmnopqrstuvwxyz",
+      digits: "0123456789",
+      symbols: "!@#$%^&*()-_=+[]{};:,.?/"
+    };
+    function run() {
+      var chars = (upper.box.checked ? SETS.upper : "") + (lower.box.checked ? SETS.lower : "") +
+        (digits.box.checked ? SETS.digits : "") + (symbols.box.checked ? SETS.symbols : "");
+      lenLabel.textContent = length.value;
+      if (!chars) { out.value = ""; strength.textContent = "Pick at least one character set."; return; }
+      var n = parseInt(length.value, 10);
+      // Rejection sampling keeps the draw uniform across the charset.
+      var limit = Math.floor(4294967296 / chars.length) * chars.length;
+      var pw = "", buf = new Uint32Array(1);
+      while (pw.length < n) {
+        crypto.getRandomValues(buf);
+        if (buf[0] < limit) pw += chars[buf[0] % chars.length];
+      }
+      out.value = pw;
+      var bits = Math.round(n * Math.log2(chars.length));
+      strength.textContent = "About " + bits + " bits of entropy, " +
+        (bits < 50 ? "weak, use more length or character sets." : bits < 80 ? "good for most accounts." : "strong.");
+    }
+    genBtn.addEventListener("click", run);
+    length.addEventListener("input", run);
+    [upper.box, lower.box, digits.box, symbols.box].forEach(function (b) { b.addEventListener("change", run); });
+    copyBtn.addEventListener("click", function () { if (out.value) C.copyText(out.value); });
+    C.onRun(run);
+    C.onClear(function () { out.value = ""; strength.textContent = ""; });
+    run();
+  });
+
+  /* ---------- QR code generator ---------- */
+  C.register("dev/qr-code", function (root) {
+    var input = h("textarea", { class: "ta", placeholder: "https://example.com or any text...", spellcheck: "false", style: "min-height:96px", "aria-label": "QR code content" });
+    var size = h("select", { "aria-label": "QR size" }, [
+      h("option", { value: "200", text: "200 px" }),
+      h("option", { value: "300", text: "300 px" }),
+      h("option", { value: "400", text: "400 px" }),
+      h("option", { value: "600", text: "600 px (print)" })
+    ]);
+    size.value = "300";
+    var dlBtn = h("button", { class: "mini primary", type: "button", text: "Download PNG" });
+    var err = h("div", { class: "ta-err", role: "alert" });
+    var box = h("div", { style: "display:none;background:#fff;padding:16px;border-radius:10px;margin-top:13px;width:fit-content" });
+
+    root.appendChild(h("div", { class: "ta-label" }, [h("span", { text: "Content" })]));
+    root.appendChild(input);
+    root.appendChild(h("div", { class: "opts", style: "margin-top:13px" }, [
+      h("label", { class: "field" }, ["Size ", size]), dlBtn
+    ]));
+    root.appendChild(err);
+    root.appendChild(box);
+
+    function run() {
+      err.classList.remove("show");
+      box.innerHTML = "";
+      var text = input.value.trim();
+      if (!text) { box.style.display = "none"; return; }
+      if (typeof QRCode === "undefined") {
+        err.textContent = "QR library failed to load, refresh the page.";
+        err.classList.add("show");
+        return;
+      }
+      try {
+        var px = parseInt(size.value, 10);
+        new QRCode(box, { text: text, width: px, height: px, correctLevel: QRCode.CorrectLevel.M });
+        box.style.display = "";
+      } catch (e) {
+        box.style.display = "none";
+        err.textContent = "That content is too long for a QR code, try shortening it.";
+        err.classList.add("show");
+      }
+    }
+    input.addEventListener("input", debounce(run, 200));
+    size.addEventListener("change", run);
+    dlBtn.addEventListener("click", function () {
+      var canvas = box.querySelector("canvas");
+      if (!canvas) return;
+      // Re-draw with a white quiet zone so printed codes stay scannable.
+      var margin = Math.round(canvas.width / 12);
+      var big = document.createElement("canvas");
+      big.width = canvas.width + margin * 2;
+      big.height = canvas.height + margin * 2;
+      var ctx = big.getContext("2d");
+      ctx.fillStyle = "#fff";
+      ctx.fillRect(0, 0, big.width, big.height);
+      ctx.drawImage(canvas, margin, margin);
+      big.toBlob(function (blob) { if (blob) C.download(blob, "qr-code.png"); }, "image/png");
+    });
+    C.onRun(run);
+    C.onClear(function () { input.value = ""; run(); });
   });
 
   C.boot();

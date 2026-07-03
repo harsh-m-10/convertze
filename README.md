@@ -1,6 +1,6 @@
 # Convertze
 
-Free file & developer tools that run **entirely in your browser**, no uploads, no accounts, no backend.
+Free file, text & developer tools that run **entirely in your browser**. Your files never leave your device: no accounts, no backend.
 
 **Live:** [convertze.com](https://convertze.com) · **Source & contribute:** [github.com/harsh-m-10/convertze](https://github.com/harsh-m-10/convertze)
 

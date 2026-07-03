@@ -19,7 +19,7 @@ const crypto = require("crypto");
 const ROOT = path.join(__dirname, "..");
 // Content hash of the shared assets. Used to version asset URLs and the
 // service worker cache so stale CSS/JS can never be served against new HTML.
-const ASSET_FILES = ["site.css", "app.js", "tools-image.js", "tools-pdf.js", "tools-dev.js"];
+const ASSET_FILES = ["site.css", "app.js", "tools-image.js", "tools-pdf.js", "tools-dev.js", "tools-text.js"];
 const ASSET_HASH = crypto.createHash("md5")
   .update(ASSET_FILES.map((f) => fs.readFileSync(path.join(__dirname, "..", "assets", f))).join("\n"))
   .digest("hex").slice(0, 8);
@@ -37,9 +37,10 @@ const LIB_URLS = {
   pdflib: "https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js",
   jsyaml: "https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js",
   marked: "https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js",
-  sparkmd5: "https://cdnjs.cloudflare.com/ajax/libs/spark-md5/3.0.2/spark-md5.min.js"
+  sparkmd5: "https://cdnjs.cloudflare.com/ajax/libs/spark-md5/3.0.2/spark-md5.min.js",
+  qrcode: "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"
 };
-const CAT_MODULE = { images: "tools-image.js", pdf: "tools-pdf.js", dev: "tools-dev.js" };
+const CAT_MODULE = { images: "tools-image.js", pdf: "tools-pdf.js", dev: "tools-dev.js", text: "tools-text.js" };
 
 const esc = (s) => String(s)
   .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -85,7 +86,11 @@ const TOOL_ICONS = {
   asterisk: stroke('<line x1="12" y1="3" x2="12" y2="21"/><line x1="5.6" y1="7.5" x2="18.4" y2="16.5"/><line x1="18.4" y1="7.5" x2="5.6" y2="16.5"/>'),
   droplet: stroke('<path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>'),
   link: stroke('<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>'),
-  eye: stroke('<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>')
+  eye: stroke('<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>'),
+  qr: stroke('<rect x="3" y="3" width="5" height="5"/><rect x="16" y="3" width="5" height="5"/><rect x="3" y="16" width="5" height="5"/><path d="M21 16h-3a2 2 0 0 0-2 2v3"/><path d="M21 21v.01"/><path d="M12 7v3a2 2 0 0 1-2 2H7"/><path d="M3 12h.01"/><path d="M12 3h.01"/><path d="M12 16v.01"/><path d="M16 12h1"/><path d="M21 12v.01"/><path d="M12 21v-1"/>'),
+  type: stroke('<polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/>'),
+  sort: stroke('<path d="M11 5h10"/><path d="M11 9h7"/><path d="M11 13h4"/><path d="M3 17l3 3 3-3"/><path d="M6 20V4"/>'),
+  quote: stroke('<path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/>')
 };
 const toolIcon = (t, lg) =>
   `<span class="t-icon${lg ? " lg" : ""} c-${t.cat}">${TOOL_ICONS[t.icon] || TOOL_ICONS.image}</span>`;
@@ -146,7 +151,7 @@ function footer() {
   </footer>`;
 }
 
-const privacyBadge = `<p class="privacy-line">${ICONS.shield} No uploads. No accounts. Runs in your browser.</p>`;
+const privacyBadge = `<p class="privacy-line">${ICONS.shield} Files stay on your device. No accounts. Free.</p>`;
 
 function page({ title, desc, canonicalPath, activeCat, body, scripts }) {
   return `<!DOCTYPE html>
@@ -183,9 +188,9 @@ function homepage() {
 
   const body = `<main class="wrap">
     <section class="hero">
-      <h1>Convert anything.<br><span class="grad">Upload nothing.</span></h1>
-      <p>Free, fast tools for images, PDFs and everyday dev work. Everything runs right here in your browser, so your files never leave your hands.</p>
-      <span class="trust-badge">${ICONS.shield} No uploads · No accounts · Open source</span>
+      <h1>Convert anything.<br><span class="grad">Nothing leaves your device.</span></h1>
+      <p>Free, fast tools for images, PDFs, text and everyday dev work. Everything runs right here in your browser, so your files never leave your hands.</p>
+      <span class="trust-badge">${ICONS.shield} Files stay on your device · No accounts · Open source</span>
     </section>
     <div class="header-search" style="max-width:430px;margin:18px 0 6px">
       ${ICONS.search}
@@ -200,8 +205,8 @@ function homepage() {
   </main>`;
 
   return page({
-    title: "Convertze, Free Online File & Developer Tools. No Upload, Private.",
-    desc: "Free in-browser tools: convert and compress images, merge and split PDFs, format JSON, decode JWTs and more. No uploads, no accounts, everything runs locally.",
+    title: "Convertze, Free & Private Online File, Text & Developer Tools",
+    desc: "Free in-browser tools: convert and compress images, merge and split PDFs, count words, format JSON, decode JWTs and more. Your files stay on your device.",
     canonicalPath: "",
     body
   });
@@ -225,8 +230,8 @@ function hubPage(cat) {
     <p style="margin-top:26px;color:var(--muted);font-size:13.5px">More: ${others}</p>
   </main>`;
   return page({
-    title: `${cat.label}, Free, Online, No Upload | Convertze`,
-    desc: cat.blurb + " Free and private, no uploads, no sign-up.",
+    title: `${cat.label}, Free & Private, In Your Browser | Convertze`,
+    desc: cat.blurb + " Free and private, no sign-up.",
     canonicalPath: cat.id,
     activeCat: cat.id,
     body
@@ -241,7 +246,7 @@ const STEPS = {
     "Download the result; multiple files arrive as a single zip."
   ],
   pdf: [
-    "Drop your file(s), they are read locally, never uploaded.",
+    "Drop your file(s), they are read locally on your device.",
     "Set the options you need and run the tool.",
     "Download the finished PDF, images or text."
   ],
@@ -249,6 +254,11 @@ const STEPS = {
     "Paste your input, or drop a text file onto the box.",
     "The output updates live as you type.",
     "Copy it to the clipboard, or download it as a file."
+  ],
+  text: [
+    "Paste or type your text into the box.",
+    "The results update live as you type.",
+    "Copy the output, or download it as a file."
   ]
 };
 
@@ -272,6 +282,22 @@ function toolPage(t) {
     operatingSystem: "Any",
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" }
   });
+  const faqs = t.faq || [];
+  const faqPanel = faqs.length ? `<div class="panel">
+          <h2>Frequently asked questions</h2>
+          ${faqs.map((f) => `<details class="faq-item"><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`).join("\n          ")}
+        </div>
+        ` : "";
+  const faqLd = faqs.length ? `
+  <script type="application/ld+json">${JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a }
+    }))
+  })}</script>` : "";
 
   const body = `<main class="wrap">
     <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/${cat.id}">${esc(cat.label)}</a> › ${esc(t.name)}</nav>
@@ -294,7 +320,7 @@ function toolPage(t) {
           ${steps}
           </ol>
         </div>
-        <div class="panel">
+        ${faqPanel}<div class="panel">
           <h2>Related tools</h2>
           <ul class="related-list">
           ${related}
@@ -307,10 +333,10 @@ function toolPage(t) {
       </aside>
     </div>
   </main>
-  <script type="application/ld+json">${jsonLd}</script>`;
+  <script type="application/ld+json">${jsonLd}</script>${faqLd}`;
 
   return page({
-    title: `${t.name}, Free, Online, No Upload | Convertze`,
+    title: `${t.name}, Free & Private, In Your Browser | Convertze`,
     desc: t.metaDescription,
     canonicalPath: t.path,
     activeCat: t.cat,

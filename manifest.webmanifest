@@ -1,7 +1,7 @@
 {
   "name": "Convertze",
   "short_name": "Convertze",
-  "description": "Free in-browser file and developer tools. Images, PDF, JSON and more, no uploads, no accounts.",
+  "description": "Free in-browser file, text and developer tools. Images, PDF, JSON and more; everything stays on your device, no accounts.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

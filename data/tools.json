@@ -5,19 +5,25 @@
       "id": "images",
       "nav": "Images",
       "label": "Image tools",
-      "blurb": "Convert, resize, compress, crop and rotate images, with batch support and zip downloads. Processed by your browser, never uploaded."
+      "blurb": "Convert, resize, compress, crop and rotate images, with batch support and zip downloads. Everything is processed by your browser and stays on your device."
     },
     {
       "id": "pdf",
       "nav": "PDF",
       "label": "PDF tools",
-      "blurb": "Merge, split, compress and convert PDFs locally. Your documents stay on your device, there is no server to upload them to."
+      "blurb": "Merge, split, compress and convert PDFs locally. Your documents stay on your device from the moment you pick them to the moment you download the result."
     },
     {
       "id": "dev",
       "nav": "Dev Tools",
       "label": "Developer tools",
       "blurb": "Textarea-first utilities for JSON, YAML, CSV, Base64, hashes, JWTs, regex, diffs and more. Paste, see the result live, copy out."
+    },
+    {
+      "id": "text",
+      "nav": "Text",
+      "label": "Text tools",
+      "blurb": "Count, clean, convert and generate text. Word counts, case changes, sorted lists, slugs and placeholder copy, all live as you type."
     }
   ],
   "tools": [
@@ -27,10 +33,15 @@
       "name": "Image Converter",
       "h1": "Convert PNG, JPG and WebP",
       "short": "Convert between PNG, JPG and WebP, alone or in batches.",
-      "metaDescription": "Convert images between PNG, JPG and WebP for free in your browser. Batch convert with zip download. No upload, no watermark, no sign-up.",
+      "metaDescription": "Convert images between PNG, JPG and WebP for free in your browser. Batch convert with zip download. Files stay on your device, no watermark, no sign-up.",
       "about": [
         "Pick an output format and drop any mix of PNG, JPG and WebP files, each one is redrawn and re-encoded by your browser. Transparent areas turn white when exporting to JPG; quality is adjustable for lossy formats.",
         "Use it when a portal rejects WebP, an email needs smaller JPGs, or an editor wants lossless PNG. Two or more results are packaged into a single zip automatically. Because conversion is local, your images never travel over the network."
+      ],
+      "faq": [
+        { "q": "Are my images sent to a server?", "a": "No. The conversion runs inside your own browser tab using the canvas engine your browser already has. You can open this page, switch off your internet connection and the tool keeps working." },
+        { "q": "Which image formats can I convert between?", "a": "PNG, JPG and WebP, in any direction. You can mix formats in a single batch and everything comes out in the one output format you picked." },
+        { "q": "Why did my transparent PNG get a white background as JPG?", "a": "JPG has no concept of transparency, so transparent pixels have to become some color. This tool fills them with white, which is what most documents and portals expect. Convert to WebP or keep PNG if you need the transparency." }
       ],
       "libs": [
         "jszip"
@@ -48,10 +59,15 @@
       "name": "Image Resizer",
       "h1": "Resize images to exact dimensions",
       "short": "Resize to exact pixels, with or without aspect lock.",
-      "metaDescription": "Resize images to exact pixel dimensions for free in your browser. Keep aspect ratio or set width and height exactly. Batch resize, no upload.",
+      "metaDescription": "Resize images to exact pixel dimensions for free in your browser. Keep aspect ratio or set width and height exactly. Batch resize, files stay on your device.",
       "about": [
         "Set a width and height in pixels and the tool resizes your image to match, keeping the original proportions if you ask it to, or filling the exact box if you don't. Output as PNG, JPG or WebP.",
-        "Use it for avatars, thumbnails, form uploads with pixel requirements, or just making screenshots manageable. Batches are resized with the same settings and zipped. Everything runs in your browser, so nothing is uploaded anywhere."
+        "Use it for avatars, thumbnails, form uploads with pixel requirements, or just making screenshots manageable. Batches are resized with the same settings and zipped. Everything runs in your browser, so your photos never leave your device."
+      ],
+      "faq": [
+        { "q": "Will resizing reduce the quality of my image?", "a": "Shrinking an image keeps it looking sharp because pixels are averaged down. Enlarging beyond the original size will look soft, since the browser has to invent pixels that were never there. When you need a bigger image, start from the largest original you have." },
+        { "q": "How do I resize without stretching or squashing the photo?", "a": "Leave the aspect lock on. Enter the one dimension you care about and the other is calculated for you, so the proportions never change." },
+        { "q": "Can I resize many images at once?", "a": "Yes. Drop a whole folder's worth, they are all resized with the same settings, and the results download together as one zip file." }
       ],
       "libs": [
         "jszip"
@@ -69,10 +85,15 @@
       "name": "Image Compressor",
       "h1": "Compress images, by quality or to a target size",
       "short": "Compress by quality, or hit an exact KB target.",
-      "metaDescription": "Compress images for free in your browser. Choose a quality level or a target file size in KB and get the best quality that fits. No upload.",
+      "metaDescription": "Compress images for free in your browser. Choose a quality level or a target file size in KB and get the best quality that fits. Images stay on your device.",
       "about": [
         "Two modes. Pick a quality level yourself, or enter a target size in KB and the tool binary-searches for the highest quality that fits under it, shrinking dimensions only when quality alone isn't enough. That second mode is built for upload forms with strict size limits.",
         "Compress one photo or a whole batch with the same settings; multiple results download as a zip. Your images are processed by your own browser and never leave your device."
+      ],
+      "faq": [
+        { "q": "How do I compress an image to exactly 100 KB or 200 KB?", "a": "Switch to target size mode and type the limit in KB. The tool tries progressively lower quality settings until the file fits, and only shrinks the dimensions if quality alone cannot get there." },
+        { "q": "How much smaller will my image get?", "a": "Photos usually compress to a fifth or a tenth of their original size before quality loss becomes noticeable. Screenshots and graphics vary more. The result size is shown for every file, so you can adjust and retry instantly." },
+        { "q": "Does compressing here add a watermark or limit how many files I can process?", "a": "No watermark, no daily limit, no account. The work happens on your own device, so there is no server cost that would need to be recovered from you." }
       ],
       "libs": [
         "jszip"
@@ -90,10 +111,15 @@
       "name": "Image Cropper",
       "h1": "Center-crop images to an exact frame",
       "short": "Center-crop images to an exact frame size.",
-      "metaDescription": "Center-crop images to exact pixel dimensions for free in your browser. Ideal for avatars, thumbnails and fixed-frame uploads. No upload.",
+      "metaDescription": "Center-crop images to exact pixel dimensions for free in your browser. Ideal for avatars, thumbnails and fixed-frame uploads. Everything stays on your device.",
       "about": [
         "Enter the frame you need, 500×500 for an avatar, 1280×720 for a thumbnail, and the tool scales your image to fill it, then cuts that exact region from the centre. The frame is always filled edge to edge.",
         "It works on batches too, applying the same frame to every file and zipping the results. Like every Convertze tool, cropping happens locally in your browser tab."
+      ],
+      "faq": [
+        { "q": "What does center-crop mean exactly?", "a": "The image is first scaled so it covers your target frame completely, then everything outside the frame is trimmed away evenly from the edges. The middle of your photo always survives, the borders are what get cut." },
+        { "q": "Will the output be exactly the size I typed?", "a": "Yes, to the pixel. That is the point of this tool: if a form wants 500 by 500, you get exactly 500 by 500 with no letterboxing or stretching." },
+        { "q": "Is my photo uploaded anywhere while cropping?", "a": "No. The photo is read and cropped by your own browser and never crosses the network, which makes it fine to use for ID photos and other personal images." }
       ],
       "libs": [
         "jszip"
@@ -111,10 +137,15 @@
       "name": "Image Rotator",
       "h1": "Rotate images 90°, 180° or 270°",
       "short": "Fix sideways photos in exact 90° steps.",
-      "metaDescription": "Rotate images by 90, 180 or 270 degrees for free in your browser. Batch rotate with zip download. No upload, no quality loss games.",
+      "metaDescription": "Rotate images by 90, 180 or 270 degrees for free in your browser. Batch rotate with zip download. Photos stay on your device, no quality loss games.",
       "about": [
         "Fix sideways phone photos and scans by rotating them in exact 90-degree steps, then export in the format you choose. The geometry is exact, no resampling artifacts from arbitrary angles.",
-        "Rotate a single file or a batch in one click; multiple results arrive as a zip. Processing is local to your browser, no upload, no account, no watermark."
+        "Rotate a single file or a batch in one click; multiple results arrive as a zip. Processing is local to your browser, your photos stay on your device, no account, no watermark."
+      ],
+      "faq": [
+        { "q": "Does rotating lose image quality?", "a": "Rotating in 90-degree steps moves pixels without resampling them, so the geometry is exact. If you export as JPG the file is re-encoded, which is normal for any editor; pick PNG if you want a lossless result." },
+        { "q": "Why does my phone photo appear sideways in the first place?", "a": "Phones often save the photo in one orientation and add a rotation flag that some apps ignore. Rotating here bakes the correct orientation into the pixels themselves, so the photo looks right everywhere." },
+        { "q": "Can I rotate several photos at the same time?", "a": "Yes, drop them all, choose the angle once and every photo is rotated the same way. More than one result downloads as a single zip." }
       ],
       "libs": [
         "jszip"
@@ -132,10 +163,15 @@
       "name": "Favicon Generator",
       "h1": "Generate a favicon pack from one image",
       "short": "Turn one image into a full favicon pack.",
-      "metaDescription": "Generate a complete favicon pack (16-512 px) from one image, free in your browser. Downloads as a zip. No upload, no sign-up.",
+      "metaDescription": "Generate a complete favicon pack (16-512 px) from one image, free in your browser. Downloads as a zip. Your logo stays on your device, no sign-up.",
       "about": [
         "Give it one logo or icon and it produces the standard favicon set, 16, 32 and 48 px for browsers, 180 px for Apple touch, 192 and 512 px for PWA manifests, centre-cropped to square automatically. The size list is editable if you need extras.",
         "The whole pack downloads as a single zip, generated locally. Your logo never touches a server, which also means there's no rate limit and no branding added."
+      ],
+      "faq": [
+        { "q": "What sizes does the favicon pack include?", "a": "16, 32 and 48 px for browser tabs, 180 px for iOS home screens, and 192 and 512 px for PWA manifests. You can edit the size list before generating if a platform asks for something extra." },
+        { "q": "What kind of image should I start from?", "a": "A square PNG of 512 px or larger gives the best results. Non-square images are center-cropped to square automatically, so keep your logo centered in the frame." },
+        { "q": "How do I add the generated favicons to my site?", "a": "Unzip the pack into your site root and reference the sizes you use with link tags, for example rel=\"icon\" for the small ones and rel=\"apple-touch-icon\" for the 180 px file. The 192 and 512 px files go in your web manifest." }
       ],
       "libs": [
         "jszip"
@@ -158,6 +194,11 @@
         "Rasterize any SVG into a PNG at the resolution you need, pick a scale factor up to 8× for crisp exports of icons and logos headed for documents, slides or app stores.",
         "Rendering uses your browser's own SVG engine, so the output matches exactly what you see in a browser tab, and the file never leaves your machine."
       ],
+      "faq": [
+        { "q": "What does the scale factor do?", "a": "It multiplies the SVG's natural dimensions before rasterizing. A 100 px wide icon at 8x scale becomes an 800 px PNG, which stays crisp in slides, app store listings and print-ish contexts." },
+        { "q": "Will the PNG look exactly like my SVG?", "a": "Yes, because the drawing is done by your browser's own SVG renderer, the same engine that displays the file when you open it in a tab. What you see is literally what gets exported." },
+        { "q": "Does transparency survive the conversion?", "a": "Yes. PNG supports alpha, so transparent areas of your SVG stay transparent in the output." }
+      ],
       "libs": [],
       "related": [
         "images/favicon",
@@ -172,10 +213,15 @@
       "name": "Merge PDF",
       "h1": "Merge PDF files into one",
       "short": "Combine multiple PDFs, in the order you choose.",
-      "metaDescription": "Merge PDF files for free in your browser, combine two or more PDFs into one, reorder before merging. No upload, no limits, no watermark.",
+      "metaDescription": "Merge PDF files for free in your browser, combine two or more PDFs into one, reorder before merging. Documents stay on your device, no limits, no watermark.",
       "about": [
         "Combine contracts, scans, chapters or statements into a single PDF. Files merge in the order listed, use the arrows next to each file to reorder before you merge.",
         "Merging runs on pdf-lib inside your browser, which matters for exactly the kind of documents people merge: agreements, IDs, financial statements. There is no server in this pipeline, so they cannot leak."
+      ],
+      "faq": [
+        { "q": "Is it safe to merge confidential documents here?", "a": "Yes, and this is the tool's whole reason to exist. The PDFs are read and combined by your own browser using pdf-lib; they are never transmitted, so there is no server copy to leak or get breached." },
+        { "q": "Can I control the order of the merged pages?", "a": "Yes. Files merge top to bottom in the order shown in the list, and each file has arrows to move it up or down before you press merge." },
+        { "q": "Is there a limit on file size or number of PDFs?", "a": "No fixed limit. The practical ceiling is your device's memory, and normal documents, even hundreds of pages, are far below it." }
       ],
       "libs": [
         "pdflib"
@@ -193,10 +239,15 @@
       "name": "Split PDF",
       "h1": "Split a PDF into separate pages",
       "short": "Extract pages or ranges into separate PDFs.",
-      "metaDescription": "Split PDF pages for free in your browser, extract all pages or a range like 1-3,5 into separate PDFs, zipped. No upload required.",
+      "metaDescription": "Split PDF pages for free in your browser, extract all pages or a range like 1-3,5 into separate PDFs, zipped. Your PDF stays on your device.",
       "about": [
         "Pull pages out of a PDF by typing a range, '1-3,5,8' or 'all', and each selected page becomes its own PDF, packaged together in a zip.",
         "Use it to extract a signature page, separate scanned documents that were combined, or share one chapter without the rest. The source document is read locally by pdf-lib and never transmitted."
+      ],
+      "faq": [
+        { "q": "How do I extract just a few specific pages?", "a": "Type the pages the way you would in a print dialog, for example 1-3,5,8. Each selected page becomes its own PDF and they download together as a zip." },
+        { "q": "Does splitting change the quality of the pages?", "a": "No. Pages are copied out of the original document as-is, with their text, images and formatting untouched. Nothing is re-rendered." },
+        { "q": "Can I split a PDF without installing anything or making an account?", "a": "Yes. The tool is a web page; it reads your PDF locally, splits it on your device and hands you the results. No install, no sign-up, and the document never leaves your device." }
       ],
       "libs": [
         "pdflib",
@@ -215,10 +266,15 @@
       "name": "Compress PDF",
       "h1": "Compress a PDF in your browser",
       "short": "Shrink heavy PDFs to a fraction of their size.",
-      "metaDescription": "Compress a PDF online for free with no upload, runs entirely in your browser. Reduce PDF file size for email and portal limits.",
+      "metaDescription": "Compress a PDF online for free, entirely in your browser. Reduce PDF file size for email and portal limits while the document stays on your device.",
       "about": [
         "Shrinks heavy PDFs, especially scanned documents, by re-rendering each page as an optimised JPEG at the quality you choose and rebuilding the file. Compression of 60-90% is typical for scans.",
-        "The trade-off: pages become images, so text stops being selectable. For scanned PDFs that's no loss at all; for text-heavy digital PDFs, try a lighter setting and check the result. Either way the document is processed locally and never uploaded."
+        "The trade-off: pages become images, so text stops being selectable. For scanned PDFs that's no loss at all; for text-heavy digital PDFs, try a lighter setting and check the result. Either way the document is processed locally on your device."
+      ],
+      "faq": [
+        { "q": "How much smaller will my PDF get?", "a": "Scanned documents typically shrink by 60 to 90 percent. Digital PDFs that are mostly text compress less dramatically because there is less redundant image data to squeeze." },
+        { "q": "Why is the text not selectable after compressing?", "a": "This tool compresses by re-rendering each page as an optimized image, which is what makes scans so much smaller. The visual content is identical but the invisible text layer is gone. If you need selectable text, keep the original alongside the compressed copy." },
+        { "q": "Is this safe for bank statements and signed contracts?", "a": "Yes. The document is rendered and rebuilt entirely by your browser. It never leaves your device, so there is no copy on anyone's server." }
       ],
       "libs": [
         "pdfjs",
@@ -237,10 +293,15 @@
       "name": "Images to PDF",
       "h1": "Combine images into one PDF",
       "short": "Combine JPG, PNG or WebP photos into one A4 PDF.",
-      "metaDescription": "Convert images to PDF for free in your browser, combine JPG, PNG and WebP photos into one A4 PDF, one image per page. No upload.",
+      "metaDescription": "Convert images to PDF for free in your browser, combine JPG, PNG and WebP photos into one A4 PDF, one image per page. Photos stay on your device.",
       "about": [
         "Select one or many images and get a single PDF with one image per A4 page, scaled to fit with clean margins, the standard way offices and portals want photographed documents submitted.",
         "JPG, PNG and WebP all work; every image is re-encoded safely before being placed in the document, so formats that normally break PDF generators won't. Assembly happens locally in your browser with jsPDF."
+      ],
+      "faq": [
+        { "q": "How do the images fit onto the pages?", "a": "One image per A4 page, scaled to fit within clean margins while keeping its proportions. Portrait photos and landscape screenshots both come out looking sensible." },
+        { "q": "In what order do my photos appear in the PDF?", "a": "In the order you selected them, top to bottom in the file list. Reorder them there before generating if you need a different sequence." },
+        { "q": "Can I turn photos of documents into a PDF for a government portal?", "a": "Yes, that is the classic use. Photograph each page, drop the photos here, and you get one A4 PDF ready to submit, assembled on your own device without the documents going anywhere." }
       ],
       "libs": [
         "jspdf"
@@ -258,10 +319,15 @@
       "name": "PDF to Images",
       "h1": "Convert PDF pages to JPG or PNG",
       "short": "Every page rendered as a JPG or PNG.",
-      "metaDescription": "Convert PDF to JPG or PNG for free in your browser, every page rendered at 2x resolution, multi-page output zipped. No upload.",
+      "metaDescription": "Convert PDF to JPG or PNG for free in your browser, every page rendered at 2x resolution, multi-page output zipped. Your PDF stays on your device.",
       "about": [
         "Renders each page of your PDF at 2× resolution and exports it as JPG (smaller) or PNG (lossless, better for text and line art). Single pages download directly; multi-page documents arrive as one zip rather than a stream of blocked downloads.",
         "Rendering uses Mozilla's pdf.js inside your browser, the same engine Firefox uses, your document never goes anywhere."
+      ],
+      "faq": [
+        { "q": "Should I choose JPG or PNG for the pages?", "a": "JPG for scanned pages and photos, it is much smaller. PNG for pages with sharp text, diagrams or line art, it is lossless so fine lines stay crisp." },
+        { "q": "What resolution are the exported images?", "a": "Pages are rendered at twice their natural size, so a standard A4 page comes out around 1190 by 1684 pixels, sharp enough for slides, documents and web use." },
+        { "q": "How does a 50-page PDF download?", "a": "As one zip containing all fifty images, named by page number. Single-page documents skip the zip and download the image directly." }
       ],
       "libs": [
         "pdfjs",
@@ -280,10 +346,15 @@
       "name": "PDF to Text",
       "h1": "Extract text from a PDF",
       "short": "Pull the text layer out; copy or download it.",
-      "metaDescription": "Extract text from a PDF for free in your browser. View and copy it directly or download as .txt. Digital PDFs only; nothing uploaded.",
+      "metaDescription": "Extract text from a PDF for free in your browser. View and copy it directly or download as .txt. Digital PDFs only; the file stays on your device.",
       "about": [
         "Extracts the embedded text layer from a PDF, read and copy it right on this page, or download the whole thing as a .txt file. Page breaks are kept as blank lines.",
         "One caveat: scanned PDFs are photographs of text with no text layer, so they come back empty, that requires OCR, which would mean either a heavyweight download or a server, and Convertze refuses to add a server."
+      ],
+      "faq": [
+        { "q": "Why did my PDF come back with no text?", "a": "It is almost certainly a scan. Scanned PDFs are photographs of pages with no embedded text layer, and reading them requires OCR, which this tool deliberately does not do because it would need either a server or a very heavy download." },
+        { "q": "Does the extracted text keep its formatting?", "a": "You get the raw text with page breaks preserved as blank lines. Fonts, columns and layout are not reproduced, which is usually what you want when feeding text to a script or search." },
+        { "q": "Can I extract text from a confidential PDF safely?", "a": "Yes. The document is parsed by pdf.js running inside your browser, the same engine Firefox uses, and nothing is transmitted anywhere." }
       ],
       "libs": [
         "pdfjs"
@@ -301,10 +372,15 @@
       "name": "HTML to PDF",
       "h1": "Convert an HTML file to PDF",
       "short": "Render an .html file into a paged A4 PDF.",
-      "metaDescription": "Convert HTML files to PDF for free in your browser. The page is rendered visually with styles and split across A4 pages. No upload.",
+      "metaDescription": "Convert HTML files to PDF for free in your browser. The page is rendered visually with styles and split across A4 pages. The file stays on your device.",
       "about": [
         "Renders your .html file visually, inline styles included, then slices the result across A4 pages. Good for invoices, reports, receipts and pages you want frozen as documents.",
         "Rendering uses html2canvas plus jsPDF inside your browser. Very complex layouts may differ slightly from the browser's own print dialog, but the file itself never leaves your machine."
+      ],
+      "faq": [
+        { "q": "Will my CSS styles show up in the PDF?", "a": "Inline styles and style tags inside the file are rendered. External stylesheets referenced by URL may not load, so for best results save the page as a self-contained HTML file first." },
+        { "q": "How is this different from pressing Ctrl+P in the browser?", "a": "The print dialog is actually excellent for one-off jobs. This tool is for when you want a repeatable A4 render of an .html file as a downloadable document without fiddling with print settings each time." },
+        { "q": "Why does my complex page look slightly different in the PDF?", "a": "The page is rendered by html2canvas, which reimplements browser drawing and handles most, but not all, modern CSS. Simple documents come out identical; heavy layouts with exotic CSS may shift slightly." }
       ],
       "libs": [
         "jspdf",
@@ -323,10 +399,15 @@
       "name": "Markdown to PDF",
       "h1": "Convert Markdown or text to PDF",
       "short": "Turn .md and .txt files into clean PDFs.",
-      "metaDescription": "Convert Markdown to PDF for free in your browser, headings, lists, code and tables rendered into a clean A4 document. No upload.",
+      "metaDescription": "Convert Markdown to PDF for free in your browser, headings, lists, code and tables rendered into a clean A4 document. Files stay on your device.",
       "about": [
         "Drop a .md (or plain .txt) file and get an A4 PDF with headings, lists, code blocks and tables properly rendered, useful for sharing READMEs, notes and documentation with people who don't read raw Markdown.",
-        "Markdown is parsed by marked, styled, rendered, and paged into a PDF, all inside your browser tab. Nothing is uploaded at any point."
+        "Markdown is parsed by marked, styled, rendered, and paged into a PDF, all inside your browser tab. Nothing leaves that tab at any point."
+      ],
+      "faq": [
+        { "q": "Which Markdown features are rendered in the PDF?", "a": "Headings, paragraphs, bold and italics, links, ordered and unordered lists, tables, code blocks and blockquotes, styled cleanly for an A4 page. It follows the same CommonMark-plus-tables behavior as GitHub." },
+        { "q": "Can I convert a plain .txt file too?", "a": "Yes. Plain text goes through the same pipeline and comes out as a clean paged document. Any Markdown syntax that happens to be in the file gets rendered." },
+        { "q": "Where is the conversion actually performed?", "a": "Entirely in your browser: marked parses the Markdown, the result is styled and rendered to pages, and jsPDF assembles the file, so your notes are never sent anywhere." }
       ],
       "libs": [
         "jspdf",
@@ -346,10 +427,15 @@
       "name": "JSON Formatter",
       "h1": "Format, validate & minify JSON",
       "short": "Beautify or minify JSON live, with clear errors.",
-      "metaDescription": "Format, validate and minify JSON for free in your browser. Live as you type, with error messages that point at the problem line. No upload.",
+      "metaDescription": "Format, validate and minify JSON for free in your browser. Live as you type, with error messages that point at the problem line. Your JSON stays on your device.",
       "about": [
         "Paste JSON and see it pretty-printed live as you type, with a one-click toggle to minified output. Invalid JSON gets a precise error, including the line where parsing failed, which makes this a quick validator too.",
         "Because parsing happens in your browser, API payloads and config files with secrets in them never leave your machine. Copy the result, download it, or share it via the URL."
+      ],
+      "faq": [
+        { "q": "Is it safe to paste API responses with tokens or secrets in them?", "a": "Yes. The JSON is parsed by your own browser with JavaScript's built-in JSON engine and is never transmitted. Nothing you paste here reaches any server." },
+        { "q": "How do I find out why my JSON is invalid?", "a": "Paste it and the error message names the problem and the line where parsing failed, for example a trailing comma or an unquoted key. Fix, and the output updates the moment the JSON becomes valid." },
+        { "q": "What is the difference between beautify and minify?", "a": "Beautify adds indentation and line breaks so humans can read the structure. Minify strips every unnecessary character so the payload is as small as possible for transmission or storage. The data is identical either way." }
       ],
       "libs": [],
       "related": [
@@ -365,10 +451,15 @@
       "name": "JSON to YAML Converter",
       "h1": "Convert between JSON and YAML",
       "short": "Both directions, live, with validation.",
-      "metaDescription": "Convert JSON to YAML and YAML to JSON for free in your browser. Live conversion with validation errors. Nothing is uploaded.",
+      "metaDescription": "Convert JSON to YAML and YAML to JSON for free in your browser. Live conversion with validation errors. Your config stays on your device.",
       "about": [
         "Converts in both directions, paste JSON to get YAML, or flip the direction and paste YAML to get JSON. The output updates live, and parse errors tell you what's wrong rather than failing silently.",
         "The usual use case: moving config between JSON-first tools and YAML-first ones like Kubernetes, GitHub Actions and CI pipelines. Conversion runs locally via js-yaml."
+      ],
+      "faq": [
+        { "q": "Does the conversion lose any data?", "a": "No. JSON and YAML describe the same structures, objects, arrays, strings, numbers, booleans and nulls, so converting between them is lossless. Comments in YAML are the one thing JSON cannot represent, so those disappear going to JSON." },
+        { "q": "Can I convert Kubernetes manifests or GitHub Actions workflows here?", "a": "Yes, that is the most common use. Paste the YAML to get JSON for scripting or API calls, or paste JSON output from a tool and get clean YAML to commit." },
+        { "q": "Is my configuration data kept private?", "a": "Yes. Conversion runs on js-yaml inside your browser tab, so config files, which often contain hostnames, keys and internal details, never leave your device." }
       ],
       "libs": [
         "jsyaml"
@@ -386,10 +477,15 @@
       "name": "CSV to JSON Converter",
       "h1": "Convert between CSV and JSON",
       "short": "Header-row CSV to a JSON array, and back.",
-      "metaDescription": "Convert CSV to JSON and JSON to CSV for free in your browser. Quoted fields handled correctly, live output, no upload.",
+      "metaDescription": "Convert CSV to JSON and JSON to CSV for free in your browser. Quoted fields handled correctly, live output, and your data stays on your device.",
       "about": [
         "CSV with a header row becomes a JSON array of objects; a JSON array of objects becomes properly quoted CSV. Embedded commas, quotes and line breaks inside fields are handled correctly in both directions.",
-        "The standard bridge between spreadsheets and code: export from Excel or Sheets, convert here, feed to your script, or the reverse. Your data is parsed locally and never uploaded."
+        "The standard bridge between spreadsheets and code: export from Excel or Sheets, convert here, feed to your script, or the reverse. Your data is parsed locally and never leaves your browser."
+      ],
+      "faq": [
+        { "q": "How does the tool know my column names?", "a": "The first CSV row is treated as the header, and each following row becomes a JSON object using those headers as keys. Going the other way, the keys of your JSON objects become the header row." },
+        { "q": "What about commas and quotes inside my data?", "a": "Fields containing commas, quotes or line breaks are handled with proper CSV quoting in both directions, the cases that break naive converters are exactly what this one is tested on." },
+        { "q": "Can I convert an Excel or Google Sheets file?", "a": "Export the sheet as CSV first, which both apps do natively, then drop the CSV here. The JSON comes out ready for your script or API." }
       ],
       "libs": [],
       "related": [
@@ -405,10 +501,15 @@
       "name": "Base64 Encode / Decode",
       "h1": "Base64 encode and decode, text or files",
       "short": "Text and file modes, both directions.",
-      "metaDescription": "Base64 encode and decode text or files for free in your browser. UTF-8 safe, URL-safe variants handled. Nothing is uploaded.",
+      "metaDescription": "Base64 encode and decode text or files for free in your browser. UTF-8 safe, URL-safe variants handled. Everything stays on your device.",
       "about": [
         "Encode text or any file to Base64, or decode a Base64 string back, as text on screen, or as a downloadable binary file when the content isn't text. UTF-8 and URL-safe variants with missing padding are handled automatically.",
         "Useful for data URIs, basic-auth headers, API payloads and config values. Everything runs on your device, so credentials you encode here stay yours."
+      ],
+      "faq": [
+        { "q": "Is Base64 encryption?", "a": "No, and this matters: Base64 is just a different alphabet for the same bytes, anyone can decode it instantly. Use it for transport and embedding, never for hiding secrets." },
+        { "q": "Can I encode a file, not just text?", "a": "Yes. Switch to file mode and drop any file, image, PDF, binary, and you get its Base64 string, ready for a data URI or an API payload. Decoding works in reverse and offers a download when the result is not text." },
+        { "q": "Why does my Base64 string fail to decode elsewhere?", "a": "Usually it is the URL-safe variant, which swaps + and / for - and _ and often drops the trailing = padding. This tool detects and accepts both variants automatically." }
       ],
       "libs": [],
       "related": [
@@ -424,10 +525,15 @@
       "name": "Hash Generator",
       "h1": "SHA-256 and MD5 hashes, text or files",
       "short": "Checksum any text or file instantly.",
-      "metaDescription": "Generate SHA-256 and MD5 hashes of text or any file, free in your browser. Verify downloads and checksums privately, no upload.",
+      "metaDescription": "Generate SHA-256 and MD5 hashes of text or any file, free in your browser. Verify downloads and checksums privately; files stay on your device.",
       "about": [
         "Computes SHA-256 (via your browser's Web Crypto API) and MD5 digests of any text or file, the standard way to verify a download against a published checksum or to fingerprint a file.",
         "Because hashing is local you can safely checksum sensitive files; the bytes never leave your machine. MD5 is provided for legacy checksums only, don't use it for anything security-critical."
+      ],
+      "faq": [
+        { "q": "How do I verify a downloaded file against its published checksum?", "a": "Drop the file here, then compare the SHA-256 shown with the checksum on the download page. If every character matches, the file arrived intact and untampered." },
+        { "q": "Should I use SHA-256 or MD5?", "a": "SHA-256 for anything that matters today. MD5 is cryptographically broken and exists here only because older download pages and legacy systems still publish MD5 checksums." },
+        { "q": "Can I hash a large or sensitive file safely?", "a": "Yes. The file is read and hashed by your own browser, SHA-256 through the built-in Web Crypto API, and the contents never leave your device." }
       ],
       "libs": [
         "sparkmd5"
@@ -450,6 +556,11 @@
         "Paste a JWT and see its header, payload and signature in three labelled panes, with exp, iat and nbf timestamps translated into readable dates and an at-a-glance expired/valid note. Purely for debugging, the signature is not verified.",
         "This matters more than it sounds: a live JWT is a credential, and most online decoders send it to their server. This one decodes entirely in your browser."
       ],
+      "faq": [
+        { "q": "Is it safe to paste a production JWT here?", "a": "Safer than most alternatives: the token is split and Base64-decoded entirely in your browser, so it is never transmitted. Still, treat live tokens as credentials, decode what you need and avoid sharing screenshots of the payload." },
+        { "q": "Why does it say the signature is not verified?", "a": "Verifying a signature requires the secret or public key it was signed with, which only the issuing server should have. This tool is for inspecting what a token claims, not for proving the claims are genuine." },
+        { "q": "How do I tell if my token is expired?", "a": "The exp claim is translated into a readable date next to its raw value, along with iat and nbf, so you can see at a glance when the token was issued and when it stops being valid." }
+      ],
       "libs": [],
       "related": [
         "dev/base64",
@@ -469,6 +580,11 @@
         "Type a Unix timestamp, seconds or milliseconds, auto-detected, or any date string, and see every useful form at once: Unix seconds, milliseconds, ISO 8601 UTC, your local time, and relative time. One click loads the current moment.",
         "A small tool you reach for constantly when reading logs, debugging APIs and writing queries. Runs entirely in your browser."
       ],
+      "faq": [
+        { "q": "How does it know whether my number is seconds or milliseconds?", "a": "By magnitude. Recent dates are ten digits in seconds and thirteen in milliseconds, so the tool detects which one you pasted and labels the interpretation it chose." },
+        { "q": "Can I convert a date back into a Unix timestamp?", "a": "Yes, type or paste any common date string, ISO 8601 or a human-readable form, and the Unix seconds and milliseconds appear alongside the other formats." },
+        { "q": "Which timezone do the results use?", "a": "You get both: ISO 8601 in UTC, plus the same moment rendered in your device's local timezone, labelled clearly so log times and wall-clock times stop getting confused." }
+      ],
       "libs": [],
       "related": [
         "dev/jwt",
@@ -483,10 +599,15 @@
       "name": "Text Diff",
       "h1": "Compare two texts, line diff",
       "short": "Side-by-side inputs, green/red line diff.",
-      "metaDescription": "Compare two texts for free in your browser with a clear green/red line diff. Configs, code, documents, nothing is uploaded.",
+      "metaDescription": "Compare two texts for free in your browser with a clear green/red line diff. Configs, code, documents, and your text stays on your device.",
       "about": [
         "Paste the original on the left and the changed version on the right; the diff below shows added lines in green and removed lines in red, computed with a proper longest-common-subsequence algorithm.",
         "Use it for config drift, reviewing edits, comparing API responses or checking what a colleague changed in a snippet, without pasting your text into someone else's server. The comparison runs locally."
+      ],
+      "faq": [
+        { "q": "How is the diff computed?", "a": "With a longest-common-subsequence algorithm on lines, the same family of algorithm git uses. That means it finds the minimal set of added and removed lines rather than marking everything after the first change." },
+        { "q": "Can I diff configs or code containing secrets?", "a": "Yes. Both texts are compared entirely inside your browser and never transmitted, which is the reason to use this over pasting into a random diff site." },
+        { "q": "Is there a size limit on the texts?", "a": "Very large inputs, beyond roughly two thousand lines each, are declined to keep the comparison instant in the browser. For files of that size a desktop diff tool is the better fit." }
       ],
       "libs": [],
       "related": [
@@ -502,10 +623,15 @@
       "name": "Regex Tester",
       "h1": "Test regular expressions live",
       "short": "Live match highlighting, flags, groups.",
-      "metaDescription": "Test regular expressions for free in your browser with live match highlighting, flag toggles and match count. JavaScript regex, no upload.",
+      "metaDescription": "Test regular expressions for free in your browser with live match highlighting, flag toggles and match count. JavaScript regex; test data stays on your device.",
       "about": [
         "Type a pattern, toggle flags (g, i, m, s), and watch matches highlight live in your test string with a running match count and capture-group breakdown. Errors in the pattern are shown as you type instead of silently matching nothing.",
         "The engine is JavaScript's own RegExp, exactly what runs in Node and the browser, so what matches here matches in your code. Your test data stays on your machine."
+      ],
+      "faq": [
+        { "q": "Which regex flavor does this tester use?", "a": "JavaScript's built-in RegExp, the exact engine in Node and every browser. If your target is Python, Java or PCRE, most patterns carry over but lookbehind and some escapes can differ." },
+        { "q": "What do the g, i, m and s flags do?", "a": "g finds all matches instead of stopping at the first, i ignores case, m makes ^ and $ match at line boundaries, and s lets the dot match newline characters." },
+        { "q": "Why does my pattern match nothing?", "a": "If the pattern itself is invalid you get the parser's error message as you type. If it is valid but matchless, check the g flag and remember that special characters like . + ? ( ) need escaping with a backslash to be matched literally." }
       ],
       "libs": [],
       "related": [
@@ -526,6 +652,11 @@
         "Paste a color in any common CSS form, #2563EB, rgb(37, 99, 235), hsl(221, 83%, 53%), and get all the others instantly, with a live swatch so you can see what you're working with. Shorthand hex and alpha channels are understood.",
         "Handy when a design tool hands you HSL but your stylesheet wants hex, or you need rgb() components for an rgba() overlay. Runs entirely client-side."
       ],
+      "faq": [
+        { "q": "What color formats can I paste in?", "a": "Anything CSS understands: six or three digit hex, rgb() and rgba(), hsl() and hsla(), and named colors like rebeccapurple. The other formats are derived from whatever you paste." },
+        { "q": "Does it handle transparency?", "a": "Yes. Colors with an alpha channel come out as eight-digit hex, rgba() and hsla(), with the alpha preserved across all three." },
+        { "q": "When would I need HSL instead of hex?", "a": "HSL separates hue from lightness, which makes it the practical format for building shade variations of a brand color, lighten by raising L, keep H and S fixed. Hex is compact for storage; they describe the same color." }
+      ],
       "libs": [],
       "related": [
         "dev/regex",
@@ -540,10 +671,15 @@
       "name": "URL Encode / Decode",
       "h1": "URL encode and decode text",
       "short": "Percent-encoding, both directions, live.",
-      "metaDescription": "URL encode and decode text for free in your browser, full encodeURIComponent or query-safe modes, live output. Nothing uploaded.",
+      "metaDescription": "URL encode and decode text for free in your browser, full encodeURIComponent or query-safe modes, live output. Everything stays local.",
       "about": [
         "Encode text for safe use in URLs and query strings, or decode percent-encoded strings back to readable text, live as you type, in both directions. Choose full component encoding or URI-preserving mode depending on whether you're encoding a value or a whole URL.",
         "Constant companion when debugging query strings, webhooks, OAuth redirects and log lines full of %2F. Local-only, like everything here."
+      ],
+      "faq": [
+        { "q": "What is the difference between the two encoding modes?", "a": "Component mode encodes everything reserved, right for a single query parameter value. URI mode leaves structural characters like :, / and ? intact, right when you are encoding a whole URL and want it to stay a URL." },
+        { "q": "Why do spaces sometimes show as %20 and sometimes as +?", "a": "%20 is the standard percent encoding; + means space only inside the query string of a form submission. This tool produces %20, which is valid everywhere, and decodes both." },
+        { "q": "Why does my decoded string still contain % signs?", "a": "Either it was encoded twice, decode it again, or it contains a stray % that is not part of a valid escape. Double encoding is the classic cause of %2520 appearing where %20 was expected." }
       ],
       "libs": [],
       "related": [
@@ -559,10 +695,15 @@
       "name": "Markdown Preview",
       "h1": "Preview Markdown live",
       "short": "Type Markdown, see rendered HTML instantly.",
-      "metaDescription": "Preview Markdown live in your browser for free, GitHub-style rendering of headings, lists, tables and code. Nothing is uploaded.",
+      "metaDescription": "Preview Markdown live in your browser for free, GitHub-style rendering of headings, lists, tables and code. Your text stays on your device.",
       "about": [
         "Type or paste Markdown on the left and see it rendered on the right, live, headings, lists, tables, code blocks, links and images, in a clean GitHub-style presentation.",
         "Use it to sanity-check a README before pushing, draft release notes, or write docs without leaving the browser. Rendering happens locally via marked; you can also download the rendered HTML."
+      ],
+      "faq": [
+        { "q": "Does this render the same way GitHub does?", "a": "Very close. Rendering uses marked with tables, fenced code blocks and other CommonMark-plus-GFM features, so a README that looks right here will look right on GitHub. GitHub-only extras like mentions and issue links stay plain text." },
+        { "q": "Can I get the HTML out, not just look at it?", "a": "Yes, Copy HTML puts the rendered markup on your clipboard and Download HTML saves it as a file, useful for pasting into a CMS or emailing a rendered doc." },
+        { "q": "Can I preview a .md file from my computer?", "a": "Drop the file straight onto the editor pane and its contents load instantly. Everything happens in the tab; the file is not sent anywhere." }
       ],
       "libs": [
         "marked"
@@ -573,6 +714,200 @@
         "dev/json-formatter"
       ],
       "icon": "eye"
+    },
+    {
+      "path": "dev/uuid",
+      "cat": "dev",
+      "name": "UUID Generator",
+      "h1": "Generate UUIDs (v4)",
+      "short": "Cryptographically random v4 UUIDs, one or many.",
+      "metaDescription": "Generate random version 4 UUIDs for free in your browser, one at a time or in bulk, using cryptographic randomness. Copy with one click.",
+      "about": [
+        "Generates version 4 UUIDs using your browser's cryptographic random number generator, the same crypto.randomUUID API you would call in code. Make one, or a whole column of them for seeding a database or spreadsheet.",
+        "UUIDs are generated on your device the moment you click, they are not drawn from any shared pool or logged anywhere, so they are yours alone."
+      ],
+      "faq": [
+        { "q": "What is a version 4 UUID?", "a": "A 128-bit identifier where 122 bits are random, formatted as five hyphen-separated groups like 8b4f...-....-4...-....-... . The 4 marks the version. With that much randomness, collisions are not a practical concern." },
+        { "q": "Are these UUIDs unique and safe to use in production?", "a": "Yes. They come from crypto.randomUUID, which uses the operating system's cryptographic randomness, exactly what server frameworks use. Generating them here or in your code produces the same class of identifier." },
+        { "q": "Can I generate many UUIDs at once?", "a": "Yes, set the count and generate up to a thousand in one click, one per line, ready to copy into a script, database seed or spreadsheet column." }
+      ],
+      "libs": [],
+      "related": [
+        "dev/password",
+        "dev/hash",
+        "dev/timestamp"
+      ],
+      "icon": "hash"
+    },
+    {
+      "path": "dev/password",
+      "cat": "dev",
+      "name": "Password Generator",
+      "h1": "Generate strong random passwords",
+      "short": "Length, character sets, cryptographic randomness.",
+      "metaDescription": "Generate strong random passwords for free in your browser with length and character set controls. Created on your device and never sent anywhere.",
+      "about": [
+        "Pick a length, toggle uppercase, lowercase, digits and symbols, and get a password drawn from your browser's cryptographic random number generator, the same source of randomness password managers use.",
+        "Generation happens on your device and the password exists only on your screen and clipboard. Nothing is transmitted, logged or stored, there is no server involved that could remember it."
+      ],
+      "faq": [
+        { "q": "Is it safe to generate a password on a website?", "a": "On this one, yes, and the reason is verifiable: generation uses crypto.getRandomValues inside your browser, the page makes no network requests with the result, and the code is open source. The password never exists anywhere but your device." },
+        { "q": "How long should my password be?", "a": "Sixteen characters with mixed character sets is a strong default for accounts that matter. Length beats cleverness: every added character multiplies the work an attacker faces." },
+        { "q": "Why would I exclude symbols?", "a": "Some legacy systems reject certain symbols or limit which ones they accept. Turning symbols off and lengthening the password by a few characters keeps the strength while satisfying the picky form." }
+      ],
+      "libs": [],
+      "related": [
+        "dev/uuid",
+        "dev/hash",
+        "dev/base64"
+      ],
+      "icon": "key"
+    },
+    {
+      "path": "dev/qr-code",
+      "cat": "dev",
+      "name": "QR Code Generator",
+      "h1": "Generate a QR code from text or a link",
+      "short": "Any text or URL to a downloadable QR code.",
+      "metaDescription": "Generate QR codes from links or text for free in your browser, pick a size and download as PNG. Created locally on your device, no watermark.",
+      "about": [
+        "Type or paste a link, some text, a WiFi string or anything else, and get a scannable QR code instantly, at the pixel size you choose, downloadable as a PNG with no watermark.",
+        "The code is drawn locally in your browser, so whatever you encode, a private URL, a note, contact details, is never sent anywhere. Print it, drop it in a slide, or add it to a poster."
+      ],
+      "faq": [
+        { "q": "Does the QR code expire or stop working later?", "a": "Never. The data is baked into the pattern itself, there is no redirect service in the middle, so the code works as long as whatever it points to exists. That is also why there are no scan statistics." },
+        { "q": "How much text can a QR code hold?", "a": "Up to roughly two to three thousand characters, but codes get dense and harder to scan as content grows. For URLs and short text, which is the normal use, scanning is instant." },
+        { "q": "What size should I download for print?", "a": "Use the larger sizes for print, a QR code should be at least 2 x 2 cm on the page and scanned codes need sharp edges. For screens, the default size is plenty." }
+      ],
+      "libs": [
+        "qrcode"
+      ],
+      "related": [
+        "dev/url",
+        "dev/base64",
+        "images/favicon"
+      ],
+      "icon": "qr"
+    },
+    {
+      "path": "text/word-counter",
+      "cat": "text",
+      "name": "Word Counter",
+      "h1": "Count words, characters and sentences",
+      "short": "Live word, character, sentence and paragraph counts.",
+      "metaDescription": "Count words, characters, sentences and paragraphs for free in your browser, live as you type, with estimated reading time. Text stays on your device.",
+      "about": [
+        "Paste or type and watch the counts update live: words, characters with and without spaces, sentences, paragraphs and an estimated reading time at a typical 200 words per minute.",
+        "Built for the moments a limit is looming, essay word counts, meta descriptions, tweet-length checks, application forms. Your text is counted on your device and never leaves it."
+      ],
+      "faq": [
+        { "q": "How are words counted, exactly?", "a": "Anything separated by spaces or line breaks counts as a word, the same rule word processors use, so hyphenated terms count once and numbers count as words. Counts here will match what Google Docs and Word show for normal prose." },
+        { "q": "Which character count do forms usually mean?", "a": "Almost always characters including spaces, that is what input limits measure. Both figures are shown, so use the one your form specifies." },
+        { "q": "How is reading time estimated?", "a": "Word count divided by 200 words per minute, a standard average adult reading pace for online text. Technical or dense material naturally reads slower." }
+      ],
+      "libs": [],
+      "related": [
+        "text/case-converter",
+        "text/sort-lines",
+        "dev/markdown-preview"
+      ],
+      "icon": "filetext"
+    },
+    {
+      "path": "text/case-converter",
+      "cat": "text",
+      "name": "Case Converter",
+      "h1": "Convert text case instantly",
+      "short": "UPPER, lower, Title, camelCase, snake_case and more.",
+      "metaDescription": "Convert text to uppercase, lowercase, title case, sentence case, camelCase, snake_case or kebab-case for free in your browser, live as you type.",
+      "about": [
+        "Paste text and click a case: UPPERCASE, lowercase, Title Case, Sentence case, camelCase, snake_case or kebab-case. The output updates instantly and is ready to copy.",
+        "One half of its life is fixing accidental caps lock and shouting emails; the other half is developer renames, turning a heading into a variable name or a filename. Conversion happens on your device."
+      ],
+      "faq": [
+        { "q": "What is the difference between title case and sentence case?", "a": "Title Case capitalizes the first letter of every word, the style of headlines. Sentence case capitalizes only the first word of each sentence, the style of normal prose." },
+        { "q": "How does camelCase conversion decide where words start?", "a": "Spaces, hyphens and underscores are treated as word boundaries, then the words are joined with each one after the first capitalized. so 'user login count' becomes userLoginCount." },
+        { "q": "Can I fix a paragraph I typed with caps lock on?", "a": "Yes, paste it and click Sentence case. Everything drops to lowercase except the first letter of each sentence, which saves retyping the whole thing." }
+      ],
+      "libs": [],
+      "related": [
+        "text/slug-generator",
+        "text/word-counter",
+        "dev/url"
+      ],
+      "icon": "type"
+    },
+    {
+      "path": "text/sort-lines",
+      "cat": "text",
+      "name": "Sort & Dedupe Lines",
+      "h1": "Sort, dedupe and clean text lines",
+      "short": "Sort lines A-Z, remove duplicates, reverse, trim.",
+      "metaDescription": "Sort lines alphabetically, remove duplicate lines, reverse order and trim blanks for free in your browser. Your lists stay on your device.",
+      "about": [
+        "Paste a list, one item per line, and clean it up: sort A to Z or Z to A, case-sensitive or not, remove duplicate lines, reverse the order, and strip empty lines and stray whitespace.",
+        "The everyday cases: deduplicating an email list, alphabetizing names, cleaning up a log extract, tidying a TODO dump. Lists are processed on your device, so customer data can stay customer data."
+      ],
+      "faq": [
+        { "q": "How do I remove duplicate lines from a list?", "a": "Paste the list and turn on dedupe. Each line is kept the first time it appears and dropped on repeats; combine with case-insensitive mode to treat Apple and apple as the same entry." },
+        { "q": "Does sorting handle numbers sensibly?", "a": "Sorting is alphabetical, so 10 sorts before 2 because 1 comes before 2 as a character. Pad numbers to the same width, 02 and 10, when you need numeric order." },
+        { "q": "Is it safe to clean up a customer email list here?", "a": "Yes. The list is sorted and deduplicated entirely inside your browser and is never transmitted, unlike pasting it into a random website form that posts to a server." }
+      ],
+      "libs": [],
+      "related": [
+        "dev/diff",
+        "text/word-counter",
+        "dev/csv-json"
+      ],
+      "icon": "sort"
+    },
+    {
+      "path": "text/lorem-ipsum",
+      "cat": "text",
+      "name": "Lorem Ipsum Generator",
+      "h1": "Generate lorem ipsum placeholder text",
+      "short": "Paragraphs, sentences or words of filler text.",
+      "metaDescription": "Generate lorem ipsum placeholder text for free, choose paragraphs, sentences or words and copy the result instantly. Runs in your browser.",
+      "about": [
+        "Choose how much you need, so many paragraphs, sentences or words, and get classic lorem ipsum filler, starting from the traditional 'Lorem ipsum dolor sit amet' opening. Copy it or download it as a text file.",
+        "Placeholder text keeps design reviews focused on layout instead of copy. Generation is instant and local; there is no API and no limit."
+      ],
+      "faq": [
+        { "q": "What is lorem ipsum and why is it used?", "a": "It is scrambled pseudo-Latin used as placeholder text since the days of print typesetting. Because it reads as natural-length words without meaning anything, viewers judge the layout instead of stopping to read the copy." },
+        { "q": "Does the text always start with 'Lorem ipsum dolor sit amet'?", "a": "The first paragraph starts with the traditional opening, which designers expect. Following paragraphs vary so large blocks do not visibly repeat." },
+        { "q": "Is the generated text really random?", "a": "Sentences are assembled from the classic lorem ipsum vocabulary with randomized lengths and word order, so every generation differs while keeping the familiar look." }
+      ],
+      "libs": [],
+      "related": [
+        "text/word-counter",
+        "dev/markdown-preview",
+        "text/case-converter"
+      ],
+      "icon": "quote"
+    },
+    {
+      "path": "text/slug-generator",
+      "cat": "text",
+      "name": "Slug Generator",
+      "h1": "Turn any text into a URL slug",
+      "short": "Clean, lowercase, hyphenated slugs from any text.",
+      "metaDescription": "Generate URL slugs from any text for free in your browser, lowercase, hyphenated and accent-free, live as you type.",
+      "about": [
+        "Type a headline or product name and get a clean slug instantly: lowercased, accents stripped, punctuation removed, words joined with single hyphens. 'Crème Brûlée: A How-To!' becomes creme-brulee-a-how-to.",
+        "Slugs made this way are safe in URLs, filenames and IDs across every system. The conversion runs live on your device as you type."
+      ],
+      "faq": [
+        { "q": "What exactly is a slug?", "a": "The human-readable part of a URL that identifies a page, like 'sort-lines' in convertze.com/text/sort-lines. Good slugs are lowercase, hyphenated and short, readable by both people and search engines." },
+        { "q": "What happens to accents and special characters?", "a": "Accented letters are converted to their plain equivalents, é to e, ü to u, and anything that is not a letter or digit becomes a hyphen, with repeats collapsed. The result is pure lowercase ASCII that works everywhere." },
+        { "q": "Are hyphens or underscores better in URLs?", "a": "Hyphens. Search engines treat hyphens as word separators but treat underscores as word joiners, so hyphenated slugs are read as their separate words." }
+      ],
+      "libs": [],
+      "related": [
+        "dev/url",
+        "text/case-converter",
+        "text/sort-lines"
+      ],
+      "icon": "link"
     }
   ]
 }
