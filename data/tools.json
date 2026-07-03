@@ -1,5 +1,6 @@
 {
   "site": "https://convertze.com",
+  "goatcounter": "",
   "categories": [
     {
       "id": "images",
@@ -993,6 +994,270 @@
         "text/word-counter"
       ],
       "icon": "currency"
+    },
+    {
+      "path": "calc/length-converter",
+      "cat": "calc",
+      "name": "Length Converter",
+      "h1": "Convert length units",
+      "short": "cm to inches, feet to metres, km to miles, live.",
+      "metaDescription": "Convert length units for free: cm to inches, feet to metres, km to miles, yards, millimetres and more. Instant and live as you type.",
+      "about": [
+        "Type a number, pick the two units and read the answer instantly: millimetres, centimetres, metres and kilometres on the metric side, inches, feet, yards and miles on the imperial side, converted in any direction.",
+        "The unit rate is shown underneath, so 1 cm = 0.3937 in stays visible while you work, and one click swaps the direction. Everything computes locally in your browser."
+      ],
+      "faq": [
+        { "q": "How many centimetres are in an inch?", "a": "An inch is exactly 2.54 centimetres, so divide centimetres by 2.54 to get inches. The converter does this live for any value you type." },
+        { "q": "How accurate are the conversions?", "a": "Exact. Modern imperial units are defined in terms of the metre (an inch is exactly 0.0254 m), so the factors used here are definitions, not approximations. Only the display is rounded." },
+        { "q": "Can I convert between two imperial units, like miles to feet?", "a": "Yes, any unit converts to any other, metric to metric, imperial to imperial or across systems. Pick the pair and the math is instant." }
+      ],
+      "libs": [],
+      "related": [
+        "calc/weight-converter",
+        "calc/area-converter",
+        "calc/speed-converter"
+      ],
+      "icon": "ruler"
+    },
+    {
+      "path": "calc/weight-converter",
+      "cat": "calc",
+      "name": "Weight Converter",
+      "h1": "Convert weight units",
+      "short": "kg to lbs, grams to ounces, tonnes, live.",
+      "metaDescription": "Convert weight units for free: kg to lbs, grams to ounces, milligrams to grams, tonnes and more. Instant, live as you type, no sign-up.",
+      "about": [
+        "Kilograms, grams, milligrams and tonnes on one side, pounds and ounces on the other, converted instantly in any direction with the unit rate shown as you type.",
+        "The everyday cases: gym weights in pounds, recipes in ounces, parcels in kilograms, supplements in milligrams. One click swaps the direction, and the math runs locally."
+      ],
+      "faq": [
+        { "q": "How do I convert kg to lbs quickly in my head?", "a": "Multiply by 2.2 for a close estimate; the exact factor is 2.20462. So 70 kg is about 154 lb. The converter uses the exact definition, 1 lb = 0.45359237 kg." },
+        { "q": "Is this ounces of weight or fluid ounces?", "a": "Weight ounces (avoirdupois), the kind used for food and parcels. Fluid ounces measure volume and are a different unit entirely." },
+        { "q": "What is the difference between a tonne and a ton?", "a": "This converter uses the metric tonne, exactly 1000 kg. The US short ton is 907.18 kg and the UK long ton is 1016 kg; if a document just says ton, check which country it comes from." }
+      ],
+      "libs": [],
+      "related": [
+        "calc/length-converter",
+        "calc/bmi-calculator",
+        "calc/data-size-converter"
+      ],
+      "icon": "scale"
+    },
+    {
+      "path": "calc/temperature-converter",
+      "cat": "calc",
+      "name": "Temperature Converter",
+      "h1": "Convert Celsius, Fahrenheit and Kelvin",
+      "short": "C to F to K, both directions, live.",
+      "metaDescription": "Convert temperature for free: Celsius to Fahrenheit, Fahrenheit to Celsius, and Kelvin, live as you type. Exact formulas, no sign-up.",
+      "about": [
+        "Type a temperature and convert between Celsius, Fahrenheit and Kelvin instantly, using the exact formulas rather than approximations.",
+        "Useful for weather in other countries, oven settings in imported recipes, lab work in Kelvin, and settling arguments about whether 98.6 F is actually a fever. Runs locally in your browser."
+      ],
+      "faq": [
+        { "q": "What is the formula for Celsius to Fahrenheit?", "a": "Multiply by 9/5 and add 32. So 20 C is 68 F. Going the other way, subtract 32 and multiply by 5/9." },
+        { "q": "What is Kelvin and when would I use it?", "a": "Kelvin is the scientific scale that starts at absolute zero, the coldest possible temperature. 0 C equals 273.15 K, and Kelvin steps are the same size as Celsius steps, so it is mostly a shift used in physics and chemistry." },
+        { "q": "At what temperature are Celsius and Fahrenheit equal?", "a": "At minus 40. It is the one point where both scales read the same number, and yes, you can verify it in the converter." }
+      ],
+      "libs": [],
+      "related": [
+        "calc/length-converter",
+        "calc/weight-converter",
+        "calc/speed-converter"
+      ],
+      "icon": "thermometer"
+    },
+    {
+      "path": "calc/area-converter",
+      "cat": "calc",
+      "name": "Area Converter",
+      "h1": "Convert area units",
+      "short": "Sq ft to sq m, acres, hectares, live.",
+      "metaDescription": "Convert area units for free: square feet to square metres, acres to hectares, square yards and square kilometres. Instant, live as you type.",
+      "about": [
+        "Square feet, square yards, square metres, square kilometres, acres and hectares, converted instantly in any direction. The unit rate is displayed so you can sanity-check as you go.",
+        "This is the converter real estate keeps busy: apartment listings in square feet, land in acres or hectares, government records in square metres. Everything computes locally."
+      ],
+      "faq": [
+        { "q": "How many square feet are in a square metre?", "a": "About 10.764. A 1000 sq ft apartment is roughly 93 square metres. The converter uses the exact factor, since a foot is defined as exactly 0.3048 m." },
+        { "q": "What is the difference between an acre and a hectare?", "a": "A hectare is 10,000 square metres; an acre is about 4,047 square metres, so one hectare is roughly 2.47 acres. Acres are common in India, the US and the UK; hectares are the metric standard." },
+        { "q": "Why do property listings mix square feet and square yards?", "a": "Habit and region. North Indian plots are often quoted in square yards (gaj), apartments in square feet, and legal documents in square metres. This tool converts between all of them so you can compare like with like." }
+      ],
+      "libs": [],
+      "related": [
+        "calc/length-converter",
+        "calc/percentage-calculator",
+        "calc/emi-calculator"
+      ],
+      "icon": "gridicon"
+    },
+    {
+      "path": "calc/speed-converter",
+      "cat": "calc",
+      "name": "Speed Converter",
+      "h1": "Convert speed units",
+      "short": "km/h to mph, m/s, knots, live.",
+      "metaDescription": "Convert speed units for free: km/h to mph, metres per second, knots and feet per second. Instant, live as you type, no sign-up.",
+      "about": [
+        "Kilometres per hour, miles per hour, metres per second, knots and feet per second, converted instantly with the unit rate shown underneath.",
+        "Reads foreign speed limits, translates cricket bowling speeds, converts wind speeds from weather reports and makes physics homework less painful. All local, all live."
+      ],
+      "faq": [
+        { "q": "How do I convert km/h to mph?", "a": "Divide by 1.609. So 100 km/h is about 62 mph. Going the other way, multiply miles per hour by 1.609." },
+        { "q": "What exactly is a knot?", "a": "One nautical mile per hour, about 1.852 km/h. Ships and aircraft use knots because nautical miles line up neatly with degrees of latitude." },
+        { "q": "Why do physics problems use metres per second?", "a": "Because it is the SI unit, and formulas for distance, acceleration and energy come out clean in SI. 1 m/s equals exactly 3.6 km/h, a factor worth memorizing." }
+      ],
+      "libs": [],
+      "related": [
+        "calc/length-converter",
+        "calc/temperature-converter",
+        "calc/weight-converter"
+      ],
+      "icon": "gauge"
+    },
+    {
+      "path": "calc/data-size-converter",
+      "cat": "calc",
+      "name": "Data Size Converter",
+      "h1": "Convert data sizes, MB, GB, MiB and more",
+      "short": "KB, MB, GB, TB and their 1024-based cousins.",
+      "metaDescription": "Convert data sizes for free: MB to GB, KB to MB, bits to bytes, and the 1024-based KiB, MiB and GiB. Instant and live as you type.",
+      "about": [
+        "Bits, bytes, and both families of bigger units: the decimal KB, MB, GB and TB that storage makers use (powers of 1000), and the binary KiB, MiB, GiB and TiB that operating systems often report (powers of 1024).",
+        "That split is why a 500 GB drive shows up as 465 gigabytes in Windows, and this converter makes the difference visible instead of mysterious. All conversions run locally."
+      ],
+      "faq": [
+        { "q": "Why does my 1 TB drive show less than 1 TB in Windows?", "a": "The drive is sold in decimal terabytes (1 TB = 1,000,000,000,000 bytes) but Windows reports binary tebibytes while calling them TB. 1 TB is about 0.909 TiB, so a 1 TB drive shows roughly 931 GB. Nothing is missing." },
+        { "q": "How many MB are in a GB?", "a": "1000 MB in the decimal system used for storage and bandwidth. If a program is using binary units, 1 GiB is 1024 MiB. This tool has both families so you can convert either way." },
+        { "q": "What is the difference between a bit and a byte?", "a": "A byte is 8 bits. Internet speeds are quoted in bits per second (100 Mbps) while file sizes are in bytes, which is why a 100 Mbps connection downloads at about 12.5 MB per second." }
+      ],
+      "libs": [],
+      "related": [
+        "images/compress",
+        "pdf/compress",
+        "calc/percentage-calculator"
+      ],
+      "icon": "database"
+    },
+    {
+      "path": "calc/percentage-calculator",
+      "cat": "calc",
+      "name": "Percentage Calculator",
+      "h1": "Calculate percentages three ways",
+      "short": "X% of Y, X as a percent of Y, percent change.",
+      "metaDescription": "Free percentage calculator: find X% of a number, what percent one number is of another, and percent increase or decrease. Live as you type.",
+      "about": [
+        "The three percentage questions everyone actually asks, in one tool: what is 18% of 1200, what percent is 45 of 80, and what is the percent change from 250 to 300. Pick the mode, type two numbers, read the answer.",
+        "Discounts, marks, tips, salary hikes, tax components. No formulas to remember and nothing leaves your browser."
+      ],
+      "faq": [
+        { "q": "How do I calculate a percentage of a number?", "a": "Multiply the number by the percentage and divide by 100. 18% of 1200 is 1200 x 18 / 100 = 216. The first mode does exactly this." },
+        { "q": "How do I work out percent increase or decrease?", "a": "Take the difference between new and old, divide by the old value, multiply by 100. Going from 250 to 300 is (300 - 250) / 250 x 100 = 20% increase. The third mode handles it, including decreases." },
+        { "q": "What percent did I score if I got 45 out of 80?", "a": "Use the second mode: 45 is 56.25% of 80. It divides the first number by the second and multiplies by 100." }
+      ],
+      "libs": [],
+      "related": [
+        "calc/gst-calculator",
+        "calc/emi-calculator",
+        "calc/bmi-calculator"
+      ],
+      "icon": "percent"
+    },
+    {
+      "path": "calc/age-calculator",
+      "cat": "calc",
+      "name": "Age Calculator",
+      "h1": "Calculate exact age from date of birth",
+      "short": "Years, months, days, and days to next birthday.",
+      "metaDescription": "Free age calculator: exact age in years, months and days from a date of birth, total days lived and days until the next birthday.",
+      "about": [
+        "Pick a date of birth and get the exact age in years, months and days, the same age expressed in months, the total days lived, and how long until the next birthday.",
+        "The as-of date is adjustable, which is the feature that matters for forms: government applications often want your age on a specific cutoff date, not today. Calculated locally, nothing stored."
+      ],
+      "faq": [
+        { "q": "How is exact age in years, months and days calculated?", "a": "Calendar arithmetic, not day counting: full years first, then full months, then leftover days, borrowing from the previous month when needed. It is the same method forms and registrars expect." },
+        { "q": "Can I check my age on a specific date, like an exam cutoff?", "a": "Yes, change the as-of date. Applications often require your age as of a cutoff like August 1st, and this shows exactly that instead of your age today." },
+        { "q": "Does the calculation handle leap years?", "a": "Yes. Date arithmetic uses the real calendar, so February 29th birthdays and leap-year day counts come out correctly." }
+      ],
+      "libs": [],
+      "related": [
+        "dev/timestamp",
+        "calc/percentage-calculator",
+        "calc/bmi-calculator"
+      ],
+      "icon": "calendar"
+    },
+    {
+      "path": "calc/emi-calculator",
+      "cat": "calc",
+      "name": "EMI Calculator",
+      "h1": "Calculate loan EMI",
+      "short": "Monthly EMI, total interest, total payment.",
+      "metaDescription": "Free EMI calculator for home, car and personal loans: monthly EMI, total interest and total payment from amount, rate and tenure. Instant.",
+      "about": [
+        "Enter the loan amount, annual interest rate and tenure, and see the monthly EMI, the total interest you will pay over the life of the loan, and the total outflow, updated live as you adjust the numbers.",
+        "It uses the standard reducing-balance formula every bank uses, which makes it the honest way to compare offers: change the tenure and watch the interest total move. The numbers you type never leave your device."
+      ],
+      "faq": [
+        { "q": "How is EMI calculated?", "a": "With the reducing-balance formula: EMI = P x r x (1+r)^n / ((1+r)^n - 1), where P is the loan amount, r the monthly interest rate and n the number of months. This is the same formula banks use." },
+        { "q": "Why is the total interest so much more than I expected?", "a": "Long tenures multiply interest. A 10 lakh loan at 9% costs about 8,997 per month over 20 years, but nearly 11.6 lakh in interest, more than the loan itself. Shortening the tenure raises the EMI but cuts the total dramatically, and this calculator lets you watch that trade-off live." },
+        { "q": "Does this include processing fees and insurance?", "a": "No, it shows the pure EMI math. Banks typically add a one-time processing fee (often 0.5 to 1%) and may bundle insurance, so treat those as extras on top when comparing offers." }
+      ],
+      "libs": [],
+      "related": [
+        "calc/gst-calculator",
+        "calc/percentage-calculator",
+        "calc/currency-converter"
+      ],
+      "icon": "coins"
+    },
+    {
+      "path": "calc/gst-calculator",
+      "cat": "calc",
+      "name": "GST Calculator",
+      "h1": "Add or remove GST",
+      "short": "GST at 5, 12, 18 or 28%, with CGST/SGST split.",
+      "metaDescription": "Free GST calculator: add GST to a base amount or extract GST from a total, at 5, 12, 18 or 28 percent, with the CGST and SGST split shown.",
+      "about": [
+        "Two directions: add GST to a pre-tax amount to see the final price, or start from a tax-inclusive total and extract the base amount and the tax inside it. Quick buttons cover the standard 5, 12, 18 and 28 percent slabs, and any custom rate works too.",
+        "The CGST/SGST split (half and half for intra-state sales) is shown alongside, which is what invoices actually need. Calculated locally, instantly."
+      ],
+      "faq": [
+        { "q": "How do I remove GST from a total that already includes it?", "a": "Divide the total by 1 plus the rate. An 1180 rupee bill at 18% GST contains a base of 1180 / 1.18 = 1000 and 180 of tax. Pick 'Remove GST' mode and this happens automatically." },
+        { "q": "What are CGST and SGST?", "a": "For sales within a state, GST is split equally between the centre (CGST) and the state (SGST), so an 18% rate appears on invoices as 9% + 9%. Interstate sales use a single IGST at the full rate instead." },
+        { "q": "Which GST rates apply to what?", "a": "Broadly: 5% for essentials and transport, 12% and 18% for most goods and services (18% is the most common), and 28% for luxury and sin goods. Rates change with council decisions, so check the current schedule for your specific item." }
+      ],
+      "libs": [],
+      "related": [
+        "calc/percentage-calculator",
+        "calc/emi-calculator",
+        "calc/currency-converter"
+      ],
+      "icon": "receipt"
+    },
+    {
+      "path": "calc/bmi-calculator",
+      "cat": "calc",
+      "name": "BMI Calculator",
+      "h1": "Calculate your BMI",
+      "short": "Metric or imperial, with WHO category.",
+      "metaDescription": "Free BMI calculator in metric (kg, cm) or imperial (lb, ft) units, with your WHO category shown instantly. Nothing you enter leaves your device.",
+      "about": [
+        "Enter your weight and height in metric or imperial units and get your body mass index with the WHO category it falls in, updated live as you type.",
+        "BMI is a screening number, not a diagnosis: it does not distinguish muscle from fat and reads athletic builds as heavy. Useful as a rough gauge and for forms that ask for it. Your numbers stay on your device."
+      ],
+      "faq": [
+        { "q": "How is BMI calculated?", "a": "Weight in kilograms divided by height in metres squared. A 70 kg person at 175 cm has a BMI of 70 / 1.75² = 22.9, which falls in the healthy range." },
+        { "q": "What are the healthy BMI ranges?", "a": "WHO adult ranges: under 18.5 is underweight, 18.5 to 24.9 healthy, 25 to 29.9 overweight, 30 and above obese. Some Asian-population guidelines use slightly lower cutoffs, with overweight starting at 23." },
+        { "q": "Is BMI accurate for athletes?", "a": "Not particularly. Muscle is denser than fat, so muscular people often read as overweight despite low body fat. Treat BMI as a population screening tool; waist measurement and body composition tell an individual more." }
+      ],
+      "libs": [],
+      "related": [
+        "calc/weight-converter",
+        "calc/age-calculator",
+        "calc/percentage-calculator"
+      ],
+      "icon": "heart"
     }
   ]
 }

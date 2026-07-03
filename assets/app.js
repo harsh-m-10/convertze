@@ -83,6 +83,35 @@
     if (input && pop) wireSearch(input, pop);
   });
 
+  /* Ctrl+K / Cmd+K focuses the tool search from anywhere. */
+  document.addEventListener("keydown", function (e) {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+      var target = document.getElementById("grid-search") || document.querySelector("[data-tool-search] input");
+      if (target) {
+        e.preventDefault();
+        target.focus();
+        target.select();
+      }
+    }
+  });
+
+  /* ---------- PWA install prompt ---------- */
+  var installEvt = null;
+  window.addEventListener("beforeinstallprompt", function (e) {
+    e.preventDefault();
+    installEvt = e;
+    var btn = document.getElementById("install-app");
+    if (btn) {
+      btn.style.display = "";
+      btn.addEventListener("click", function () {
+        if (!installEvt) return;
+        installEvt.prompt();
+        installEvt = null;
+        btn.style.display = "none";
+      });
+    }
+  });
+
   /* ---------- Homepage grid filter ---------- */
   var gridSearch = document.getElementById("grid-search");
   if (gridSearch) {

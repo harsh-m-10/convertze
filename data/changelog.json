@@ -1,0 +1,44 @@
+[
+  {
+    "date": "July 3, 2026",
+    "title": "Calculators, About page and share images",
+    "items": [
+      "New Calculators section: length, weight, temperature, area, speed and data-size converters plus percentage, age, EMI, GST and BMI calculators",
+      "Ctrl+K now focuses the tool search from any page",
+      "Every tool page has a proper share preview image and a suggest-a-feature link",
+      "New About page explaining exactly how the privacy model works",
+      "This changelog"
+    ]
+  },
+  {
+    "date": "July 3, 2026",
+    "title": "Sign PDF and friends",
+    "items": [
+      "Sign PDF: draw your signature, type your name in a handwriting style, or upload a photo of your real signature, then place it on any page",
+      "Compress PDF can now target an exact size in KB",
+      "Rotate PDF: 90, 180 or 270 degrees, all pages or a range",
+      "Currency converter with 160+ currencies at daily rates",
+      "Image Converter got smart format suggestions and a split-by-size batch rule"
+    ]
+  },
+  {
+    "date": "July 3, 2026",
+    "title": "Text tools and FAQs",
+    "items": [
+      "New Text section: word counter, case converter, sort and dedupe lines, lorem ipsum and slug generator",
+      "UUID, password and QR code generators under Dev Tools",
+      "Frequently-asked-questions section on every tool page",
+      "Wider layout and clearer wording: files stay on your device",
+      "Markdown preview rewritten: proper GitHub-style rendering with independent scrolling panes"
+    ]
+  },
+  {
+    "date": "June 12, 2026",
+    "title": "The big restructure",
+    "items": [
+      "One page per tool, 27 tools across Images, PDF and Dev Tools",
+      "Site-wide search, dark and light themes, offline support",
+      "Every tool runs fully in the browser, nothing is uploaded"
+    ]
+  }
+]

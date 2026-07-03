@@ -92,13 +92,28 @@ const TOOL_ICONS = {
   sort: stroke('<path d="M11 5h10"/><path d="M11 9h7"/><path d="M11 13h4"/><path d="M3 17l3 3 3-3"/><path d="M6 20V4"/>'),
   quote: stroke('<path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/>'),
   pen: stroke('<path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/>'),
-  currency: stroke('<circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/>')
+  currency: stroke('<circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/>'),
+  ruler: stroke('<path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.4 2.4 0 0 1 0-3.4l2.6-2.6a2.4 2.4 0 0 1 3.4 0z"/><path d="m14.5 12.5 2-2"/><path d="m11.5 9.5 2-2"/><path d="m8.5 6.5 2-2"/><path d="m17.5 15.5 2-2"/>'),
+  scale: stroke('<path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/>'),
+  thermometer: stroke('<path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0z"/>'),
+  gridicon: stroke('<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/><path d="M15 3v18"/>'),
+  gauge: stroke('<path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/>'),
+  database: stroke('<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/>'),
+  percent: stroke('<line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/>'),
+  calendar: stroke('<rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>'),
+  coins: stroke('<circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/><path d="M7 6h1v4"/><path d="m16.71 13.88.7.71-2.82 2.82"/>'),
+  receipt: stroke('<path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 17.5v-11"/>'),
+  heart: stroke('<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7z"/>')
 };
 const toolIcon = (t, lg) =>
   `<span class="t-icon${lg ? " lg" : ""} c-${t.cat}">${TOOL_ICONS[t.icon] || TOOL_ICONS.image}</span>`;
 
-function head({ title, desc, canonicalPath }) {
+function head({ title, desc, canonicalPath, ogImage }) {
   const url = canonicalPath ? `${SITE}/${canonicalPath}` : `${SITE}/`;
+  const og = `${SITE}${ogImage || "/assets/og/default.png"}`;
+  const gc = DATA.goatcounter
+    ? `\n  <script data-goatcounter="https://${DATA.goatcounter}.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>`
+    : "";
   return `<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -114,7 +129,9 @@ function head({ title, desc, canonicalPath }) {
   <meta property="og:title" content="${esc(title)}">
   <meta property="og:description" content="${esc(desc)}">
   <meta property="og:site_name" content="Convertze">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="${og}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="${og}">${gc}
   <script>try{if(localStorage.getItem("convertze-theme")==="light")document.documentElement.classList.add("light")}catch(e){}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -135,7 +152,7 @@ function header(activeCat) {
       <span class="header-spacer"></span>
       <div class="header-search" data-tool-search>
         ${ICONS.search}
-        <input type="text" placeholder="Search tools..." aria-label="Search tools">
+        <input type="text" placeholder="Search tools...   Ctrl+K" aria-label="Search tools">
         <div class="search-pop"></div>
       </div>
       <a class="icon-btn" href="https://github.com/harsh-m-10/convertze" target="_blank" rel="noopener noreferrer" aria-label="View source on GitHub" title="Open source on GitHub">${ICONS.github}</a>
@@ -147,19 +164,19 @@ function header(activeCat) {
 function footer() {
   return `<footer class="site-footer">
     <div class="wrap cols">
-      <span>Convertze is a free, open source side project. Your files stay on your device. Found a bug? Tell us on GitHub.</span>
-      <span>${cats.map((c) => `<a href="/${c.id}">${esc(c.label)}</a>`).join(" · ")} · <a href="https://github.com/harsh-m-10/convertze" rel="noopener noreferrer" target="_blank">GitHub</a></span>
+      <span>Convertze is a free, open source side project. Your files stay on your device. Found a bug? Tell us on GitHub. <button class="mini" id="install-app" type="button" style="display:none">Install app</button></span>
+      <span>${cats.map((c) => `<a href="/${c.id}">${esc(c.label)}</a>`).join(" · ")} · <a href="/about">About</a> · <a href="/changelog">What's new</a> · <a href="https://github.com/harsh-m-10/convertze" rel="noopener noreferrer" target="_blank">GitHub</a></span>
     </div>
   </footer>`;
 }
 
 const privacyBadge = `<p class="privacy-line">${ICONS.shield} Files stay on your device. No accounts. Free.</p>`;
 
-function page({ title, desc, canonicalPath, activeCat, body, scripts }) {
+function page({ title, desc, canonicalPath, activeCat, body, scripts, ogImage }) {
   return `<!DOCTYPE html>
 ${MARK}
 <html lang="en">
-${head({ title, desc, canonicalPath })}
+${head({ title, desc, canonicalPath, ogImage })}
 <body>
   ${header(activeCat)}
   ${body}
@@ -192,7 +209,7 @@ function homepage() {
     <section class="hero">
       <h1>Convert anything.<br><span class="grad">Nothing leaves your device.</span></h1>
       <p>Free, fast tools for images, PDFs, text and everyday dev work. Everything runs right here in your browser, so your files never leave your hands.</p>
-      <span class="trust-badge">${ICONS.shield} Files stay on your device · No accounts · Open source</span>
+      <span class="trust-badge">${ICONS.shield} Files stay on your device · Works offline · Open source</span>
     </section>
     <div class="header-search" style="max-width:430px;margin:18px 0 6px">
       ${ICONS.search}
@@ -332,6 +349,7 @@ function toolPage(t) {
           <ul class="related-list">
           ${related}
           </ul>
+          <p style="margin:14px 0 0;font-size:12.8px"><a href="https://github.com/harsh-m-10/convertze/issues/new?title=${encodeURIComponent("[" + t.name + "] ")}" rel="noopener noreferrer" target="_blank">Missing something? Suggest a feature →</a></p>
         </div>
       </div>
       <aside class="side-nav" aria-label="${esc(cat.label)}">
@@ -347,6 +365,7 @@ function toolPage(t) {
     desc: t.metaDescription,
     canonicalPath: t.path,
     activeCat: t.cat,
+    ogImage: `/assets/og/${t.path.replace("/", "-")}.png`,
     body,
     scripts: [...libScripts, v("/assets/" + CAT_MODULE[t.cat])]
   });
@@ -360,7 +379,7 @@ function notFound() {
       <p>That page doesn't exist, but the tool you wanted probably does.</p>
       <div class="header-search" data-tool-search>
         ${ICONS.search}
-        <input type="text" placeholder="Search tools..." aria-label="Search tools">
+        <input type="text" placeholder="Search tools...   Ctrl+K" aria-label="Search tools">
         <div class="search-pop"></div>
       </div>
       <p style="margin-top:18px"><a class="btn" href="/">Browse all tools</a></p>
@@ -374,12 +393,72 @@ function notFound() {
   });
 }
 
+/* ---------- About ---------- */
+function aboutPage() {
+  const body = `<main class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › About</nav>
+    <h1 class="tool-h1">About Convertze</h1>
+    <div class="page-grid" style="grid-template-columns:minmax(0,720px)">
+      <div>
+        <div class="panel about">
+          <h2>What this is</h2>
+          <p>Convertze is a free collection of ${tools.length} file, text and developer tools built by Agent Null as an open source side project. Every tool runs entirely inside your browser: images are converted by your browser's own canvas, PDFs are read and rebuilt by JavaScript libraries running in your tab, and text tools are plain local code.</p>
+          <p>That architecture is the whole point. There is no server that receives your files, which means there is nothing to leak, nothing to retain, and no reason to make you sign up.</p>
+        </div>
+        <div class="panel about">
+          <h2>The privacy promise, precisely</h2>
+          <p>Your files, text and numbers never leave your device. The one exception on the whole site is the currency converter, which downloads a public exchange-rate table once a day; the amounts you type still stay local. You can verify all of this: open your browser's network tab while using any tool, or read the source code on GitHub.</p>
+        </div>
+        <div class="panel about">
+          <h2>Contact & contributions</h2>
+          <p>Found a bug, or missing a tool you need? <a href="https://github.com/harsh-m-10/convertze/issues/new" rel="noopener noreferrer" target="_blank">Open an issue on GitHub</a>. Several tools on this site exist because someone asked for them.</p>
+        </div>
+      </div>
+    </div>
+  </main>`;
+  return page({
+    title: "About Convertze, Free In-Browser Tools",
+    desc: "Convertze is a free, open source collection of file, text and developer tools that run entirely in your browser. No uploads, no accounts, no tracking of your files.",
+    canonicalPath: "about",
+    body
+  });
+}
+
+/* ---------- Changelog ---------- */
+function changelogPage() {
+  const log = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "changelog.json"), "utf8"));
+  const entries = log.map((e) => `<div class="panel about">
+          <h2>${esc(e.date)} · ${esc(e.title)}</h2>
+          <ul class="related-list">
+          ${e.items.map((i) => `<li>${esc(i)}</li>`).join("\n          ")}
+          </ul>
+        </div>`).join("\n        ");
+  const body = `<main class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › What's new</nav>
+    <h1 class="tool-h1">What's new</h1>
+    <p class="tool-tagline">Everything shipped on Convertze, newest first.</p>
+    <div class="page-grid" style="grid-template-columns:minmax(0,720px)">
+      <div>
+        ${entries}
+      </div>
+    </div>
+  </main>`;
+  return page({
+    title: "What's New on Convertze",
+    desc: "Release notes for Convertze: new tools, features and fixes, newest first.",
+    canonicalPath: "changelog",
+    body
+  });
+}
+
 /* ---------- Sitemap ---------- */
 function sitemap() {
   const urls = [
     { loc: `${SITE}/`, pri: "1.0" },
     ...cats.map((c) => ({ loc: `${SITE}/${c.id}`, pri: "0.9" })),
-    ...tools.map((t) => ({ loc: `${SITE}/${t.path}`, pri: "0.8" }))
+    ...tools.map((t) => ({ loc: `${SITE}/${t.path}`, pri: "0.8" })),
+    { loc: `${SITE}/about`, pri: "0.4" },
+    { loc: `${SITE}/changelog`, pri: "0.4" }
   ];
   return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -403,6 +482,8 @@ function write(rel, content) {
 write("index.html", homepage());
 for (const c of cats) write(path.join(c.id, "index.html"), hubPage(c));
 for (const t of tools) write(path.join(t.path, "index.html"), toolPage(t));
+write(path.join("about", "index.html"), aboutPage());
+write(path.join("changelog", "index.html"), changelogPage());
 write("404.html", notFound());
 write("sitemap.xml", sitemap());
 
