@@ -96,9 +96,9 @@
       var digits = value >= 1000 ? 2 : value >= 1 ? 4 : 6;
       result.textContent = amt.toLocaleString(undefined, { maximumFractionDigits: 6 }) + " " + from.value +
         " = " + value.toLocaleString(undefined, { maximumFractionDigits: digits }) + " " + to.value;
-      var unit = (rTo / rFrom);
-      rateLine.textContent = "1 " + from.value + " = " + unit.toLocaleString(undefined, { maximumFractionDigits: 6 }) +
-        " " + to.value + (updated ? " · rates updated " + updated.replace(/ \d\d:\d\d:\d\d.*$/, "") : "");
+      var unit = (rFrom / rTo);
+      rateLine.textContent = "1 " + to.value + " = " + unit.toLocaleString(undefined, { maximumFractionDigits: 6 }) +
+        " " + from.value + (updated ? " · rates updated " + updated.replace(/ \d\d:\d\d:\d\d.*$/, "") : "");
       C.hashState.save({ a: amount.value, f: from.value, t: to.value });
     }
 
@@ -186,8 +186,9 @@
         if (!isFinite(v)) { result.textContent = "-"; rateLine.textContent = ""; return; }
         var out = fromBase(ut, toBase(uf, v));
         result.textContent = fmt(v) + " " + from.value + " = " + fmt(out) + " " + to.value;
-        var unit = fromBase(ut, toBase(uf, 1));
-        rateLine.textContent = uf.toBase ? "" : "1 " + from.value + " = " + fmt(unit) + " " + to.value;
+        // Show the reverse rate so the line never just repeats the result.
+        var inverse = fromBase(uf, toBase(ut, 1));
+        rateLine.textContent = uf.toBase ? "" : "1 " + to.value + " = " + fmt(inverse) + " " + from.value;
         C.hashState.save({ a: amount.value, f: from.value, t: to.value });
       }
       swap.addEventListener("click", function () {

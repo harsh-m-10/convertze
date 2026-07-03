@@ -89,6 +89,7 @@
     renderList = fileListUI(root, state, function () {
       convertBtn.disabled = !state.files.length;
       if (!state.files.length) status.set("idle", "Ready when you are.");
+      else if (cfg.onFilesAdded) cfg.onFilesAdded(state.files);
     });
 
     var optsRow = h("div", { class: "opts" });
@@ -161,6 +162,7 @@
 
   C.register("images/convert", function (root) {
     var fmt, hint, hintText, hintBtn, suggestedFmt = null;
+    var ruleMB, ruleTouched = false;
 
     imageTool(root, {
       accept: "image/png,image/jpeg,image/webp",
@@ -177,7 +179,9 @@
 
         /* Conditional batch rule: route files by size to different formats. */
         var ruleBox = h("input", { type: "checkbox" });
-        var ruleMB = h("input", { type: "number", value: "5", min: "0.1", step: "0.5", style: "width:64px" });
+        ruleMB = h("input", { type: "number", value: "5", min: "0.01", step: "any", style: "width:70px" });
+        // Auto-suggested from the batch until the user edits it by hand (issue #1).
+        ruleMB.addEventListener("input", function () { ruleTouched = true; });
         var bigSel = formatSelect("webp");
         var smallSel = formatSelect("png");
         var ruleDetail = h("span", { class: "field", style: "display:none" }, [
@@ -203,6 +207,13 @@
       onFilesAdded: async function (files) {
         hint.style.display = "none";
         suggestedFmt = null;
+        // Suggest a split threshold that actually divides this batch: the
+        // midpoint between the smallest and largest file (issue #1).
+        if (!ruleTouched && files.length) {
+          var sizes = files.map(function (f) { return f.size; });
+          var midMB = (Math.min.apply(null, sizes) + Math.max.apply(null, sizes)) / 2 / 1048576;
+          ruleMB.value = midMB >= 1 ? midMB.toFixed(1) : Math.max(0.01, midMB).toFixed(2);
+        }
         try {
           var sample = files.slice(0, 12);
           var opaquePng = 0, opaquePngBytes = 0, withAlpha = 0;

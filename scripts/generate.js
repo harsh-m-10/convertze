@@ -280,9 +280,9 @@ const STEPS = {
     "Copy the output, or download it as a file."
   ],
   calc: [
-    "Type an amount and pick your currencies.",
+    "Enter your numbers and pick the options.",
     "The result updates live as you type.",
-    "Swap the direction with one click."
+    "Everything is calculated on your device, nothing is saved or sent."
   ]
 };
 
@@ -294,7 +294,7 @@ function toolPage(t) {
   const related = (t.related || []).filter((p) => byPath[p]).map((p) =>
     `<li><a href="/${p}">${esc(byPath[p].name)}</a> <span style="color:var(--muted);font-weight:400">- ${esc(byPath[p].short)}</span></li>`
   ).join("\n          ");
-  const steps = STEPS[t.cat].map((s) => `<li>${esc(s)}</li>`).join("\n          ");
+  const steps = (t.steps || STEPS[t.cat]).map((s) => `<li>${esc(s)}</li>`).join("\n          ");
   const libScripts = (t.libs || []).map((l) => LIB_URLS[l]);
   const jsonLd = JSON.stringify({
     "@context": "https://schema.org",
@@ -397,8 +397,8 @@ function notFound() {
 function aboutPage() {
   const body = `<main class="wrap">
     <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › About</nav>
-    <h1 class="tool-h1">About Convertze</h1>
-    <div class="page-grid" style="grid-template-columns:minmax(0,720px)">
+    <h1 class="tool-h1" style="text-align:center">About Convertze</h1>
+    <div class="page-grid" style="grid-template-columns:minmax(0,720px);justify-content:center">
       <div>
         <div class="panel about">
           <h2>What this is</h2>
@@ -435,9 +435,9 @@ function changelogPage() {
         </div>`).join("\n        ");
   const body = `<main class="wrap">
     <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › What's new</nav>
-    <h1 class="tool-h1">What's new</h1>
-    <p class="tool-tagline">Everything shipped on Convertze, newest first.</p>
-    <div class="page-grid" style="grid-template-columns:minmax(0,720px)">
+    <h1 class="tool-h1" style="text-align:center">What's new</h1>
+    <p class="tool-tagline" style="text-align:center">Everything shipped on Convertze, newest first.</p>
+    <div class="page-grid" style="grid-template-columns:minmax(0,720px);justify-content:center">
       <div>
         ${entries}
       </div>

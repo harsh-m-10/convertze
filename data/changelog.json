@@ -1,6 +1,17 @@
 [
   {
     "date": "July 3, 2026",
+    "title": "PDF to Markdown and community fixes",
+    "items": [
+      "PDF to Markdown: headings, paragraphs and lists inferred from digital PDFs (requested in issue #2)",
+      "Split-by-size threshold now auto-suggests from the actual batch instead of a fixed 5 MB (issue #1)",
+      "Unit converters show the reverse rate instead of repeating the result",
+      "How-it-works steps are now specific to each calculator",
+      "About and changelog pages centered; usage analytics enabled (privacy-friendly, no cookies)"
+    ]
+  },
+  {
+    "date": "July 3, 2026",
     "title": "Calculators, About page and share images",
     "items": [
       "New Calculators section: length, weight, temperature, area, speed and data-size converters plus percentage, age, EMI, GST and BMI calculators",

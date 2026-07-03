@@ -1,6 +1,6 @@
 {
   "site": "https://convertze.com",
-  "goatcounter": "",
+  "goatcounter": "agent-null",
   "categories": [
     {
       "id": "images",
@@ -46,10 +46,22 @@
         "For big mixed batches there is a split-by-size rule: send files over a threshold to one format and the rest to another, in a single run. Two or more results are packaged into a zip automatically, and because conversion is local, your images never travel over the network."
       ],
       "faq": [
-        { "q": "Are my images sent to a server?", "a": "No. The conversion runs inside your own browser tab using the canvas engine your browser already has. You can open this page, switch off your internet connection and the tool keeps working." },
-        { "q": "Can I convert different files to different formats in one batch?", "a": "Yes. Turn on the split-by-size rule and files over your threshold (say 5 MB) go to one format while the rest go to another, useful for large mixed uploads where only the heavy files need WebP." },
-        { "q": "What does the smart suggestion do?", "a": "When you drop files, the tool quickly checks them on your device, and if a better format is obvious, like WebP for large PNGs with no transparency, it tells you why and offers a one-click switch. It never changes your choice on its own." },
-        { "q": "Why did my transparent PNG get a white background as JPG?", "a": "JPG has no concept of transparency, so transparent pixels have to become some color. This tool fills them with white, which is what most documents and portals expect. Convert to WebP or keep PNG if you need the transparency." }
+        {
+          "q": "Are my images sent to a server?",
+          "a": "No. The conversion runs inside your own browser tab using the canvas engine your browser already has. You can open this page, switch off your internet connection and the tool keeps working."
+        },
+        {
+          "q": "Can I convert different files to different formats in one batch?",
+          "a": "Yes. Turn on the split-by-size rule and files over your threshold (say 5 MB) go to one format while the rest go to another, useful for large mixed uploads where only the heavy files need WebP."
+        },
+        {
+          "q": "What does the smart suggestion do?",
+          "a": "When you drop files, the tool quickly checks them on your device, and if a better format is obvious, like WebP for large PNGs with no transparency, it tells you why and offers a one-click switch. It never changes your choice on its own."
+        },
+        {
+          "q": "Why did my transparent PNG get a white background as JPG?",
+          "a": "JPG has no concept of transparency, so transparent pixels have to become some color. This tool fills them with white, which is what most documents and portals expect. Convert to WebP or keep PNG if you need the transparency."
+        }
       ],
       "libs": [
         "jszip"
@@ -73,9 +85,18 @@
         "Use it for avatars, thumbnails, form uploads with pixel requirements, or just making screenshots manageable. Batches are resized with the same settings and zipped. Everything runs in your browser, so your photos never leave your device."
       ],
       "faq": [
-        { "q": "Will resizing reduce the quality of my image?", "a": "Shrinking an image keeps it looking sharp because pixels are averaged down. Enlarging beyond the original size will look soft, since the browser has to invent pixels that were never there. When you need a bigger image, start from the largest original you have." },
-        { "q": "How do I resize without stretching or squashing the photo?", "a": "Leave the aspect lock on. Enter the one dimension you care about and the other is calculated for you, so the proportions never change." },
-        { "q": "Can I resize many images at once?", "a": "Yes. Drop a whole folder's worth, they are all resized with the same settings, and the results download together as one zip file." }
+        {
+          "q": "Will resizing reduce the quality of my image?",
+          "a": "Shrinking an image keeps it looking sharp because pixels are averaged down. Enlarging beyond the original size will look soft, since the browser has to invent pixels that were never there. When you need a bigger image, start from the largest original you have."
+        },
+        {
+          "q": "How do I resize without stretching or squashing the photo?",
+          "a": "Leave the aspect lock on. Enter the one dimension you care about and the other is calculated for you, so the proportions never change."
+        },
+        {
+          "q": "Can I resize many images at once?",
+          "a": "Yes. Drop a whole folder's worth, they are all resized with the same settings, and the results download together as one zip file."
+        }
       ],
       "libs": [
         "jszip"
@@ -99,9 +120,18 @@
         "Compress one photo or a whole batch with the same settings; multiple results download as a zip. Your images are processed by your own browser and never leave your device."
       ],
       "faq": [
-        { "q": "How do I compress an image to exactly 100 KB or 200 KB?", "a": "Switch to target size mode and type the limit in KB. The tool tries progressively lower quality settings until the file fits, and only shrinks the dimensions if quality alone cannot get there." },
-        { "q": "How much smaller will my image get?", "a": "Photos usually compress to a fifth or a tenth of their original size before quality loss becomes noticeable. Screenshots and graphics vary more. The result size is shown for every file, so you can adjust and retry instantly." },
-        { "q": "Does compressing here add a watermark or limit how many files I can process?", "a": "No watermark, no daily limit, no account. The work happens on your own device, so there is no server cost that would need to be recovered from you." }
+        {
+          "q": "How do I compress an image to exactly 100 KB or 200 KB?",
+          "a": "Switch to target size mode and type the limit in KB. The tool tries progressively lower quality settings until the file fits, and only shrinks the dimensions if quality alone cannot get there."
+        },
+        {
+          "q": "How much smaller will my image get?",
+          "a": "Photos usually compress to a fifth or a tenth of their original size before quality loss becomes noticeable. Screenshots and graphics vary more. The result size is shown for every file, so you can adjust and retry instantly."
+        },
+        {
+          "q": "Does compressing here add a watermark or limit how many files I can process?",
+          "a": "No watermark, no daily limit, no account. The work happens on your own device, so there is no server cost that would need to be recovered from you."
+        }
       ],
       "libs": [
         "jszip"
@@ -125,9 +155,18 @@
         "It works on batches too, applying the same frame to every file and zipping the results. Like every Convertze tool, cropping happens locally in your browser tab."
       ],
       "faq": [
-        { "q": "What does center-crop mean exactly?", "a": "The image is first scaled so it covers your target frame completely, then everything outside the frame is trimmed away evenly from the edges. The middle of your photo always survives, the borders are what get cut." },
-        { "q": "Will the output be exactly the size I typed?", "a": "Yes, to the pixel. That is the point of this tool: if a form wants 500 by 500, you get exactly 500 by 500 with no letterboxing or stretching." },
-        { "q": "Is my photo uploaded anywhere while cropping?", "a": "No. The photo is read and cropped by your own browser and never crosses the network, which makes it fine to use for ID photos and other personal images." }
+        {
+          "q": "What does center-crop mean exactly?",
+          "a": "The image is first scaled so it covers your target frame completely, then everything outside the frame is trimmed away evenly from the edges. The middle of your photo always survives, the borders are what get cut."
+        },
+        {
+          "q": "Will the output be exactly the size I typed?",
+          "a": "Yes, to the pixel. That is the point of this tool: if a form wants 500 by 500, you get exactly 500 by 500 with no letterboxing or stretching."
+        },
+        {
+          "q": "Is my photo uploaded anywhere while cropping?",
+          "a": "No. The photo is read and cropped by your own browser and never crosses the network, which makes it fine to use for ID photos and other personal images."
+        }
       ],
       "libs": [
         "jszip"
@@ -151,9 +190,18 @@
         "Rotate a single file or a batch in one click; multiple results arrive as a zip. Processing is local to your browser, your photos stay on your device, no account, no watermark."
       ],
       "faq": [
-        { "q": "Does rotating lose image quality?", "a": "Rotating in 90-degree steps moves pixels without resampling them, so the geometry is exact. If you export as JPG the file is re-encoded, which is normal for any editor; pick PNG if you want a lossless result." },
-        { "q": "Why does my phone photo appear sideways in the first place?", "a": "Phones often save the photo in one orientation and add a rotation flag that some apps ignore. Rotating here bakes the correct orientation into the pixels themselves, so the photo looks right everywhere." },
-        { "q": "Can I rotate several photos at the same time?", "a": "Yes, drop them all, choose the angle once and every photo is rotated the same way. More than one result downloads as a single zip." }
+        {
+          "q": "Does rotating lose image quality?",
+          "a": "Rotating in 90-degree steps moves pixels without resampling them, so the geometry is exact. If you export as JPG the file is re-encoded, which is normal for any editor; pick PNG if you want a lossless result."
+        },
+        {
+          "q": "Why does my phone photo appear sideways in the first place?",
+          "a": "Phones often save the photo in one orientation and add a rotation flag that some apps ignore. Rotating here bakes the correct orientation into the pixels themselves, so the photo looks right everywhere."
+        },
+        {
+          "q": "Can I rotate several photos at the same time?",
+          "a": "Yes, drop them all, choose the angle once and every photo is rotated the same way. More than one result downloads as a single zip."
+        }
       ],
       "libs": [
         "jszip"
@@ -177,9 +225,18 @@
         "The whole pack downloads as a single zip, generated locally. Your logo never touches a server, which also means there's no rate limit and no branding added."
       ],
       "faq": [
-        { "q": "What sizes does the favicon pack include?", "a": "16, 32 and 48 px for browser tabs, 180 px for iOS home screens, and 192 and 512 px for PWA manifests. You can edit the size list before generating if a platform asks for something extra." },
-        { "q": "What kind of image should I start from?", "a": "A square PNG of 512 px or larger gives the best results. Non-square images are center-cropped to square automatically, so keep your logo centered in the frame." },
-        { "q": "How do I add the generated favicons to my site?", "a": "Unzip the pack into your site root and reference the sizes you use with link tags, for example rel=\"icon\" for the small ones and rel=\"apple-touch-icon\" for the 180 px file. The 192 and 512 px files go in your web manifest." }
+        {
+          "q": "What sizes does the favicon pack include?",
+          "a": "16, 32 and 48 px for browser tabs, 180 px for iOS home screens, and 192 and 512 px for PWA manifests. You can edit the size list before generating if a platform asks for something extra."
+        },
+        {
+          "q": "What kind of image should I start from?",
+          "a": "A square PNG of 512 px or larger gives the best results. Non-square images are center-cropped to square automatically, so keep your logo centered in the frame."
+        },
+        {
+          "q": "How do I add the generated favicons to my site?",
+          "a": "Unzip the pack into your site root and reference the sizes you use with link tags, for example rel=\"icon\" for the small ones and rel=\"apple-touch-icon\" for the 180 px file. The 192 and 512 px files go in your web manifest."
+        }
       ],
       "libs": [
         "jszip"
@@ -203,9 +260,18 @@
         "Rendering uses your browser's own SVG engine, so the output matches exactly what you see in a browser tab, and the file never leaves your machine."
       ],
       "faq": [
-        { "q": "What does the scale factor do?", "a": "It multiplies the SVG's natural dimensions before rasterizing. A 100 px wide icon at 8x scale becomes an 800 px PNG, which stays crisp in slides, app store listings and print-ish contexts." },
-        { "q": "Will the PNG look exactly like my SVG?", "a": "Yes, because the drawing is done by your browser's own SVG renderer, the same engine that displays the file when you open it in a tab. What you see is literally what gets exported." },
-        { "q": "Does transparency survive the conversion?", "a": "Yes. PNG supports alpha, so transparent areas of your SVG stay transparent in the output." }
+        {
+          "q": "What does the scale factor do?",
+          "a": "It multiplies the SVG's natural dimensions before rasterizing. A 100 px wide icon at 8x scale becomes an 800 px PNG, which stays crisp in slides, app store listings and print-ish contexts."
+        },
+        {
+          "q": "Will the PNG look exactly like my SVG?",
+          "a": "Yes, because the drawing is done by your browser's own SVG renderer, the same engine that displays the file when you open it in a tab. What you see is literally what gets exported."
+        },
+        {
+          "q": "Does transparency survive the conversion?",
+          "a": "Yes. PNG supports alpha, so transparent areas of your SVG stay transparent in the output."
+        }
       ],
       "libs": [],
       "related": [
@@ -227,9 +293,18 @@
         "Merging runs on pdf-lib inside your browser, which matters for exactly the kind of documents people merge: agreements, IDs, financial statements. There is no server in this pipeline, so they cannot leak."
       ],
       "faq": [
-        { "q": "Is it safe to merge confidential documents here?", "a": "Yes, and this is the tool's whole reason to exist. The PDFs are read and combined by your own browser using pdf-lib; they are never transmitted, so there is no server copy to leak or get breached." },
-        { "q": "Can I control the order of the merged pages?", "a": "Yes. Files merge top to bottom in the order shown in the list, and each file has arrows to move it up or down before you press merge." },
-        { "q": "Is there a limit on file size or number of PDFs?", "a": "No fixed limit. The practical ceiling is your device's memory, and normal documents, even hundreds of pages, are far below it." }
+        {
+          "q": "Is it safe to merge confidential documents here?",
+          "a": "Yes, and this is the tool's whole reason to exist. The PDFs are read and combined by your own browser using pdf-lib; they are never transmitted, so there is no server copy to leak or get breached."
+        },
+        {
+          "q": "Can I control the order of the merged pages?",
+          "a": "Yes. Files merge top to bottom in the order shown in the list, and each file has arrows to move it up or down before you press merge."
+        },
+        {
+          "q": "Is there a limit on file size or number of PDFs?",
+          "a": "No fixed limit. The practical ceiling is your device's memory, and normal documents, even hundreds of pages, are far below it."
+        }
       ],
       "libs": [
         "pdflib"
@@ -253,9 +328,18 @@
         "Use it to extract a signature page, separate scanned documents that were combined, or share one chapter without the rest. The source document is read locally by pdf-lib and never transmitted."
       ],
       "faq": [
-        { "q": "How do I extract just a few specific pages?", "a": "Type the pages the way you would in a print dialog, for example 1-3,5,8. Each selected page becomes its own PDF and they download together as a zip." },
-        { "q": "Does splitting change the quality of the pages?", "a": "No. Pages are copied out of the original document as-is, with their text, images and formatting untouched. Nothing is re-rendered." },
-        { "q": "Can I split a PDF without installing anything or making an account?", "a": "Yes. The tool is a web page; it reads your PDF locally, splits it on your device and hands you the results. No install, no sign-up, and the document never leaves your device." }
+        {
+          "q": "How do I extract just a few specific pages?",
+          "a": "Type the pages the way you would in a print dialog, for example 1-3,5,8. Each selected page becomes its own PDF and they download together as a zip."
+        },
+        {
+          "q": "Does splitting change the quality of the pages?",
+          "a": "No. Pages are copied out of the original document as-is, with their text, images and formatting untouched. Nothing is re-rendered."
+        },
+        {
+          "q": "Can I split a PDF without installing anything or making an account?",
+          "a": "Yes. The tool is a web page; it reads your PDF locally, splits it on your device and hands you the results. No install, no sign-up, and the document never leaves your device."
+        }
       ],
       "libs": [
         "pdflib",
@@ -280,9 +364,18 @@
         "The trade-off: pages become images, so text stops being selectable. For scanned PDFs that's no loss at all; for text-heavy digital PDFs, try a lighter setting and check the result. Either way the document is processed locally on your device."
       ],
       "faq": [
-        { "q": "How do I compress a PDF to exactly 100 KB or 500 KB?", "a": "Switch the mode to target size and type the limit in KB. The tool tries progressively lower quality settings until the file fits, and shrinks page dimensions only as a last resort. If the target is physically unreachable it says so and gives you the smallest it could make." },
-        { "q": "Why is the text not selectable after compressing?", "a": "This tool compresses by re-rendering each page as an optimized image, which is what makes scans so much smaller. The visual content is identical but the invisible text layer is gone. If you need selectable text, keep the original alongside the compressed copy." },
-        { "q": "Is this safe for bank statements and signed contracts?", "a": "Yes. The document is rendered and rebuilt entirely by your browser. It never leaves your device, so there is no copy on anyone's server." }
+        {
+          "q": "How do I compress a PDF to exactly 100 KB or 500 KB?",
+          "a": "Switch the mode to target size and type the limit in KB. The tool tries progressively lower quality settings until the file fits, and shrinks page dimensions only as a last resort. If the target is physically unreachable it says so and gives you the smallest it could make."
+        },
+        {
+          "q": "Why is the text not selectable after compressing?",
+          "a": "This tool compresses by re-rendering each page as an optimized image, which is what makes scans so much smaller. The visual content is identical but the invisible text layer is gone. If you need selectable text, keep the original alongside the compressed copy."
+        },
+        {
+          "q": "Is this safe for bank statements and signed contracts?",
+          "a": "Yes. The document is rendered and rebuilt entirely by your browser. It never leaves your device, so there is no copy on anyone's server."
+        }
       ],
       "libs": [
         "pdfjs",
@@ -307,10 +400,22 @@
         "Contracts, agreements and forms are exactly the documents you should not be uploading to random websites. Here the PDF is rendered, signed and rebuilt entirely by your browser; it never crosses the network."
       ],
       "faq": [
-        { "q": "Is my contract uploaded while signing?", "a": "No, and that is the whole point of this tool. The PDF is rendered by pdf.js and rebuilt with your signature by pdf-lib, both running inside your browser tab. Nothing is transmitted anywhere." },
-        { "q": "Can I upload a photo of my signature or type my name instead of drawing?", "a": "Yes, both. Upload a photo or scan and the white paper background is stripped out automatically so only the ink lands on the page, or type your name and choose one of the handwriting styles." },
-        { "q": "Is this a legally binding signature?", "a": "It places a signature image on the document, which is how most everyday PDFs are signed and widely accepted. It is not a cryptographic digital certificate; for certificate-based signing (like a notarised e-sign) you need a certificate authority service." },
-        { "q": "Can I sign on a specific page or sign multiple times?", "a": "Yes, use the page arrows to pick any page and drag the signature where you want it. For a second signature, run the tool again on the file you just downloaded, it takes seconds since nothing re-uploads." }
+        {
+          "q": "Is my contract uploaded while signing?",
+          "a": "No, and that is the whole point of this tool. The PDF is rendered by pdf.js and rebuilt with your signature by pdf-lib, both running inside your browser tab. Nothing is transmitted anywhere."
+        },
+        {
+          "q": "Can I upload a photo of my signature or type my name instead of drawing?",
+          "a": "Yes, both. Upload a photo or scan and the white paper background is stripped out automatically so only the ink lands on the page, or type your name and choose one of the handwriting styles."
+        },
+        {
+          "q": "Is this a legally binding signature?",
+          "a": "It places a signature image on the document, which is how most everyday PDFs are signed and widely accepted. It is not a cryptographic digital certificate; for certificate-based signing (like a notarised e-sign) you need a certificate authority service."
+        },
+        {
+          "q": "Can I sign on a specific page or sign multiple times?",
+          "a": "Yes, use the page arrows to pick any page and drag the signature where you want it. For a second signature, run the tool again on the file you just downloaded, it takes seconds since nothing re-uploads."
+        }
       ],
       "libs": [
         "pdfjs",
@@ -335,9 +440,18 @@
         "Rotation runs on pdf-lib inside your browser. Nothing is re-rendered and nothing is uploaded; a 200-page document rotates in a couple of seconds."
       ],
       "faq": [
-        { "q": "Does rotating reduce the quality of my PDF?", "a": "No. The tool changes each page's rotation property rather than re-rendering anything, so text stays selectable and images keep every pixel." },
-        { "q": "Can I rotate just one page in the middle of the document?", "a": "Yes. Type the page numbers the way you would in a print dialog, for example 3 or 2-5,8, and only those pages turn." },
-        { "q": "My scan is rotated in some viewers but not others. Why?", "a": "Some scanners store the rotation as a hint that certain viewers ignore. Rotating here writes the orientation into the page itself, which every viewer respects." }
+        {
+          "q": "Does rotating reduce the quality of my PDF?",
+          "a": "No. The tool changes each page's rotation property rather than re-rendering anything, so text stays selectable and images keep every pixel."
+        },
+        {
+          "q": "Can I rotate just one page in the middle of the document?",
+          "a": "Yes. Type the page numbers the way you would in a print dialog, for example 3 or 2-5,8, and only those pages turn."
+        },
+        {
+          "q": "My scan is rotated in some viewers but not others. Why?",
+          "a": "Some scanners store the rotation as a hint that certain viewers ignore. Rotating here writes the orientation into the page itself, which every viewer respects."
+        }
       ],
       "libs": [
         "pdflib"
@@ -361,9 +475,18 @@
         "JPG, PNG and WebP all work; every image is re-encoded safely before being placed in the document, so formats that normally break PDF generators won't. Assembly happens locally in your browser with jsPDF."
       ],
       "faq": [
-        { "q": "How do the images fit onto the pages?", "a": "One image per A4 page, scaled to fit within clean margins while keeping its proportions. Portrait photos and landscape screenshots both come out looking sensible." },
-        { "q": "In what order do my photos appear in the PDF?", "a": "In the order you selected them, top to bottom in the file list. Reorder them there before generating if you need a different sequence." },
-        { "q": "Can I turn photos of documents into a PDF for a government portal?", "a": "Yes, that is the classic use. Photograph each page, drop the photos here, and you get one A4 PDF ready to submit, assembled on your own device without the documents going anywhere." }
+        {
+          "q": "How do the images fit onto the pages?",
+          "a": "One image per A4 page, scaled to fit within clean margins while keeping its proportions. Portrait photos and landscape screenshots both come out looking sensible."
+        },
+        {
+          "q": "In what order do my photos appear in the PDF?",
+          "a": "In the order you selected them, top to bottom in the file list. Reorder them there before generating if you need a different sequence."
+        },
+        {
+          "q": "Can I turn photos of documents into a PDF for a government portal?",
+          "a": "Yes, that is the classic use. Photograph each page, drop the photos here, and you get one A4 PDF ready to submit, assembled on your own device without the documents going anywhere."
+        }
       ],
       "libs": [
         "jspdf"
@@ -387,9 +510,18 @@
         "Rendering uses Mozilla's pdf.js inside your browser, the same engine Firefox uses, your document never goes anywhere."
       ],
       "faq": [
-        { "q": "Should I choose JPG or PNG for the pages?", "a": "JPG for scanned pages and photos, it is much smaller. PNG for pages with sharp text, diagrams or line art, it is lossless so fine lines stay crisp." },
-        { "q": "What resolution are the exported images?", "a": "Pages are rendered at twice their natural size, so a standard A4 page comes out around 1190 by 1684 pixels, sharp enough for slides, documents and web use." },
-        { "q": "How does a 50-page PDF download?", "a": "As one zip containing all fifty images, named by page number. Single-page documents skip the zip and download the image directly." }
+        {
+          "q": "Should I choose JPG or PNG for the pages?",
+          "a": "JPG for scanned pages and photos, it is much smaller. PNG for pages with sharp text, diagrams or line art, it is lossless so fine lines stay crisp."
+        },
+        {
+          "q": "What resolution are the exported images?",
+          "a": "Pages are rendered at twice their natural size, so a standard A4 page comes out around 1190 by 1684 pixels, sharp enough for slides, documents and web use."
+        },
+        {
+          "q": "How does a 50-page PDF download?",
+          "a": "As one zip containing all fifty images, named by page number. Single-page documents skip the zip and download the image directly."
+        }
       ],
       "libs": [
         "pdfjs",
@@ -414,9 +546,18 @@
         "One caveat: scanned PDFs are photographs of text with no text layer, so they come back empty, that requires OCR, which would mean either a heavyweight download or a server, and Convertze refuses to add a server."
       ],
       "faq": [
-        { "q": "Why did my PDF come back with no text?", "a": "It is almost certainly a scan. Scanned PDFs are photographs of pages with no embedded text layer, and reading them requires OCR, which this tool deliberately does not do because it would need either a server or a very heavy download." },
-        { "q": "Does the extracted text keep its formatting?", "a": "You get the raw text with page breaks preserved as blank lines. Fonts, columns and layout are not reproduced, which is usually what you want when feeding text to a script or search." },
-        { "q": "Can I extract text from a confidential PDF safely?", "a": "Yes. The document is parsed by pdf.js running inside your browser, the same engine Firefox uses, and nothing is transmitted anywhere." }
+        {
+          "q": "Why did my PDF come back with no text?",
+          "a": "It is almost certainly a scan. Scanned PDFs are photographs of pages with no embedded text layer, and reading them requires OCR, which this tool deliberately does not do because it would need either a server or a very heavy download."
+        },
+        {
+          "q": "Does the extracted text keep its formatting?",
+          "a": "You get the raw text with page breaks preserved as blank lines. Fonts, columns and layout are not reproduced, which is usually what you want when feeding text to a script or search."
+        },
+        {
+          "q": "Can I extract text from a confidential PDF safely?",
+          "a": "Yes. The document is parsed by pdf.js running inside your browser, the same engine Firefox uses, and nothing is transmitted anywhere."
+        }
       ],
       "libs": [
         "pdfjs"
@@ -424,6 +565,32 @@
       "related": [
         "pdf/pdf-to-images",
         "pdf/split",
+        "pdf/markdown-to-pdf"
+      ],
+      "icon": "filetext"
+    },
+    {
+      "path": "pdf/pdf-to-markdown",
+      "cat": "pdf",
+      "name": "PDF to Markdown",
+      "h1": "Convert a PDF to Markdown",
+      "short": "Text, headings and lists inferred into clean .md.",
+      "metaDescription": "Convert a PDF to Markdown for free in your browser. Headings, paragraphs and lists inferred from the layout. Digital PDFs only; the file stays on your device.",
+      "about": [
+        "Extracts the text of a digital PDF and reconstructs it as Markdown: larger fonts become headings, bullet and numbered lines become lists, and paragraph breaks follow the visual spacing. Copy the result or download it as a .md file.",
+        "Know the limits before you rely on it: the structure is inferred from the layout, not read from the file, so complex documents need a review pass. Tables come out as plain text lines, multi-column layouts can interleave, and scanned PDFs return nothing because they have no text layer (that needs OCR). For clean, mostly linear documents it works well."
+      ],
+      "faq": [
+        { "q": "How does it know what is a heading?", "a": "By font size. The most common text size on the page is treated as body text, and noticeably larger lines become headings, biggest as #, next as ##, and so on. It is a good heuristic for reports and articles, less so for decorative layouts." },
+        { "q": "Why did my PDF produce messy or empty output?", "a": "Two usual reasons. Scanned PDFs are photographs with no text layer, so there is nothing to extract without OCR. And multi-column or table-heavy layouts read in visual order, which can interleave columns. This tool is at its best on linear, text-first documents." },
+        { "q": "Are tables converted to Markdown tables?", "a": "No, table cells come out as plain text lines. Reliable table detection from PDF geometry is genuinely hard, so rather than produce broken pipes-and-dashes, the tool keeps the text and leaves the table formatting to you." }
+      ],
+      "libs": [
+        "pdfjs"
+      ],
+      "related": [
+        "pdf/pdf-to-text",
+        "dev/markdown-preview",
         "pdf/markdown-to-pdf"
       ],
       "icon": "filetext"
@@ -440,9 +607,18 @@
         "Rendering uses html2canvas plus jsPDF inside your browser. Very complex layouts may differ slightly from the browser's own print dialog, but the file itself never leaves your machine."
       ],
       "faq": [
-        { "q": "Will my CSS styles show up in the PDF?", "a": "Inline styles and style tags inside the file are rendered. External stylesheets referenced by URL may not load, so for best results save the page as a self-contained HTML file first." },
-        { "q": "How is this different from pressing Ctrl+P in the browser?", "a": "The print dialog is actually excellent for one-off jobs. This tool is for when you want a repeatable A4 render of an .html file as a downloadable document without fiddling with print settings each time." },
-        { "q": "Why does my complex page look slightly different in the PDF?", "a": "The page is rendered by html2canvas, which reimplements browser drawing and handles most, but not all, modern CSS. Simple documents come out identical; heavy layouts with exotic CSS may shift slightly." }
+        {
+          "q": "Will my CSS styles show up in the PDF?",
+          "a": "Inline styles and style tags inside the file are rendered. External stylesheets referenced by URL may not load, so for best results save the page as a self-contained HTML file first."
+        },
+        {
+          "q": "How is this different from pressing Ctrl+P in the browser?",
+          "a": "The print dialog is actually excellent for one-off jobs. This tool is for when you want a repeatable A4 render of an .html file as a downloadable document without fiddling with print settings each time."
+        },
+        {
+          "q": "Why does my complex page look slightly different in the PDF?",
+          "a": "The page is rendered by html2canvas, which reimplements browser drawing and handles most, but not all, modern CSS. Simple documents come out identical; heavy layouts with exotic CSS may shift slightly."
+        }
       ],
       "libs": [
         "jspdf",
@@ -467,9 +643,18 @@
         "Markdown is parsed by marked, styled, rendered, and paged into a PDF, all inside your browser tab. Nothing leaves that tab at any point."
       ],
       "faq": [
-        { "q": "Which Markdown features are rendered in the PDF?", "a": "Headings, paragraphs, bold and italics, links, ordered and unordered lists, tables, code blocks and blockquotes, styled cleanly for an A4 page. It follows the same CommonMark-plus-tables behavior as GitHub." },
-        { "q": "Can I convert a plain .txt file too?", "a": "Yes. Plain text goes through the same pipeline and comes out as a clean paged document. Any Markdown syntax that happens to be in the file gets rendered." },
-        { "q": "Where is the conversion actually performed?", "a": "Entirely in your browser: marked parses the Markdown, the result is styled and rendered to pages, and jsPDF assembles the file, so your notes are never sent anywhere." }
+        {
+          "q": "Which Markdown features are rendered in the PDF?",
+          "a": "Headings, paragraphs, bold and italics, links, ordered and unordered lists, tables, code blocks and blockquotes, styled cleanly for an A4 page. It follows the same CommonMark-plus-tables behavior as GitHub."
+        },
+        {
+          "q": "Can I convert a plain .txt file too?",
+          "a": "Yes. Plain text goes through the same pipeline and comes out as a clean paged document. Any Markdown syntax that happens to be in the file gets rendered."
+        },
+        {
+          "q": "Where is the conversion actually performed?",
+          "a": "Entirely in your browser: marked parses the Markdown, the result is styled and rendered to pages, and jsPDF assembles the file, so your notes are never sent anywhere."
+        }
       ],
       "libs": [
         "jspdf",
@@ -495,9 +680,18 @@
         "Because parsing happens in your browser, API payloads and config files with secrets in them never leave your machine. Copy the result, download it, or share it via the URL."
       ],
       "faq": [
-        { "q": "Is it safe to paste API responses with tokens or secrets in them?", "a": "Yes. The JSON is parsed by your own browser with JavaScript's built-in JSON engine and is never transmitted. Nothing you paste here reaches any server." },
-        { "q": "How do I find out why my JSON is invalid?", "a": "Paste it and the error message names the problem and the line where parsing failed, for example a trailing comma or an unquoted key. Fix, and the output updates the moment the JSON becomes valid." },
-        { "q": "What is the difference between beautify and minify?", "a": "Beautify adds indentation and line breaks so humans can read the structure. Minify strips every unnecessary character so the payload is as small as possible for transmission or storage. The data is identical either way." }
+        {
+          "q": "Is it safe to paste API responses with tokens or secrets in them?",
+          "a": "Yes. The JSON is parsed by your own browser with JavaScript's built-in JSON engine and is never transmitted. Nothing you paste here reaches any server."
+        },
+        {
+          "q": "How do I find out why my JSON is invalid?",
+          "a": "Paste it and the error message names the problem and the line where parsing failed, for example a trailing comma or an unquoted key. Fix, and the output updates the moment the JSON becomes valid."
+        },
+        {
+          "q": "What is the difference between beautify and minify?",
+          "a": "Beautify adds indentation and line breaks so humans can read the structure. Minify strips every unnecessary character so the payload is as small as possible for transmission or storage. The data is identical either way."
+        }
       ],
       "libs": [],
       "related": [
@@ -519,9 +713,18 @@
         "The usual use case: moving config between JSON-first tools and YAML-first ones like Kubernetes, GitHub Actions and CI pipelines. Conversion runs locally via js-yaml."
       ],
       "faq": [
-        { "q": "Does the conversion lose any data?", "a": "No. JSON and YAML describe the same structures, objects, arrays, strings, numbers, booleans and nulls, so converting between them is lossless. Comments in YAML are the one thing JSON cannot represent, so those disappear going to JSON." },
-        { "q": "Can I convert Kubernetes manifests or GitHub Actions workflows here?", "a": "Yes, that is the most common use. Paste the YAML to get JSON for scripting or API calls, or paste JSON output from a tool and get clean YAML to commit." },
-        { "q": "Is my configuration data kept private?", "a": "Yes. Conversion runs on js-yaml inside your browser tab, so config files, which often contain hostnames, keys and internal details, never leave your device." }
+        {
+          "q": "Does the conversion lose any data?",
+          "a": "No. JSON and YAML describe the same structures, objects, arrays, strings, numbers, booleans and nulls, so converting between them is lossless. Comments in YAML are the one thing JSON cannot represent, so those disappear going to JSON."
+        },
+        {
+          "q": "Can I convert Kubernetes manifests or GitHub Actions workflows here?",
+          "a": "Yes, that is the most common use. Paste the YAML to get JSON for scripting or API calls, or paste JSON output from a tool and get clean YAML to commit."
+        },
+        {
+          "q": "Is my configuration data kept private?",
+          "a": "Yes. Conversion runs on js-yaml inside your browser tab, so config files, which often contain hostnames, keys and internal details, never leave your device."
+        }
       ],
       "libs": [
         "jsyaml"
@@ -545,9 +748,18 @@
         "The standard bridge between spreadsheets and code: export from Excel or Sheets, convert here, feed to your script, or the reverse. Your data is parsed locally and never leaves your browser."
       ],
       "faq": [
-        { "q": "How does the tool know my column names?", "a": "The first CSV row is treated as the header, and each following row becomes a JSON object using those headers as keys. Going the other way, the keys of your JSON objects become the header row." },
-        { "q": "What about commas and quotes inside my data?", "a": "Fields containing commas, quotes or line breaks are handled with proper CSV quoting in both directions, the cases that break naive converters are exactly what this one is tested on." },
-        { "q": "Can I convert an Excel or Google Sheets file?", "a": "Export the sheet as CSV first, which both apps do natively, then drop the CSV here. The JSON comes out ready for your script or API." }
+        {
+          "q": "How does the tool know my column names?",
+          "a": "The first CSV row is treated as the header, and each following row becomes a JSON object using those headers as keys. Going the other way, the keys of your JSON objects become the header row."
+        },
+        {
+          "q": "What about commas and quotes inside my data?",
+          "a": "Fields containing commas, quotes or line breaks are handled with proper CSV quoting in both directions, the cases that break naive converters are exactly what this one is tested on."
+        },
+        {
+          "q": "Can I convert an Excel or Google Sheets file?",
+          "a": "Export the sheet as CSV first, which both apps do natively, then drop the CSV here. The JSON comes out ready for your script or API."
+        }
       ],
       "libs": [],
       "related": [
@@ -569,9 +781,18 @@
         "Useful for data URIs, basic-auth headers, API payloads and config values. Everything runs on your device, so credentials you encode here stay yours."
       ],
       "faq": [
-        { "q": "Is Base64 encryption?", "a": "No, and this matters: Base64 is just a different alphabet for the same bytes, anyone can decode it instantly. Use it for transport and embedding, never for hiding secrets." },
-        { "q": "Can I encode a file, not just text?", "a": "Yes. Switch to file mode and drop any file, image, PDF, binary, and you get its Base64 string, ready for a data URI or an API payload. Decoding works in reverse and offers a download when the result is not text." },
-        { "q": "Why does my Base64 string fail to decode elsewhere?", "a": "Usually it is the URL-safe variant, which swaps + and / for - and _ and often drops the trailing = padding. This tool detects and accepts both variants automatically." }
+        {
+          "q": "Is Base64 encryption?",
+          "a": "No, and this matters: Base64 is just a different alphabet for the same bytes, anyone can decode it instantly. Use it for transport and embedding, never for hiding secrets."
+        },
+        {
+          "q": "Can I encode a file, not just text?",
+          "a": "Yes. Switch to file mode and drop any file, image, PDF, binary, and you get its Base64 string, ready for a data URI or an API payload. Decoding works in reverse and offers a download when the result is not text."
+        },
+        {
+          "q": "Why does my Base64 string fail to decode elsewhere?",
+          "a": "Usually it is the URL-safe variant, which swaps + and / for - and _ and often drops the trailing = padding. This tool detects and accepts both variants automatically."
+        }
       ],
       "libs": [],
       "related": [
@@ -593,9 +814,18 @@
         "Because hashing is local you can safely checksum sensitive files; the bytes never leave your machine. MD5 is provided for legacy checksums only, don't use it for anything security-critical."
       ],
       "faq": [
-        { "q": "How do I verify a downloaded file against its published checksum?", "a": "Drop the file here, then compare the SHA-256 shown with the checksum on the download page. If every character matches, the file arrived intact and untampered." },
-        { "q": "Should I use SHA-256 or MD5?", "a": "SHA-256 for anything that matters today. MD5 is cryptographically broken and exists here only because older download pages and legacy systems still publish MD5 checksums." },
-        { "q": "Can I hash a large or sensitive file safely?", "a": "Yes. The file is read and hashed by your own browser, SHA-256 through the built-in Web Crypto API, and the contents never leave your device." }
+        {
+          "q": "How do I verify a downloaded file against its published checksum?",
+          "a": "Drop the file here, then compare the SHA-256 shown with the checksum on the download page. If every character matches, the file arrived intact and untampered."
+        },
+        {
+          "q": "Should I use SHA-256 or MD5?",
+          "a": "SHA-256 for anything that matters today. MD5 is cryptographically broken and exists here only because older download pages and legacy systems still publish MD5 checksums."
+        },
+        {
+          "q": "Can I hash a large or sensitive file safely?",
+          "a": "Yes. The file is read and hashed by your own browser, SHA-256 through the built-in Web Crypto API, and the contents never leave your device."
+        }
       ],
       "libs": [
         "sparkmd5"
@@ -619,9 +849,18 @@
         "This matters more than it sounds: a live JWT is a credential, and most online decoders send it to their server. This one decodes entirely in your browser."
       ],
       "faq": [
-        { "q": "Is it safe to paste a production JWT here?", "a": "Safer than most alternatives: the token is split and Base64-decoded entirely in your browser, so it is never transmitted. Still, treat live tokens as credentials, decode what you need and avoid sharing screenshots of the payload." },
-        { "q": "Why does it say the signature is not verified?", "a": "Verifying a signature requires the secret or public key it was signed with, which only the issuing server should have. This tool is for inspecting what a token claims, not for proving the claims are genuine." },
-        { "q": "How do I tell if my token is expired?", "a": "The exp claim is translated into a readable date next to its raw value, along with iat and nbf, so you can see at a glance when the token was issued and when it stops being valid." }
+        {
+          "q": "Is it safe to paste a production JWT here?",
+          "a": "Safer than most alternatives: the token is split and Base64-decoded entirely in your browser, so it is never transmitted. Still, treat live tokens as credentials, decode what you need and avoid sharing screenshots of the payload."
+        },
+        {
+          "q": "Why does it say the signature is not verified?",
+          "a": "Verifying a signature requires the secret or public key it was signed with, which only the issuing server should have. This tool is for inspecting what a token claims, not for proving the claims are genuine."
+        },
+        {
+          "q": "How do I tell if my token is expired?",
+          "a": "The exp claim is translated into a readable date next to its raw value, along with iat and nbf, so you can see at a glance when the token was issued and when it stops being valid."
+        }
       ],
       "libs": [],
       "related": [
@@ -643,9 +882,18 @@
         "A small tool you reach for constantly when reading logs, debugging APIs and writing queries. Runs entirely in your browser."
       ],
       "faq": [
-        { "q": "How does it know whether my number is seconds or milliseconds?", "a": "By magnitude. Recent dates are ten digits in seconds and thirteen in milliseconds, so the tool detects which one you pasted and labels the interpretation it chose." },
-        { "q": "Can I convert a date back into a Unix timestamp?", "a": "Yes, type or paste any common date string, ISO 8601 or a human-readable form, and the Unix seconds and milliseconds appear alongside the other formats." },
-        { "q": "Which timezone do the results use?", "a": "You get both: ISO 8601 in UTC, plus the same moment rendered in your device's local timezone, labelled clearly so log times and wall-clock times stop getting confused." }
+        {
+          "q": "How does it know whether my number is seconds or milliseconds?",
+          "a": "By magnitude. Recent dates are ten digits in seconds and thirteen in milliseconds, so the tool detects which one you pasted and labels the interpretation it chose."
+        },
+        {
+          "q": "Can I convert a date back into a Unix timestamp?",
+          "a": "Yes, type or paste any common date string, ISO 8601 or a human-readable form, and the Unix seconds and milliseconds appear alongside the other formats."
+        },
+        {
+          "q": "Which timezone do the results use?",
+          "a": "You get both: ISO 8601 in UTC, plus the same moment rendered in your device's local timezone, labelled clearly so log times and wall-clock times stop getting confused."
+        }
       ],
       "libs": [],
       "related": [
@@ -667,9 +915,18 @@
         "Use it for config drift, reviewing edits, comparing API responses or checking what a colleague changed in a snippet, without pasting your text into someone else's server. The comparison runs locally."
       ],
       "faq": [
-        { "q": "How is the diff computed?", "a": "With a longest-common-subsequence algorithm on lines, the same family of algorithm git uses. That means it finds the minimal set of added and removed lines rather than marking everything after the first change." },
-        { "q": "Can I diff configs or code containing secrets?", "a": "Yes. Both texts are compared entirely inside your browser and never transmitted, which is the reason to use this over pasting into a random diff site." },
-        { "q": "Is there a size limit on the texts?", "a": "Very large inputs, beyond roughly two thousand lines each, are declined to keep the comparison instant in the browser. For files of that size a desktop diff tool is the better fit." }
+        {
+          "q": "How is the diff computed?",
+          "a": "With a longest-common-subsequence algorithm on lines, the same family of algorithm git uses. That means it finds the minimal set of added and removed lines rather than marking everything after the first change."
+        },
+        {
+          "q": "Can I diff configs or code containing secrets?",
+          "a": "Yes. Both texts are compared entirely inside your browser and never transmitted, which is the reason to use this over pasting into a random diff site."
+        },
+        {
+          "q": "Is there a size limit on the texts?",
+          "a": "Very large inputs, beyond roughly two thousand lines each, are declined to keep the comparison instant in the browser. For files of that size a desktop diff tool is the better fit."
+        }
       ],
       "libs": [],
       "related": [
@@ -691,9 +948,18 @@
         "The engine is JavaScript's own RegExp, exactly what runs in Node and the browser, so what matches here matches in your code. Your test data stays on your machine."
       ],
       "faq": [
-        { "q": "Which regex flavor does this tester use?", "a": "JavaScript's built-in RegExp, the exact engine in Node and every browser. If your target is Python, Java or PCRE, most patterns carry over but lookbehind and some escapes can differ." },
-        { "q": "What do the g, i, m and s flags do?", "a": "g finds all matches instead of stopping at the first, i ignores case, m makes ^ and $ match at line boundaries, and s lets the dot match newline characters." },
-        { "q": "Why does my pattern match nothing?", "a": "If the pattern itself is invalid you get the parser's error message as you type. If it is valid but matchless, check the g flag and remember that special characters like . + ? ( ) need escaping with a backslash to be matched literally." }
+        {
+          "q": "Which regex flavor does this tester use?",
+          "a": "JavaScript's built-in RegExp, the exact engine in Node and every browser. If your target is Python, Java or PCRE, most patterns carry over but lookbehind and some escapes can differ."
+        },
+        {
+          "q": "What do the g, i, m and s flags do?",
+          "a": "g finds all matches instead of stopping at the first, i ignores case, m makes ^ and $ match at line boundaries, and s lets the dot match newline characters."
+        },
+        {
+          "q": "Why does my pattern match nothing?",
+          "a": "If the pattern itself is invalid you get the parser's error message as you type. If it is valid but matchless, check the g flag and remember that special characters like . + ? ( ) need escaping with a backslash to be matched literally."
+        }
       ],
       "libs": [],
       "related": [
@@ -715,9 +981,18 @@
         "Handy when a design tool hands you HSL but your stylesheet wants hex, or you need rgb() components for an rgba() overlay. Runs entirely client-side."
       ],
       "faq": [
-        { "q": "What color formats can I paste in?", "a": "Anything CSS understands: six or three digit hex, rgb() and rgba(), hsl() and hsla(), and named colors like rebeccapurple. The other formats are derived from whatever you paste." },
-        { "q": "Does it handle transparency?", "a": "Yes. Colors with an alpha channel come out as eight-digit hex, rgba() and hsla(), with the alpha preserved across all three." },
-        { "q": "When would I need HSL instead of hex?", "a": "HSL separates hue from lightness, which makes it the practical format for building shade variations of a brand color, lighten by raising L, keep H and S fixed. Hex is compact for storage; they describe the same color." }
+        {
+          "q": "What color formats can I paste in?",
+          "a": "Anything CSS understands: six or three digit hex, rgb() and rgba(), hsl() and hsla(), and named colors like rebeccapurple. The other formats are derived from whatever you paste."
+        },
+        {
+          "q": "Does it handle transparency?",
+          "a": "Yes. Colors with an alpha channel come out as eight-digit hex, rgba() and hsla(), with the alpha preserved across all three."
+        },
+        {
+          "q": "When would I need HSL instead of hex?",
+          "a": "HSL separates hue from lightness, which makes it the practical format for building shade variations of a brand color, lighten by raising L, keep H and S fixed. Hex is compact for storage; they describe the same color."
+        }
       ],
       "libs": [],
       "related": [
@@ -739,9 +1014,18 @@
         "Constant companion when debugging query strings, webhooks, OAuth redirects and log lines full of %2F. Local-only, like everything here."
       ],
       "faq": [
-        { "q": "What is the difference between the two encoding modes?", "a": "Component mode encodes everything reserved, right for a single query parameter value. URI mode leaves structural characters like :, / and ? intact, right when you are encoding a whole URL and want it to stay a URL." },
-        { "q": "Why do spaces sometimes show as %20 and sometimes as +?", "a": "%20 is the standard percent encoding; + means space only inside the query string of a form submission. This tool produces %20, which is valid everywhere, and decodes both." },
-        { "q": "Why does my decoded string still contain % signs?", "a": "Either it was encoded twice, decode it again, or it contains a stray % that is not part of a valid escape. Double encoding is the classic cause of %2520 appearing where %20 was expected." }
+        {
+          "q": "What is the difference between the two encoding modes?",
+          "a": "Component mode encodes everything reserved, right for a single query parameter value. URI mode leaves structural characters like :, / and ? intact, right when you are encoding a whole URL and want it to stay a URL."
+        },
+        {
+          "q": "Why do spaces sometimes show as %20 and sometimes as +?",
+          "a": "%20 is the standard percent encoding; + means space only inside the query string of a form submission. This tool produces %20, which is valid everywhere, and decodes both."
+        },
+        {
+          "q": "Why does my decoded string still contain % signs?",
+          "a": "Either it was encoded twice, decode it again, or it contains a stray % that is not part of a valid escape. Double encoding is the classic cause of %2520 appearing where %20 was expected."
+        }
       ],
       "libs": [],
       "related": [
@@ -763,9 +1047,18 @@
         "Use it to sanity-check a README before pushing, draft release notes, or write docs without leaving the browser. Rendering happens locally via marked; you can also download the rendered HTML."
       ],
       "faq": [
-        { "q": "Does this render the same way GitHub does?", "a": "Very close. Rendering uses marked with tables, fenced code blocks and other CommonMark-plus-GFM features, so a README that looks right here will look right on GitHub. GitHub-only extras like mentions and issue links stay plain text." },
-        { "q": "Can I get the HTML out, not just look at it?", "a": "Yes, Copy HTML puts the rendered markup on your clipboard and Download HTML saves it as a file, useful for pasting into a CMS or emailing a rendered doc." },
-        { "q": "Can I preview a .md file from my computer?", "a": "Drop the file straight onto the editor pane and its contents load instantly. Everything happens in the tab; the file is not sent anywhere." }
+        {
+          "q": "Does this render the same way GitHub does?",
+          "a": "Very close. Rendering uses marked with tables, fenced code blocks and other CommonMark-plus-GFM features, so a README that looks right here will look right on GitHub. GitHub-only extras like mentions and issue links stay plain text."
+        },
+        {
+          "q": "Can I get the HTML out, not just look at it?",
+          "a": "Yes, Copy HTML puts the rendered markup on your clipboard and Download HTML saves it as a file, useful for pasting into a CMS or emailing a rendered doc."
+        },
+        {
+          "q": "Can I preview a .md file from my computer?",
+          "a": "Drop the file straight onto the editor pane and its contents load instantly. Everything happens in the tab; the file is not sent anywhere."
+        }
       ],
       "libs": [
         "marked"
@@ -789,9 +1082,18 @@
         "UUIDs are generated on your device the moment you click, they are not drawn from any shared pool or logged anywhere, so they are yours alone."
       ],
       "faq": [
-        { "q": "What is a version 4 UUID?", "a": "A 128-bit identifier where 122 bits are random, formatted as five hyphen-separated groups like 8b4f...-....-4...-....-... . The 4 marks the version. With that much randomness, collisions are not a practical concern." },
-        { "q": "Are these UUIDs unique and safe to use in production?", "a": "Yes. They come from crypto.randomUUID, which uses the operating system's cryptographic randomness, exactly what server frameworks use. Generating them here or in your code produces the same class of identifier." },
-        { "q": "Can I generate many UUIDs at once?", "a": "Yes, set the count and generate up to a thousand in one click, one per line, ready to copy into a script, database seed or spreadsheet column." }
+        {
+          "q": "What is a version 4 UUID?",
+          "a": "A 128-bit identifier where 122 bits are random, formatted as five hyphen-separated groups like 8b4f...-....-4...-....-... . The 4 marks the version. With that much randomness, collisions are not a practical concern."
+        },
+        {
+          "q": "Are these UUIDs unique and safe to use in production?",
+          "a": "Yes. They come from crypto.randomUUID, which uses the operating system's cryptographic randomness, exactly what server frameworks use. Generating them here or in your code produces the same class of identifier."
+        },
+        {
+          "q": "Can I generate many UUIDs at once?",
+          "a": "Yes, set the count and generate up to a thousand in one click, one per line, ready to copy into a script, database seed or spreadsheet column."
+        }
       ],
       "libs": [],
       "related": [
@@ -813,9 +1115,18 @@
         "Generation happens on your device and the password exists only on your screen and clipboard. Nothing is transmitted, logged or stored, there is no server involved that could remember it."
       ],
       "faq": [
-        { "q": "Is it safe to generate a password on a website?", "a": "On this one, yes, and the reason is verifiable: generation uses crypto.getRandomValues inside your browser, the page makes no network requests with the result, and the code is open source. The password never exists anywhere but your device." },
-        { "q": "How long should my password be?", "a": "Sixteen characters with mixed character sets is a strong default for accounts that matter. Length beats cleverness: every added character multiplies the work an attacker faces." },
-        { "q": "Why would I exclude symbols?", "a": "Some legacy systems reject certain symbols or limit which ones they accept. Turning symbols off and lengthening the password by a few characters keeps the strength while satisfying the picky form." }
+        {
+          "q": "Is it safe to generate a password on a website?",
+          "a": "On this one, yes, and the reason is verifiable: generation uses crypto.getRandomValues inside your browser, the page makes no network requests with the result, and the code is open source. The password never exists anywhere but your device."
+        },
+        {
+          "q": "How long should my password be?",
+          "a": "Sixteen characters with mixed character sets is a strong default for accounts that matter. Length beats cleverness: every added character multiplies the work an attacker faces."
+        },
+        {
+          "q": "Why would I exclude symbols?",
+          "a": "Some legacy systems reject certain symbols or limit which ones they accept. Turning symbols off and lengthening the password by a few characters keeps the strength while satisfying the picky form."
+        }
       ],
       "libs": [],
       "related": [
@@ -837,9 +1148,18 @@
         "The code is drawn locally in your browser, so whatever you encode, a private URL, a note, contact details, is never sent anywhere. Print it, drop it in a slide, or add it to a poster."
       ],
       "faq": [
-        { "q": "Does the QR code expire or stop working later?", "a": "Never. The data is baked into the pattern itself, there is no redirect service in the middle, so the code works as long as whatever it points to exists. That is also why there are no scan statistics." },
-        { "q": "How much text can a QR code hold?", "a": "Up to roughly two to three thousand characters, but codes get dense and harder to scan as content grows. For URLs and short text, which is the normal use, scanning is instant." },
-        { "q": "What size should I download for print?", "a": "Use the larger sizes for print, a QR code should be at least 2 x 2 cm on the page and scanned codes need sharp edges. For screens, the default size is plenty." }
+        {
+          "q": "Does the QR code expire or stop working later?",
+          "a": "Never. The data is baked into the pattern itself, there is no redirect service in the middle, so the code works as long as whatever it points to exists. That is also why there are no scan statistics."
+        },
+        {
+          "q": "How much text can a QR code hold?",
+          "a": "Up to roughly two to three thousand characters, but codes get dense and harder to scan as content grows. For URLs and short text, which is the normal use, scanning is instant."
+        },
+        {
+          "q": "What size should I download for print?",
+          "a": "Use the larger sizes for print, a QR code should be at least 2 x 2 cm on the page and scanned codes need sharp edges. For screens, the default size is plenty."
+        }
       ],
       "libs": [
         "qrcode"
@@ -863,9 +1183,18 @@
         "Built for the moments a limit is looming, essay word counts, meta descriptions, tweet-length checks, application forms. Your text is counted on your device and never leaves it."
       ],
       "faq": [
-        { "q": "How are words counted, exactly?", "a": "Anything separated by spaces or line breaks counts as a word, the same rule word processors use, so hyphenated terms count once and numbers count as words. Counts here will match what Google Docs and Word show for normal prose." },
-        { "q": "Which character count do forms usually mean?", "a": "Almost always characters including spaces, that is what input limits measure. Both figures are shown, so use the one your form specifies." },
-        { "q": "How is reading time estimated?", "a": "Word count divided by 200 words per minute, a standard average adult reading pace for online text. Technical or dense material naturally reads slower." }
+        {
+          "q": "How are words counted, exactly?",
+          "a": "Anything separated by spaces or line breaks counts as a word, the same rule word processors use, so hyphenated terms count once and numbers count as words. Counts here will match what Google Docs and Word show for normal prose."
+        },
+        {
+          "q": "Which character count do forms usually mean?",
+          "a": "Almost always characters including spaces, that is what input limits measure. Both figures are shown, so use the one your form specifies."
+        },
+        {
+          "q": "How is reading time estimated?",
+          "a": "Word count divided by 200 words per minute, a standard average adult reading pace for online text. Technical or dense material naturally reads slower."
+        }
       ],
       "libs": [],
       "related": [
@@ -887,9 +1216,18 @@
         "One half of its life is fixing accidental caps lock and shouting emails; the other half is developer renames, turning a heading into a variable name or a filename. Conversion happens on your device."
       ],
       "faq": [
-        { "q": "What is the difference between title case and sentence case?", "a": "Title Case capitalizes the first letter of every word, the style of headlines. Sentence case capitalizes only the first word of each sentence, the style of normal prose." },
-        { "q": "How does camelCase conversion decide where words start?", "a": "Spaces, hyphens and underscores are treated as word boundaries, then the words are joined with each one after the first capitalized. so 'user login count' becomes userLoginCount." },
-        { "q": "Can I fix a paragraph I typed with caps lock on?", "a": "Yes, paste it and click Sentence case. Everything drops to lowercase except the first letter of each sentence, which saves retyping the whole thing." }
+        {
+          "q": "What is the difference between title case and sentence case?",
+          "a": "Title Case capitalizes the first letter of every word, the style of headlines. Sentence case capitalizes only the first word of each sentence, the style of normal prose."
+        },
+        {
+          "q": "How does camelCase conversion decide where words start?",
+          "a": "Spaces, hyphens and underscores are treated as word boundaries, then the words are joined with each one after the first capitalized. so 'user login count' becomes userLoginCount."
+        },
+        {
+          "q": "Can I fix a paragraph I typed with caps lock on?",
+          "a": "Yes, paste it and click Sentence case. Everything drops to lowercase except the first letter of each sentence, which saves retyping the whole thing."
+        }
       ],
       "libs": [],
       "related": [
@@ -911,9 +1249,18 @@
         "The everyday cases: deduplicating an email list, alphabetizing names, cleaning up a log extract, tidying a TODO dump. Lists are processed on your device, so customer data can stay customer data."
       ],
       "faq": [
-        { "q": "How do I remove duplicate lines from a list?", "a": "Paste the list and turn on dedupe. Each line is kept the first time it appears and dropped on repeats; combine with case-insensitive mode to treat Apple and apple as the same entry." },
-        { "q": "Does sorting handle numbers sensibly?", "a": "Sorting is alphabetical, so 10 sorts before 2 because 1 comes before 2 as a character. Pad numbers to the same width, 02 and 10, when you need numeric order." },
-        { "q": "Is it safe to clean up a customer email list here?", "a": "Yes. The list is sorted and deduplicated entirely inside your browser and is never transmitted, unlike pasting it into a random website form that posts to a server." }
+        {
+          "q": "How do I remove duplicate lines from a list?",
+          "a": "Paste the list and turn on dedupe. Each line is kept the first time it appears and dropped on repeats; combine with case-insensitive mode to treat Apple and apple as the same entry."
+        },
+        {
+          "q": "Does sorting handle numbers sensibly?",
+          "a": "Sorting is alphabetical, so 10 sorts before 2 because 1 comes before 2 as a character. Pad numbers to the same width, 02 and 10, when you need numeric order."
+        },
+        {
+          "q": "Is it safe to clean up a customer email list here?",
+          "a": "Yes. The list is sorted and deduplicated entirely inside your browser and is never transmitted, unlike pasting it into a random website form that posts to a server."
+        }
       ],
       "libs": [],
       "related": [
@@ -935,9 +1282,18 @@
         "Placeholder text keeps design reviews focused on layout instead of copy. Generation is instant and local; there is no API and no limit."
       ],
       "faq": [
-        { "q": "What is lorem ipsum and why is it used?", "a": "It is scrambled pseudo-Latin used as placeholder text since the days of print typesetting. Because it reads as natural-length words without meaning anything, viewers judge the layout instead of stopping to read the copy." },
-        { "q": "Does the text always start with 'Lorem ipsum dolor sit amet'?", "a": "The first paragraph starts with the traditional opening, which designers expect. Following paragraphs vary so large blocks do not visibly repeat." },
-        { "q": "Is the generated text really random?", "a": "Sentences are assembled from the classic lorem ipsum vocabulary with randomized lengths and word order, so every generation differs while keeping the familiar look." }
+        {
+          "q": "What is lorem ipsum and why is it used?",
+          "a": "It is scrambled pseudo-Latin used as placeholder text since the days of print typesetting. Because it reads as natural-length words without meaning anything, viewers judge the layout instead of stopping to read the copy."
+        },
+        {
+          "q": "Does the text always start with 'Lorem ipsum dolor sit amet'?",
+          "a": "The first paragraph starts with the traditional opening, which designers expect. Following paragraphs vary so large blocks do not visibly repeat."
+        },
+        {
+          "q": "Is the generated text really random?",
+          "a": "Sentences are assembled from the classic lorem ipsum vocabulary with randomized lengths and word order, so every generation differs while keeping the familiar look."
+        }
       ],
       "libs": [],
       "related": [
@@ -959,9 +1315,18 @@
         "Slugs made this way are safe in URLs, filenames and IDs across every system. The conversion runs live on your device as you type."
       ],
       "faq": [
-        { "q": "What exactly is a slug?", "a": "The human-readable part of a URL that identifies a page, like 'sort-lines' in convertze.com/text/sort-lines. Good slugs are lowercase, hyphenated and short, readable by both people and search engines." },
-        { "q": "What happens to accents and special characters?", "a": "Accented letters are converted to their plain equivalents, é to e, ü to u, and anything that is not a letter or digit becomes a hyphen, with repeats collapsed. The result is pure lowercase ASCII that works everywhere." },
-        { "q": "Are hyphens or underscores better in URLs?", "a": "Hyphens. Search engines treat hyphens as word separators but treat underscores as word joiners, so hyphenated slugs are read as their separate words." }
+        {
+          "q": "What exactly is a slug?",
+          "a": "The human-readable part of a URL that identifies a page, like 'sort-lines' in convertze.com/text/sort-lines. Good slugs are lowercase, hyphenated and short, readable by both people and search engines."
+        },
+        {
+          "q": "What happens to accents and special characters?",
+          "a": "Accented letters are converted to their plain equivalents, é to e, ü to u, and anything that is not a letter or digit becomes a hyphen, with repeats collapsed. The result is pure lowercase ASCII that works everywhere."
+        },
+        {
+          "q": "Are hyphens or underscores better in URLs?",
+          "a": "Hyphens. Search engines treat hyphens as word separators but treat underscores as word joiners, so hyphenated slugs are read as their separate words."
+        }
       ],
       "libs": [],
       "related": [
@@ -978,14 +1343,28 @@
       "h1": "Convert currencies at daily rates",
       "short": "160+ currencies, daily rates, instant conversion.",
       "metaDescription": "Convert between 160+ currencies for free with daily updated exchange rates. USD to INR, EUR to USD, GBP, JPY and more. Instant, no sign-up.",
+      "steps": [
+        "Type an amount and pick the two currencies.",
+        "The conversion updates live as you type.",
+        "Swap the direction with one click."
+      ],
       "about": [
         "Type an amount, pick the two currencies and read the answer, updated live as you type, with the unit rate shown underneath and a one-click swap. Over 160 currencies are covered, with the popular ones at the top of the list.",
         "One honest note: exchange rates are the single thing on Convertze that has to come from the internet. A public daily rates table is downloaded and cached on your device; the amounts you type are never sent anywhere, the math happens locally."
       ],
       "faq": [
-        { "q": "Where do the exchange rates come from?", "a": "From the open ExchangeRate-API feed, refreshed about once a day and cached in your browser for 24 hours. After the first load, the tool even works offline using the cached table." },
-        { "q": "Will I get exactly this rate at a bank or money changer?", "a": "No, treat these as mid-market reference rates. Banks, cards and transfer services add a margin of roughly 0.5 to 4 percent on top, so the amount you actually receive will be a little lower." },
-        { "q": "Is the amount I type sent to a server?", "a": "No. Only a generic rates table is downloaded, the same table for every visitor. Your amounts and currency choices stay on your device, where the conversion is calculated." }
+        {
+          "q": "Where do the exchange rates come from?",
+          "a": "From the open ExchangeRate-API feed, refreshed about once a day and cached in your browser for 24 hours. After the first load, the tool even works offline using the cached table."
+        },
+        {
+          "q": "Will I get exactly this rate at a bank or money changer?",
+          "a": "No, treat these as mid-market reference rates. Banks, cards and transfer services add a margin of roughly 0.5 to 4 percent on top, so the amount you actually receive will be a little lower."
+        },
+        {
+          "q": "Is the amount I type sent to a server?",
+          "a": "No. Only a generic rates table is downloaded, the same table for every visitor. Your amounts and currency choices stay on your device, where the conversion is calculated."
+        }
       ],
       "libs": [],
       "related": [
@@ -1007,9 +1386,18 @@
         "The unit rate is shown underneath, so 1 cm = 0.3937 in stays visible while you work, and one click swaps the direction. Everything computes locally in your browser."
       ],
       "faq": [
-        { "q": "How many centimetres are in an inch?", "a": "An inch is exactly 2.54 centimetres, so divide centimetres by 2.54 to get inches. The converter does this live for any value you type." },
-        { "q": "How accurate are the conversions?", "a": "Exact. Modern imperial units are defined in terms of the metre (an inch is exactly 0.0254 m), so the factors used here are definitions, not approximations. Only the display is rounded." },
-        { "q": "Can I convert between two imperial units, like miles to feet?", "a": "Yes, any unit converts to any other, metric to metric, imperial to imperial or across systems. Pick the pair and the math is instant." }
+        {
+          "q": "How many centimetres are in an inch?",
+          "a": "An inch is exactly 2.54 centimetres, so divide centimetres by 2.54 to get inches. The converter does this live for any value you type."
+        },
+        {
+          "q": "How accurate are the conversions?",
+          "a": "Exact. Modern imperial units are defined in terms of the metre (an inch is exactly 0.0254 m), so the factors used here are definitions, not approximations. Only the display is rounded."
+        },
+        {
+          "q": "Can I convert between two imperial units, like miles to feet?",
+          "a": "Yes, any unit converts to any other, metric to metric, imperial to imperial or across systems. Pick the pair and the math is instant."
+        }
       ],
       "libs": [],
       "related": [
@@ -1017,7 +1405,12 @@
         "calc/area-converter",
         "calc/speed-converter"
       ],
-      "icon": "ruler"
+      "icon": "ruler",
+      "steps": [
+        "Type an amount and pick the two units.",
+        "The conversion updates live as you type.",
+        "Swap the direction with one click."
+      ]
     },
     {
       "path": "calc/weight-converter",
@@ -1031,9 +1424,18 @@
         "The everyday cases: gym weights in pounds, recipes in ounces, parcels in kilograms, supplements in milligrams. One click swaps the direction, and the math runs locally."
       ],
       "faq": [
-        { "q": "How do I convert kg to lbs quickly in my head?", "a": "Multiply by 2.2 for a close estimate; the exact factor is 2.20462. So 70 kg is about 154 lb. The converter uses the exact definition, 1 lb = 0.45359237 kg." },
-        { "q": "Is this ounces of weight or fluid ounces?", "a": "Weight ounces (avoirdupois), the kind used for food and parcels. Fluid ounces measure volume and are a different unit entirely." },
-        { "q": "What is the difference between a tonne and a ton?", "a": "This converter uses the metric tonne, exactly 1000 kg. The US short ton is 907.18 kg and the UK long ton is 1016 kg; if a document just says ton, check which country it comes from." }
+        {
+          "q": "How do I convert kg to lbs quickly in my head?",
+          "a": "Multiply by 2.2 for a close estimate; the exact factor is 2.20462. So 70 kg is about 154 lb. The converter uses the exact definition, 1 lb = 0.45359237 kg."
+        },
+        {
+          "q": "Is this ounces of weight or fluid ounces?",
+          "a": "Weight ounces (avoirdupois), the kind used for food and parcels. Fluid ounces measure volume and are a different unit entirely."
+        },
+        {
+          "q": "What is the difference between a tonne and a ton?",
+          "a": "This converter uses the metric tonne, exactly 1000 kg. The US short ton is 907.18 kg and the UK long ton is 1016 kg; if a document just says ton, check which country it comes from."
+        }
       ],
       "libs": [],
       "related": [
@@ -1041,7 +1443,12 @@
         "calc/bmi-calculator",
         "calc/data-size-converter"
       ],
-      "icon": "scale"
+      "icon": "scale",
+      "steps": [
+        "Type an amount and pick the two units.",
+        "The conversion updates live as you type.",
+        "Swap the direction with one click."
+      ]
     },
     {
       "path": "calc/temperature-converter",
@@ -1055,9 +1462,18 @@
         "Useful for weather in other countries, oven settings in imported recipes, lab work in Kelvin, and settling arguments about whether 98.6 F is actually a fever. Runs locally in your browser."
       ],
       "faq": [
-        { "q": "What is the formula for Celsius to Fahrenheit?", "a": "Multiply by 9/5 and add 32. So 20 C is 68 F. Going the other way, subtract 32 and multiply by 5/9." },
-        { "q": "What is Kelvin and when would I use it?", "a": "Kelvin is the scientific scale that starts at absolute zero, the coldest possible temperature. 0 C equals 273.15 K, and Kelvin steps are the same size as Celsius steps, so it is mostly a shift used in physics and chemistry." },
-        { "q": "At what temperature are Celsius and Fahrenheit equal?", "a": "At minus 40. It is the one point where both scales read the same number, and yes, you can verify it in the converter." }
+        {
+          "q": "What is the formula for Celsius to Fahrenheit?",
+          "a": "Multiply by 9/5 and add 32. So 20 C is 68 F. Going the other way, subtract 32 and multiply by 5/9."
+        },
+        {
+          "q": "What is Kelvin and when would I use it?",
+          "a": "Kelvin is the scientific scale that starts at absolute zero, the coldest possible temperature. 0 C equals 273.15 K, and Kelvin steps are the same size as Celsius steps, so it is mostly a shift used in physics and chemistry."
+        },
+        {
+          "q": "At what temperature are Celsius and Fahrenheit equal?",
+          "a": "At minus 40. It is the one point where both scales read the same number, and yes, you can verify it in the converter."
+        }
       ],
       "libs": [],
       "related": [
@@ -1065,7 +1481,12 @@
         "calc/weight-converter",
         "calc/speed-converter"
       ],
-      "icon": "thermometer"
+      "icon": "thermometer",
+      "steps": [
+        "Type an amount and pick the two units.",
+        "The conversion updates live as you type.",
+        "Swap the direction with one click."
+      ]
     },
     {
       "path": "calc/area-converter",
@@ -1079,9 +1500,18 @@
         "This is the converter real estate keeps busy: apartment listings in square feet, land in acres or hectares, government records in square metres. Everything computes locally."
       ],
       "faq": [
-        { "q": "How many square feet are in a square metre?", "a": "About 10.764. A 1000 sq ft apartment is roughly 93 square metres. The converter uses the exact factor, since a foot is defined as exactly 0.3048 m." },
-        { "q": "What is the difference between an acre and a hectare?", "a": "A hectare is 10,000 square metres; an acre is about 4,047 square metres, so one hectare is roughly 2.47 acres. Acres are common in India, the US and the UK; hectares are the metric standard." },
-        { "q": "Why do property listings mix square feet and square yards?", "a": "Habit and region. North Indian plots are often quoted in square yards (gaj), apartments in square feet, and legal documents in square metres. This tool converts between all of them so you can compare like with like." }
+        {
+          "q": "How many square feet are in a square metre?",
+          "a": "About 10.764. A 1000 sq ft apartment is roughly 93 square metres. The converter uses the exact factor, since a foot is defined as exactly 0.3048 m."
+        },
+        {
+          "q": "What is the difference between an acre and a hectare?",
+          "a": "A hectare is 10,000 square metres; an acre is about 4,047 square metres, so one hectare is roughly 2.47 acres. Acres are common in India, the US and the UK; hectares are the metric standard."
+        },
+        {
+          "q": "Why do property listings mix square feet and square yards?",
+          "a": "Habit and region. North Indian plots are often quoted in square yards (gaj), apartments in square feet, and legal documents in square metres. This tool converts between all of them so you can compare like with like."
+        }
       ],
       "libs": [],
       "related": [
@@ -1089,7 +1519,12 @@
         "calc/percentage-calculator",
         "calc/emi-calculator"
       ],
-      "icon": "gridicon"
+      "icon": "gridicon",
+      "steps": [
+        "Type an amount and pick the two units.",
+        "The conversion updates live as you type.",
+        "Swap the direction with one click."
+      ]
     },
     {
       "path": "calc/speed-converter",
@@ -1103,9 +1538,18 @@
         "Reads foreign speed limits, translates cricket bowling speeds, converts wind speeds from weather reports and makes physics homework less painful. All local, all live."
       ],
       "faq": [
-        { "q": "How do I convert km/h to mph?", "a": "Divide by 1.609. So 100 km/h is about 62 mph. Going the other way, multiply miles per hour by 1.609." },
-        { "q": "What exactly is a knot?", "a": "One nautical mile per hour, about 1.852 km/h. Ships and aircraft use knots because nautical miles line up neatly with degrees of latitude." },
-        { "q": "Why do physics problems use metres per second?", "a": "Because it is the SI unit, and formulas for distance, acceleration and energy come out clean in SI. 1 m/s equals exactly 3.6 km/h, a factor worth memorizing." }
+        {
+          "q": "How do I convert km/h to mph?",
+          "a": "Divide by 1.609. So 100 km/h is about 62 mph. Going the other way, multiply miles per hour by 1.609."
+        },
+        {
+          "q": "What exactly is a knot?",
+          "a": "One nautical mile per hour, about 1.852 km/h. Ships and aircraft use knots because nautical miles line up neatly with degrees of latitude."
+        },
+        {
+          "q": "Why do physics problems use metres per second?",
+          "a": "Because it is the SI unit, and formulas for distance, acceleration and energy come out clean in SI. 1 m/s equals exactly 3.6 km/h, a factor worth memorizing."
+        }
       ],
       "libs": [],
       "related": [
@@ -1113,7 +1557,12 @@
         "calc/temperature-converter",
         "calc/weight-converter"
       ],
-      "icon": "gauge"
+      "icon": "gauge",
+      "steps": [
+        "Type an amount and pick the two units.",
+        "The conversion updates live as you type.",
+        "Swap the direction with one click."
+      ]
     },
     {
       "path": "calc/data-size-converter",
@@ -1127,9 +1576,18 @@
         "That split is why a 500 GB drive shows up as 465 gigabytes in Windows, and this converter makes the difference visible instead of mysterious. All conversions run locally."
       ],
       "faq": [
-        { "q": "Why does my 1 TB drive show less than 1 TB in Windows?", "a": "The drive is sold in decimal terabytes (1 TB = 1,000,000,000,000 bytes) but Windows reports binary tebibytes while calling them TB. 1 TB is about 0.909 TiB, so a 1 TB drive shows roughly 931 GB. Nothing is missing." },
-        { "q": "How many MB are in a GB?", "a": "1000 MB in the decimal system used for storage and bandwidth. If a program is using binary units, 1 GiB is 1024 MiB. This tool has both families so you can convert either way." },
-        { "q": "What is the difference between a bit and a byte?", "a": "A byte is 8 bits. Internet speeds are quoted in bits per second (100 Mbps) while file sizes are in bytes, which is why a 100 Mbps connection downloads at about 12.5 MB per second." }
+        {
+          "q": "Why does my 1 TB drive show less than 1 TB in Windows?",
+          "a": "The drive is sold in decimal terabytes (1 TB = 1,000,000,000,000 bytes) but Windows reports binary tebibytes while calling them TB. 1 TB is about 0.909 TiB, so a 1 TB drive shows roughly 931 GB. Nothing is missing."
+        },
+        {
+          "q": "How many MB are in a GB?",
+          "a": "1000 MB in the decimal system used for storage and bandwidth. If a program is using binary units, 1 GiB is 1024 MiB. This tool has both families so you can convert either way."
+        },
+        {
+          "q": "What is the difference between a bit and a byte?",
+          "a": "A byte is 8 bits. Internet speeds are quoted in bits per second (100 Mbps) while file sizes are in bytes, which is why a 100 Mbps connection downloads at about 12.5 MB per second."
+        }
       ],
       "libs": [],
       "related": [
@@ -1137,7 +1595,12 @@
         "pdf/compress",
         "calc/percentage-calculator"
       ],
-      "icon": "database"
+      "icon": "database",
+      "steps": [
+        "Type an amount and pick the two units.",
+        "The conversion updates live as you type.",
+        "Swap the direction with one click."
+      ]
     },
     {
       "path": "calc/percentage-calculator",
@@ -1151,9 +1614,18 @@
         "Discounts, marks, tips, salary hikes, tax components. No formulas to remember and nothing leaves your browser."
       ],
       "faq": [
-        { "q": "How do I calculate a percentage of a number?", "a": "Multiply the number by the percentage and divide by 100. 18% of 1200 is 1200 x 18 / 100 = 216. The first mode does exactly this." },
-        { "q": "How do I work out percent increase or decrease?", "a": "Take the difference between new and old, divide by the old value, multiply by 100. Going from 250 to 300 is (300 - 250) / 250 x 100 = 20% increase. The third mode handles it, including decreases." },
-        { "q": "What percent did I score if I got 45 out of 80?", "a": "Use the second mode: 45 is 56.25% of 80. It divides the first number by the second and multiplies by 100." }
+        {
+          "q": "How do I calculate a percentage of a number?",
+          "a": "Multiply the number by the percentage and divide by 100. 18% of 1200 is 1200 x 18 / 100 = 216. The first mode does exactly this."
+        },
+        {
+          "q": "How do I work out percent increase or decrease?",
+          "a": "Take the difference between new and old, divide by the old value, multiply by 100. Going from 250 to 300 is (300 - 250) / 250 x 100 = 20% increase. The third mode handles it, including decreases."
+        },
+        {
+          "q": "What percent did I score if I got 45 out of 80?",
+          "a": "Use the second mode: 45 is 56.25% of 80. It divides the first number by the second and multiplies by 100."
+        }
       ],
       "libs": [],
       "related": [
@@ -1175,9 +1647,18 @@
         "The as-of date is adjustable, which is the feature that matters for forms: government applications often want your age on a specific cutoff date, not today. Calculated locally, nothing stored."
       ],
       "faq": [
-        { "q": "How is exact age in years, months and days calculated?", "a": "Calendar arithmetic, not day counting: full years first, then full months, then leftover days, borrowing from the previous month when needed. It is the same method forms and registrars expect." },
-        { "q": "Can I check my age on a specific date, like an exam cutoff?", "a": "Yes, change the as-of date. Applications often require your age as of a cutoff like August 1st, and this shows exactly that instead of your age today." },
-        { "q": "Does the calculation handle leap years?", "a": "Yes. Date arithmetic uses the real calendar, so February 29th birthdays and leap-year day counts come out correctly." }
+        {
+          "q": "How is exact age in years, months and days calculated?",
+          "a": "Calendar arithmetic, not day counting: full years first, then full months, then leftover days, borrowing from the previous month when needed. It is the same method forms and registrars expect."
+        },
+        {
+          "q": "Can I check my age on a specific date, like an exam cutoff?",
+          "a": "Yes, change the as-of date. Applications often require your age as of a cutoff like August 1st, and this shows exactly that instead of your age today."
+        },
+        {
+          "q": "Does the calculation handle leap years?",
+          "a": "Yes. Date arithmetic uses the real calendar, so February 29th birthdays and leap-year day counts come out correctly."
+        }
       ],
       "libs": [],
       "related": [
@@ -1199,9 +1680,18 @@
         "It uses the standard reducing-balance formula every bank uses, which makes it the honest way to compare offers: change the tenure and watch the interest total move. The numbers you type never leave your device."
       ],
       "faq": [
-        { "q": "How is EMI calculated?", "a": "With the reducing-balance formula: EMI = P x r x (1+r)^n / ((1+r)^n - 1), where P is the loan amount, r the monthly interest rate and n the number of months. This is the same formula banks use." },
-        { "q": "Why is the total interest so much more than I expected?", "a": "Long tenures multiply interest. A 10 lakh loan at 9% costs about 8,997 per month over 20 years, but nearly 11.6 lakh in interest, more than the loan itself. Shortening the tenure raises the EMI but cuts the total dramatically, and this calculator lets you watch that trade-off live." },
-        { "q": "Does this include processing fees and insurance?", "a": "No, it shows the pure EMI math. Banks typically add a one-time processing fee (often 0.5 to 1%) and may bundle insurance, so treat those as extras on top when comparing offers." }
+        {
+          "q": "How is EMI calculated?",
+          "a": "With the reducing-balance formula: EMI = P x r x (1+r)^n / ((1+r)^n - 1), where P is the loan amount, r the monthly interest rate and n the number of months. This is the same formula banks use."
+        },
+        {
+          "q": "Why is the total interest so much more than I expected?",
+          "a": "Long tenures multiply interest. A 10 lakh loan at 9% costs about 8,997 per month over 20 years, but nearly 11.6 lakh in interest, more than the loan itself. Shortening the tenure raises the EMI but cuts the total dramatically, and this calculator lets you watch that trade-off live."
+        },
+        {
+          "q": "Does this include processing fees and insurance?",
+          "a": "No, it shows the pure EMI math. Banks typically add a one-time processing fee (often 0.5 to 1%) and may bundle insurance, so treat those as extras on top when comparing offers."
+        }
       ],
       "libs": [],
       "related": [
@@ -1223,9 +1713,18 @@
         "The CGST/SGST split (half and half for intra-state sales) is shown alongside, which is what invoices actually need. Calculated locally, instantly."
       ],
       "faq": [
-        { "q": "How do I remove GST from a total that already includes it?", "a": "Divide the total by 1 plus the rate. An 1180 rupee bill at 18% GST contains a base of 1180 / 1.18 = 1000 and 180 of tax. Pick 'Remove GST' mode and this happens automatically." },
-        { "q": "What are CGST and SGST?", "a": "For sales within a state, GST is split equally between the centre (CGST) and the state (SGST), so an 18% rate appears on invoices as 9% + 9%. Interstate sales use a single IGST at the full rate instead." },
-        { "q": "Which GST rates apply to what?", "a": "Broadly: 5% for essentials and transport, 12% and 18% for most goods and services (18% is the most common), and 28% for luxury and sin goods. Rates change with council decisions, so check the current schedule for your specific item." }
+        {
+          "q": "How do I remove GST from a total that already includes it?",
+          "a": "Divide the total by 1 plus the rate. An 1180 rupee bill at 18% GST contains a base of 1180 / 1.18 = 1000 and 180 of tax. Pick 'Remove GST' mode and this happens automatically."
+        },
+        {
+          "q": "What are CGST and SGST?",
+          "a": "For sales within a state, GST is split equally between the centre (CGST) and the state (SGST), so an 18% rate appears on invoices as 9% + 9%. Interstate sales use a single IGST at the full rate instead."
+        },
+        {
+          "q": "Which GST rates apply to what?",
+          "a": "Broadly: 5% for essentials and transport, 12% and 18% for most goods and services (18% is the most common), and 28% for luxury and sin goods. Rates change with council decisions, so check the current schedule for your specific item."
+        }
       ],
       "libs": [],
       "related": [
@@ -1247,9 +1746,18 @@
         "BMI is a screening number, not a diagnosis: it does not distinguish muscle from fat and reads athletic builds as heavy. Useful as a rough gauge and for forms that ask for it. Your numbers stay on your device."
       ],
       "faq": [
-        { "q": "How is BMI calculated?", "a": "Weight in kilograms divided by height in metres squared. A 70 kg person at 175 cm has a BMI of 70 / 1.75² = 22.9, which falls in the healthy range." },
-        { "q": "What are the healthy BMI ranges?", "a": "WHO adult ranges: under 18.5 is underweight, 18.5 to 24.9 healthy, 25 to 29.9 overweight, 30 and above obese. Some Asian-population guidelines use slightly lower cutoffs, with overweight starting at 23." },
-        { "q": "Is BMI accurate for athletes?", "a": "Not particularly. Muscle is denser than fat, so muscular people often read as overweight despite low body fat. Treat BMI as a population screening tool; waist measurement and body composition tell an individual more." }
+        {
+          "q": "How is BMI calculated?",
+          "a": "Weight in kilograms divided by height in metres squared. A 70 kg person at 175 cm has a BMI of 70 / 1.75² = 22.9, which falls in the healthy range."
+        },
+        {
+          "q": "What are the healthy BMI ranges?",
+          "a": "WHO adult ranges: under 18.5 is underweight, 18.5 to 24.9 healthy, 25 to 29.9 overweight, 30 and above obese. Some Asian-population guidelines use slightly lower cutoffs, with overweight starting at 23."
+        },
+        {
+          "q": "Is BMI accurate for athletes?",
+          "a": "Not particularly. Muscle is denser than fat, so muscular people often read as overweight despite low body fat. Treat BMI as a population screening tool; waist measurement and body composition tell an individual more."
+        }
       ],
       "libs": [],
       "related": [

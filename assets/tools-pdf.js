@@ -512,6 +512,105 @@
     });
   });
 
+  /* ---------- PDF to Markdown ---------- */
+  C.register("pdf/pdf-to-markdown", function (root) {
+    pdfTool(root, {
+      accept: "application/pdf,.pdf",
+      multiple: false,
+      filter: isPdf,
+      badFileMsg: "Please choose a PDF file.",
+      label: "Drop a PDF here",
+      sub: "Digital PDFs only, scans have no text to extract",
+      cta: "Convert to Markdown",
+      run: async function (files, s, status, extra) {
+        needs("PDF rendering", typeof pdfjsLib !== "undefined");
+        var base = C.baseName(files[0].name);
+        var pdf = await pdfjsLib.getDocument({ data: await files[0].arrayBuffer() }).promise;
+        var pages = [];
+        for (var p = 1; p <= pdf.numPages; p++) {
+          status.set("processing", "Reading page " + p + " of " + pdf.numPages + "...");
+          var content = await (await pdf.getPage(p)).getTextContent();
+
+          /* Group text items into visual lines by their y position. */
+          var lines = [];
+          content.items.forEach(function (it) {
+            if (!it.str || !it.str.trim()) return;
+            var y = it.transform[5];
+            var hgt = it.height || Math.abs(it.transform[3]) || 10;
+            var line = null;
+            for (var li = 0; li < lines.length; li++) {
+              if (Math.abs(lines[li].y - y) <= 2.5) { line = lines[li]; break; }
+            }
+            if (!line) { line = { y: y, h: hgt, parts: [] }; lines.push(line); }
+            line.parts.push({ x: it.transform[4], str: it.str });
+            if (hgt > line.h) line.h = hgt;
+          });
+          lines.sort(function (a, b) { return b.y - a.y; });
+          lines.forEach(function (l) {
+            l.parts.sort(function (a, b) { return a.x - b.x; });
+            l.text = l.parts.map(function (pt) { return pt.str; }).join(" ").replace(/\s+/g, " ").trim();
+          });
+
+          /* Body text size = median line height; larger sizes become headings. */
+          var hs = lines.map(function (l) { return l.h; }).sort(function (a, b) { return a - b; });
+          var body = hs.length ? hs[Math.floor(hs.length / 2)] : 10;
+          var headingSizes = [];
+          lines.forEach(function (l) {
+            var r = Math.round(l.h * 2) / 2;
+            if (l.h > body * 1.25 && headingSizes.indexOf(r) === -1) headingSizes.push(r);
+          });
+          headingSizes.sort(function (a, b) { return b - a; });
+
+          var out = [], prevY = null, prevH = body;
+          lines.forEach(function (l) {
+            if (!l.text) return;
+            var tier = headingSizes.indexOf(Math.round(l.h * 2) / 2);
+            var gap = prevY == null ? Infinity : prevY - l.y;
+            if (tier !== -1 && l.text.length < 120) {
+              out.push("");
+              out.push("#".repeat(Math.min(3, tier + 1)) + " " + l.text);
+              out.push("");
+            } else if (/^[•·▪‣∙◦*]\s*/.test(l.text) || /^[-–]\s+/.test(l.text)) {
+              out.push("- " + l.text.replace(/^[•·▪‣∙◦*\-–]\s*/, ""));
+            } else if (/^\d{1,3}[.)]\s+/.test(l.text)) {
+              out.push(l.text.replace(/^(\d{1,3})[.)]\s+/, "$1. "));
+            } else {
+              var last = out.length ? out[out.length - 1] : "";
+              var newPara = gap > Math.max(l.h, prevH) * 1.7;
+              if (!newPara && last && last !== "" && last.charAt(0) !== "#" && last.charAt(0) !== "-" && !/^\d{1,3}\. /.test(last)) {
+                out[out.length - 1] = last + " " + l.text; // continue the paragraph
+              } else {
+                if (newPara && last !== "") out.push("");
+                out.push(l.text);
+              }
+            }
+            prevY = l.y;
+            prevH = l.h || body;
+          });
+          pages.push(out.join("\n").replace(/\n{3,}/g, "\n\n").trim());
+        }
+        var md = pages.filter(Boolean).join("\n\n");
+        extra.innerHTML = "";
+        if (!md.trim()) {
+          status.set("error", "No text layer found, this looks like a scanned PDF (it needs OCR).");
+          return;
+        }
+        var pre = h("pre", { class: "outbox", text: md });
+        extra.appendChild(h("div", { class: "ta-label", style: "margin-top:14px" }, [
+          h("span", { text: "Markdown (" + pdf.numPages + " pages)" }),
+          h("span", { class: "mini-btns" }, [
+            h("button", { class: "mini primary", type: "button", text: "Copy", onclick: function () { C.copyText(md); } }),
+            h("button", { class: "mini", type: "button", text: "Download .md", onclick: function () {
+              C.download(new Blob([md], { type: "text/markdown" }), base + ".md");
+            } })
+          ])
+        ]));
+        extra.appendChild(pre);
+        status.set("done", "Converted " + pdf.numPages + " page(s) to Markdown. Check headings and lists, structure is inferred.");
+      }
+    });
+  });
+
   /* ---------- Rotate PDF ---------- */
   C.register("pdf/rotate", function (root) {
     pdfTool(root, {
