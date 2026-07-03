@@ -559,17 +559,140 @@
     var state = { pdfBytes: null, pdfDoc: null, pageCount: 0, pageIndex: 0, placed: null, fileName: "" };
     var status;
 
-    /* Signature pad: transparent canvas, dark ink, white CSS background. */
+    /* Handwriting fonts for typed signatures, loaded only on this page. */
+    if (!document.getElementById("sig-fonts")) {
+      document.head.appendChild(h("link", {
+        id: "sig-fonts", rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Great+Vibes&family=Dancing+Script:wght@600&family=Caveat:wght@600&display=swap"
+      }));
+    }
+
+    /* Three signature sources: draw on a pad, type a name, or upload an image. */
+    var sigMode = "draw";
+    var typedCache = null, uploadCache = null, uploadFile = null;
+
     var pad = h("canvas", { class: "sig-pad", "aria-label": "Draw your signature here" });
+    var drawSection = h("div", null, [pad]);
+
+    var typedInput = h("input", { class: "single-input", type: "text", placeholder: "Type your name...", "aria-label": "Type your signature", style: "max-width:280px" });
+    var fontSel = h("select", { "aria-label": "Signature style" }, [
+      h("option", { value: "Great Vibes", text: "Elegant script" }),
+      h("option", { value: "Dancing Script", text: "Flowing script" }),
+      h("option", { value: "Caveat", text: "Handwritten" })
+    ]);
+    var typePreview = h("img", { class: "sig-preview", alt: "Typed signature preview", style: "display:none" });
+    var typeSection = h("div", { style: "display:none" }, [
+      h("div", { class: "opts", style: "margin:0 0 10px" }, [
+        h("label", { class: "field" }, [typedInput]),
+        h("label", { class: "field" }, ["Style ", fontSel])
+      ]),
+      typePreview
+    ]);
+
+    var uploadInput = h("input", { type: "file", accept: "image/png,image/jpeg,image/webp", hidden: true, "aria-label": "Upload signature image" });
+    var whiteBox = h("input", { type: "checkbox" });
+    whiteBox.checked = true;
+    var uploadPreview = h("img", { class: "sig-preview", alt: "Uploaded signature preview", style: "display:none" });
+    var uploadSection = h("div", { style: "display:none" }, [
+      h("div", { class: "opts", style: "margin:0 0 10px" }, [
+        h("button", { class: "mini primary", type: "button", text: "Choose image...", onclick: function () { uploadInput.click(); } }),
+        h("label", { class: "field" }, [whiteBox, "Make white background transparent"])
+      ]),
+      uploadPreview,
+      uploadInput
+    ]);
+
+    var modeBtns = {};
+    var modeRow = h("span", { class: "mini-btns" }, ["draw", "type", "upload"].map(function (m) {
+      var label = m === "draw" ? "Draw" : m === "type" ? "Type" : "Upload image";
+      var b = h("button", { class: "mini" + (m === sigMode ? " on" : ""), type: "button", text: label });
+      b.addEventListener("click", function () {
+        sigMode = m;
+        Object.keys(modeBtns).forEach(function (k) { modeBtns[k].classList.toggle("on", k === sigMode); });
+        drawSection.style.display = m === "draw" ? "" : "none";
+        typeSection.style.display = m === "type" ? "" : "none";
+        uploadSection.style.display = m === "upload" ? "" : "none";
+        syncPlacedImage();
+      });
+      modeBtns[m] = b;
+      return b;
+    }));
+
     var padWrap = h("div", null, [
       h("div", { class: "ta-label" }, [
-        h("span", { text: "1. Draw your signature" }),
+        h("span", { text: "1. Your signature" }),
         h("span", { class: "mini-btns" }, [
-          h("button", { class: "mini", type: "button", text: "Clear", onclick: clearPad })
+          modeRow,
+          h("button", { class: "mini", type: "button", text: "Clear", onclick: clearSignature })
         ])
       ]),
-      pad
+      drawSection,
+      typeSection,
+      uploadSection
     ]);
+
+    async function renderTyped() {
+      var text = typedInput.value.trim();
+      if (!text) { typedCache = null; typePreview.style.display = "none"; syncPlacedImage(); return; }
+      var fam = fontSel.value;
+      try { await document.fonts.load('600 72px "' + fam + '"', text); } catch (e) { /* font falls back to cursive */ }
+      var cv = document.createElement("canvas");
+      var probe = cv.getContext("2d");
+      probe.font = '600 72px "' + fam + '", cursive';
+      cv.width = Math.max(60, Math.ceil(probe.measureText(text).width) + 48);
+      cv.height = 130;
+      var ctx = cv.getContext("2d");
+      ctx.font = '600 72px "' + fam + '", cursive';
+      ctx.fillStyle = "#1e293b";
+      ctx.textBaseline = "middle";
+      ctx.fillText(text, 24, 68);
+      typedCache = cv;
+      typePreview.src = cv.toDataURL("image/png");
+      typePreview.style.display = "";
+      syncPlacedImage();
+    }
+    typedInput.addEventListener("input", debounceSig(renderTyped, 250));
+    fontSel.addEventListener("change", renderTyped);
+    function debounceSig(fn, ms) {
+      var t;
+      return function () { clearTimeout(t); t = setTimeout(fn, ms); };
+    }
+
+    async function processUpload() {
+      if (!uploadFile) return;
+      var loaded = await C.loadImage(uploadFile);
+      var img = loaded.img;
+      var sc = Math.min(1, 800 / img.naturalWidth);
+      var cv = document.createElement("canvas");
+      cv.width = Math.max(1, Math.round(img.naturalWidth * sc));
+      cv.height = Math.max(1, Math.round(img.naturalHeight * sc));
+      var ctx = cv.getContext("2d");
+      ctx.drawImage(img, 0, 0, cv.width, cv.height);
+      loaded.revoke();
+      if (whiteBox.checked) {
+        var d = ctx.getImageData(0, 0, cv.width, cv.height);
+        for (var i = 0; i < d.data.length; i += 4) {
+          if (d.data[i] > 232 && d.data[i + 1] > 232 && d.data[i + 2] > 232) d.data[i + 3] = 0;
+        }
+        ctx.putImageData(d, 0, 0);
+      }
+      uploadCache = cv;
+      uploadPreview.src = cv.toDataURL("image/png");
+      uploadPreview.style.display = "";
+      syncPlacedImage();
+    }
+    uploadInput.addEventListener("change", function () {
+      if (uploadInput.files[0]) { uploadFile = uploadInput.files[0]; processUpload(); }
+      uploadInput.value = "";
+    });
+    whiteBox.addEventListener("change", processUpload);
+
+    function clearSignature() {
+      if (sigMode === "draw") clearPad();
+      else if (sigMode === "type") { typedInput.value = ""; typedCache = null; typePreview.style.display = "none"; }
+      else { uploadFile = null; uploadCache = null; uploadPreview.style.display = "none"; }
+      syncPlacedImage();
+    }
     var padCtx, hasInk = false;
     function setupPad() {
       var dpr = window.devicePixelRatio || 1;
@@ -617,8 +740,14 @@
       pad.addEventListener(ev, function () { drawing = false; syncPlacedImage(); });
     });
 
-    /* Crop the pad to the inked bounding box so placement is tight. */
     function signatureImage() {
+      if (sigMode === "type") return typedCache;
+      if (sigMode === "upload") return uploadCache;
+      return padCrop();
+    }
+
+    /* Crop the pad to the inked bounding box so placement is tight. */
+    function padCrop() {
       if (!hasInk) return null;
       var w = pad.width, hh = pad.height;
       var data = pad.getContext("2d").getImageData(0, 0, w, hh).data;
@@ -715,7 +844,12 @@
 
     function placeOnPage() {
       var sig = signatureImage();
-      if (!sig) { status.set("error", "Draw a signature first (box above)."); return; }
+      if (!sig) {
+        status.set("error", sigMode === "type" ? "Type your name first (box above)."
+          : sigMode === "upload" ? "Choose a signature image first (box above)."
+          : "Draw a signature first (box above).");
+        return;
+      }
       if (!state.pdfDoc) { status.set("error", "Drop a PDF first."); return; }
       state.placed = { page: state.pageIndex, xr: 0.55, yr: 0.75, wr: parseInt(sizeSlider.value, 10) / 100 };
       applyBtn.disabled = false;
@@ -794,6 +928,12 @@
 
     C.onClear(function () {
       clearPad();
+      typedInput.value = "";
+      typedCache = null;
+      typePreview.style.display = "none";
+      uploadFile = null;
+      uploadCache = null;
+      uploadPreview.style.display = "none";
       state.placed = null;
       applyBtn.disabled = true;
       status.set("idle", "Cleared.");

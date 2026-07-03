@@ -299,15 +299,16 @@
       "cat": "pdf",
       "name": "Sign PDF",
       "h1": "Sign a PDF, draw and place your signature",
-      "short": "Draw a signature, drag it onto any page, download.",
-      "metaDescription": "Sign a PDF online for free: draw your signature, place it on any page and download. The document never leaves your device, no accounts, no watermark.",
+      "short": "Draw, type or upload a signature, place it on any page.",
+      "metaDescription": "Sign a PDF online for free: draw your signature, type your name in a script style, or upload a signature image, then place it on any page. The document never leaves your device.",
       "about": [
-        "Draw your signature with a mouse, finger or stylus, pick the page, place the signature exactly where it belongs by dragging it, set the size, and download the signed PDF. The signature is embedded into the document as a clean transparent image.",
+        "Three ways to make your signature: draw it with a mouse, finger or stylus, type your name and pick a handwriting style, or upload a photo of your real signature (white paper backgrounds are made transparent automatically). Then pick the page, drag the signature into position, set the size and download.",
         "Contracts, agreements and forms are exactly the documents you should not be uploading to random websites. Here the PDF is rendered, signed and rebuilt entirely by your browser; it never crosses the network."
       ],
       "faq": [
         { "q": "Is my contract uploaded while signing?", "a": "No, and that is the whole point of this tool. The PDF is rendered by pdf.js and rebuilt with your signature by pdf-lib, both running inside your browser tab. Nothing is transmitted anywhere." },
-        { "q": "Is this a legally binding signature?", "a": "It places a drawn signature image on the document, which is how most everyday PDFs are signed and widely accepted. It is not a cryptographic digital certificate; for certificate-based signing (like a notarised e-sign) you need a certificate authority service." },
+        { "q": "Can I upload a photo of my signature or type my name instead of drawing?", "a": "Yes, both. Upload a photo or scan and the white paper background is stripped out automatically so only the ink lands on the page, or type your name and choose one of the handwriting styles." },
+        { "q": "Is this a legally binding signature?", "a": "It places a signature image on the document, which is how most everyday PDFs are signed and widely accepted. It is not a cryptographic digital certificate; for certificate-based signing (like a notarised e-sign) you need a certificate authority service." },
         { "q": "Can I sign on a specific page or sign multiple times?", "a": "Yes, use the page arrows to pick any page and drag the signature where you want it. For a second signature, run the tool again on the file you just downloaded, it takes seconds since nothing re-uploads." }
       ],
       "libs": [
