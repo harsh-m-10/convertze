@@ -1,4 +1,4 @@
-const CACHE_NAME = "convertze-bcb20a77";
+const CACHE_NAME = "convertze-3fb03d72";
 const APP_SHELL = [
   "/",
   "/images",
@@ -27,7 +27,10 @@ const CDN_ASSETS = [
   "https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js",
   "https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js",
   "https://cdnjs.cloudflare.com/ajax/libs/spark-md5/3.0.2/spark-md5.min.js",
-  "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"
+  "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js",
+  "https://cdnjs.cloudflare.com/ajax/libs/heic2any/0.0.4/heic2any.min.js",
+  "https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.1.1/tesseract.min.js",
+  "https://cdnjs.cloudflare.com/ajax/libs/sql-formatter/15.3.2/sql-formatter.min.js"
 ];
 
 self.addEventListener("install", (event) => {

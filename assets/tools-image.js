@@ -74,10 +74,12 @@
       label: cfg.label,
       sub: cfg.sub || (cfg.multiple ? "or click to browse, multiple files supported" : "or click to browse"),
       onFiles: function (files) {
-        var ok = cfg.allowSvg
-          ? files
-          : files.filter(function (f) { return /^image\//.test(f.type) && !/svg/.test(f.type); });
-        if (!ok.length) { status.set("error", "Please choose image files (JPG, PNG or WebP)."); return; }
+        var ok = cfg.fileFilter
+          ? files.filter(cfg.fileFilter)
+          : cfg.allowSvg
+            ? files
+            : files.filter(function (f) { return /^image\//.test(f.type) && !/svg/.test(f.type); });
+        if (!ok.length) { status.set("error", cfg.badFileMsg || "Please choose image files (JPG, PNG or WebP)."); return; }
         state.files = cfg.multiple ? state.files.concat(ok) : [ok[0]];
         renderList();
         status.set("done", state.files.length + " file" + (state.files.length > 1 ? "s" : "") + " ready.");
@@ -111,13 +113,22 @@
         var outputs = [];
         for (var i = 0; i < state.files.length; i++) {
           var file = state.files[i];
-          var loaded = await C.loadImage(file);
-          var out = await cfg.transform(loaded.img, file, settings);
-          loaded.revoke();
-          var blob = out.blob || await C.canvasToBlob(out.canvas, MIME[out.fmt], out.quality != null ? out.quality : 0.92);
-          var name = C.baseName(file.name) + (out.suffix || "") + "." + out.fmt;
-          outputs.push({ name: name, data: blob });
-          results.add({ name: name, blob: blob, meta: out.meta, noPreview: out.fmt === "zip" });
+          var out;
+          if (cfg.raw) {
+            out = await cfg.transform(null, file, settings);
+          } else {
+            var loaded = await C.loadImage(file);
+            out = await cfg.transform(loaded.img, file, settings);
+            loaded.revoke();
+          }
+          var parts = out.multi || [out];
+          for (var j = 0; j < parts.length; j++) {
+            var part = parts[j];
+            var blob = part.blob || await C.canvasToBlob(part.canvas, MIME[part.fmt], part.quality != null ? part.quality : 0.92);
+            var name = C.baseName(file.name) + (part.suffix || "") + "." + part.fmt;
+            outputs.push({ name: name, data: blob });
+            results.add({ name: name, blob: blob, meta: part.meta, noPreview: part.fmt === "zip" });
+          }
         }
         var delivered = await C.deliver(outputs, cfg.zipName || "convertze_images.zip");
         status.set("done", "Done, downloaded " + delivered + ".");
@@ -495,6 +506,108 @@
         return { canvas: canvas, fmt: "png", suffix: "@" + s.scale + "x", meta: canvas.width + "×" + canvas.height };
       }
     });
+  });
+
+  /* ---------- HEIC to JPG ---------- */
+  function isHeic(f) { return /\.(heic|heif)$/i.test(f.name) || /hei[cf]/.test(f.type); }
+  C.register("images/heic-to-jpg", function (root) {
+    imageTool(root, {
+      accept: ".heic,.heif,image/heic,image/heif",
+      multiple: true,
+      raw: true,
+      fileFilter: isHeic,
+      badFileMsg: "Please choose .heic or .heif files (iPhone photos).",
+      label: "Drop HEIC photos here",
+      sub: "or click to browse, whole batches welcome",
+      cta: "Convert to JPG",
+      zipName: "convertze_heic_jpg.zip",
+      options: function (row) {
+        var q = h("input", { type: "range", min: "50", max: "100", value: "90" });
+        var qv = h("span", { text: "90" });
+        q.addEventListener("input", function () { qv.textContent = q.value; });
+        row.appendChild(h("label", { class: "field" }, ["Quality ", q, qv, "%"]));
+        return function () { return { quality: parseInt(q.value, 10) / 100 }; };
+      },
+      transform: async function (img, file, s) {
+        if (typeof heic2any === "undefined") throw new Error("HEIC decoder failed to load, check your connection and refresh.");
+        var res;
+        try {
+          res = await heic2any({ blob: file, toType: "image/jpeg", quality: s.quality });
+        } catch (e) {
+          throw new Error(file.name + " could not be decoded, is it really a HEIC file?");
+        }
+        if (Array.isArray(res)) {
+          return { multi: res.map(function (b, i) { return { blob: b, fmt: "jpg", suffix: res.length > 1 ? "_" + (i + 1) : "" }; }) };
+        }
+        return { blob: res, fmt: "jpg" };
+      }
+    });
+  });
+
+  /* ---------- Image to text (OCR) ---------- */
+  C.register("images/image-to-text", function (root) {
+    var state = { file: null };
+    var lang = h("select", { "aria-label": "Language" }, [
+      h("option", { value: "eng", text: "English" }),
+      h("option", { value: "hin", text: "Hindi" }),
+      h("option", { value: "eng+hin", text: "English + Hindi" })
+    ]);
+    var btn = h("button", { class: "btn", type: "button", disabled: true, text: "Extract text" });
+    var status, extra;
+
+    C.dropzone(root, {
+      accept: "image/*",
+      multiple: false,
+      label: "Drop an image or screenshot here",
+      sub: "JPG, PNG or WebP with readable text",
+      onFiles: function (files) {
+        var f = files.filter(function (x) { return /^image\//.test(x.type); })[0];
+        if (!f) { status.set("error", "Please choose an image file."); return; }
+        state.file = f;
+        status.set("done", f.name + " ready. The recognition model downloads on first use (a few MB).");
+        btn.disabled = false;
+      }
+    });
+    root.appendChild(h("div", { class: "opts" }, [h("label", { class: "field" }, ["Language ", lang])]));
+    root.appendChild(h("div", { class: "actions-row" }, [btn]));
+    status = C.makeStatus(root);
+    extra = h("div");
+    root.appendChild(extra);
+
+    btn.addEventListener("click", async function () {
+      if (!state.file || btn.disabled) return;
+      if (typeof Tesseract === "undefined") { status.set("error", "OCR engine failed to load, check your connection and refresh."); return; }
+      btn.disabled = true;
+      extra.innerHTML = "";
+      try {
+        var result = await Tesseract.recognize(state.file, lang.value, {
+          logger: function (m) {
+            if (m.status && typeof m.progress === "number") {
+              status.set("processing", m.status.charAt(0).toUpperCase() + m.status.slice(1) + "... " + Math.round(m.progress * 100) + "%");
+            }
+          }
+        });
+        var text = (result.data.text || "").trim();
+        if (!text) { status.set("error", "No readable text found in that image."); btn.disabled = false; return; }
+        var base = C.baseName(state.file.name);
+        extra.appendChild(h("div", { class: "ta-label", style: "margin-top:14px" }, [
+          h("span", { text: "Extracted text" }),
+          h("span", { class: "mini-btns" }, [
+            h("button", { class: "mini primary", type: "button", text: "Copy", onclick: function () { C.copyText(text); } }),
+            h("button", { class: "mini", type: "button", text: "Download .txt", onclick: function () {
+              C.download(new Blob([text], { type: "text/plain" }), base + ".txt");
+            } })
+          ])
+        ]));
+        extra.appendChild(h("pre", { class: "outbox", text: text }));
+        status.set("done", "Done. OCR is never perfect, give it a quick read.");
+      } catch (e) {
+        status.set("error", e && e.message ? e.message : "Recognition failed.");
+      }
+      btn.disabled = false;
+    });
+    C.onRun(function () { btn.click(); });
+    C.onClear(function () { state.file = null; btn.disabled = true; extra.innerHTML = ""; status.set("idle", "Cleared."); });
   });
 
   C.boot();

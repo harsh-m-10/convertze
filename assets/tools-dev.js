@@ -836,6 +836,237 @@
     run();
   });
 
+  /* ---------- SQL formatter ---------- */
+  C.register("dev/sql-formatter", function (root) {
+    duoTool(root, {
+      inLabel: "SQL input",
+      outLabel: "Formatted",
+      placeholder: "select id, name from users where active = 1 order by name",
+      accept: ".sql,text/plain",
+      hashKey: "sql",
+      downloadName: function () { return "formatted.sql"; },
+      controls: function (bar, rerun) {
+        var dialect = h("select", { "aria-label": "SQL dialect" }, [
+          h("option", { value: "sql", text: "Standard SQL" }),
+          h("option", { value: "mysql", text: "MySQL" },),
+          h("option", { value: "postgresql", text: "PostgreSQL" }),
+          h("option", { value: "sqlite", text: "SQLite" })
+        ]);
+        var kw = h("select", { "aria-label": "Keyword case" }, [
+          h("option", { value: "upper", text: "KEYWORDS UPPER" }),
+          h("option", { value: "preserve", text: "keep keyword case" })
+        ]);
+        [dialect, kw].forEach(function (el) { el.addEventListener("change", rerun); });
+        bar.appendChild(h("label", { class: "field" }, ["Dialect ", dialect]));
+        bar.appendChild(h("label", { class: "field" }, [kw]));
+        return function () { return { dialect: dialect.value, kw: kw.value }; };
+      },
+      transform: function (text, s) {
+        if (typeof sqlFormatter === "undefined") throw new Error("Formatter library failed to load, check your connection and refresh.");
+        return sqlFormatter.format(text, { language: s.dialect, keywordCase: s.kw === "upper" ? "upper" : "preserve", tabWidth: 2 });
+      }
+    });
+  });
+
+  /* ---------- XML formatter ---------- */
+  function parseXml(text) {
+    var doc = new DOMParser().parseFromString(text, "application/xml");
+    var errNode = doc.querySelector("parsererror");
+    if (errNode) {
+      var msg = (errNode.textContent || "Invalid XML").split("\n")[0].trim();
+      throw new Error(msg.length > 160 ? msg.slice(0, 160) + "..." : msg);
+    }
+    return doc;
+  }
+  function serializeXml(node, indent, minify) {
+    var pad = minify ? "" : "  ".repeat(indent);
+    var nl = minify ? "" : "\n";
+    if (node.nodeType === 3) { // text
+      var t = node.textContent.trim();
+      return t ? pad + t.replace(/&/g, "&amp;").replace(/</g, "&lt;") + nl : "";
+    }
+    if (node.nodeType === 4) return pad + "<![CDATA[" + node.textContent + "]]>" + nl; // cdata
+    if (node.nodeType === 8) return pad + "<!--" + node.textContent + "-->" + nl; // comment
+    if (node.nodeType !== 1) return "";
+    var name = node.nodeName;
+    var attrs = Array.prototype.map.call(node.attributes || [], function (a) {
+      return " " + a.name + '="' + a.value.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;") + '"';
+    }).join("");
+    var kids = Array.prototype.filter.call(node.childNodes, function (k) {
+      return k.nodeType === 1 || k.nodeType === 4 || k.nodeType === 8 || (k.nodeType === 3 && k.textContent.trim());
+    });
+    if (!kids.length) return pad + "<" + name + attrs + "/>" + nl;
+    if (kids.length === 1 && kids[0].nodeType === 3) {
+      return pad + "<" + name + attrs + ">" + kids[0].textContent.trim().replace(/&/g, "&amp;").replace(/</g, "&lt;") + "</" + name + ">" + nl;
+    }
+    var inner = kids.map(function (k) { return serializeXml(k, indent + 1, minify); }).join("");
+    return pad + "<" + name + attrs + ">" + nl + inner + pad + "</" + name + ">" + nl;
+  }
+  C.register("dev/xml-formatter", function (root) {
+    duoTool(root, {
+      inLabel: "XML input",
+      outLabel: "Result",
+      placeholder: "<config><name>demo</name><flags a=\"1\"/></config>",
+      accept: ".xml,text/xml,application/xml",
+      hashKey: "xml",
+      downloadName: function (s) { return s.mode === "minify" ? "minified.xml" : "formatted.xml"; },
+      controls: function (bar, rerun) {
+        var mode = h("select", { "aria-label": "Mode" }, [
+          h("option", { value: "beautify", text: "Beautify" }),
+          h("option", { value: "minify", text: "Minify" })
+        ]);
+        mode.addEventListener("change", rerun);
+        bar.appendChild(h("label", { class: "field" }, ["Mode ", mode]));
+        return function () { return { mode: mode.value }; };
+      },
+      transform: function (text, s) {
+        var decl = /^\s*<\?xml[^?]*\?>/.exec(text);
+        var doc = parseXml(text);
+        var minify = s.mode === "minify";
+        var body = Array.prototype.map.call(doc.childNodes, function (n) {
+          return serializeXml(n, 0, minify);
+        }).join("");
+        return ((decl ? decl[0].trim() + (minify ? "" : "\n") : "") + body).trim();
+      }
+    });
+  });
+
+  /* ---------- Cron explainer ---------- */
+  C.register("dev/cron", function (root) {
+    var input = h("input", { class: "single-input", type: "text", value: "*/15 9-17 * * 1-5", spellcheck: "false", style: "font-family:var(--mono);max-width:320px", "aria-label": "Cron expression" });
+    var err = h("div", { class: "ta-err", role: "alert" });
+    var desc = h("div", { class: "outbox", style: "font-family:Inter,ui-sans-serif,sans-serif;font-size:16px;font-weight:600;max-height:none", text: "-" });
+    var runsBox = h("pre", { class: "outbox", style: "margin-top:13px" });
+    var presets = h("span", { class: "mini-btns" }, [
+      ["0 0 * * *", "Daily midnight"],
+      ["*/15 * * * *", "Every 15 min"],
+      ["0 9 * * 1-5", "Weekdays 9am"],
+      ["0 0 1 * *", "Monthly"]
+    ].map(function (p) {
+      var b = h("button", { class: "mini", type: "button", text: p[1] });
+      b.addEventListener("click", function () { input.value = p[0]; run(); });
+      return b;
+    }));
+
+    root.appendChild(h("div", { class: "opts" }, [h("label", { class: "field" }, ["Expression ", input]), presets]));
+    root.appendChild(err);
+    root.appendChild(h("div", { class: "ta-label", style: "margin-top:13px" }, [h("span", { text: "In plain English" })]));
+    root.appendChild(desc);
+    root.appendChild(h("div", { class: "ta-label", style: "margin-top:13px" }, [h("span", { text: "Next 5 runs (your local time)" })]));
+    root.appendChild(runsBox);
+
+    var MONTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+    var DAYS = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
+    var DAY_FULL = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    var MONTH_FULL = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+    function parseField(field, min, max, names) {
+      var set = {};
+      var restricted = true;
+      field.toLowerCase().split(",").forEach(function (token) {
+        var step = 1;
+        var stepM = token.match(/^(.+)\/(\d+)$/);
+        if (stepM) { token = stepM[1]; step = parseInt(stepM[2], 10); if (!step) throw new Error("Step of 0 in '" + field + "'."); }
+        var lo, hi;
+        if (token === "*") { lo = min; hi = max; if (step === 1) restricted = false; }
+        else {
+          var rangeM = token.match(/^(.+)-(.+)$/);
+          function val(x) {
+            if (names) { var i = names.indexOf(x.slice(0, 3)); if (i !== -1) return i + (names === MONTHS ? 1 : 0); }
+            var n = parseInt(x, 10);
+            if (!isFinite(n)) throw new Error("'" + x + "' isn't valid in '" + field + "'.");
+            return n;
+          }
+          if (rangeM) { lo = val(rangeM[1]); hi = val(rangeM[2]); }
+          else { lo = hi = val(token); }
+        }
+        if (names === DAYS) { if (lo === 7) lo = 0; if (hi === 7) hi = 0; }
+        if (lo < min || hi > max || lo > hi) throw new Error("'" + field + "' is out of range (" + min + "-" + max + ").");
+        for (var v = lo; v <= hi; v += step) set[v] = true;
+      });
+      return { set: set, restricted: restricted, text: field };
+    }
+
+    function parseCron(expr) {
+      var parts = expr.trim().split(/\s+/);
+      if (parts.length !== 5) throw new Error("A cron expression has 5 fields (minute hour day month weekday), this has " + parts.length + ".");
+      return {
+        min: parseField(parts[0], 0, 59),
+        hour: parseField(parts[1], 0, 23),
+        dom: parseField(parts[2], 1, 31),
+        mon: parseField(parts[3], 1, 12, MONTHS),
+        dow: parseField(parts[4], 0, 7, DAYS)
+      };
+    }
+
+    function listText(f, mapper) {
+      var vals = Object.keys(f.set).map(Number).sort(function (a, b) { return a - b; });
+      var shown = vals.slice(0, 6).map(mapper);
+      return shown.join(", ") + (vals.length > 6 ? " and " + (vals.length - 6) + " more" : "");
+    }
+
+    function describe(c, expr) {
+      var stepM = expr.trim().split(/\s+/)[0].match(/^\*\/(\d+)$/);
+      var time;
+      var mins = Object.keys(c.min.set), hrs = Object.keys(c.hour.set);
+      if (stepM && !c.hour.restricted) time = "Every " + stepM[1] + " minutes";
+      else if (stepM) time = "Every " + stepM[1] + " minutes between " + listText(c.hour, function (hh) { return hh + ":00"; });
+      else if (mins.length === 1 && hrs.length === 1) time = "At " + String(hrs[0]).padStart(2, "0") + ":" + String(mins[0]).padStart(2, "0");
+      else if (mins.length === 1 && !c.hour.restricted) time = "At minute " + mins[0] + " of every hour";
+      else time = "At minute " + listText(c.min, String) + (c.hour.restricted ? " past hour " + listText(c.hour, String) : " of every hour");
+      var when = [];
+      if (c.dom.restricted) when.push("on day " + listText(c.dom, String) + " of the month");
+      if (c.dow.restricted) when.push((c.dom.restricted ? "or " : "") + "on " + listText(c.dow, function (d) { return DAY_FULL[d]; }));
+      if (c.mon.restricted) when.push("in " + listText(c.mon, function (m) { return MONTH_FULL[m - 1]; }));
+      return time + (when.length ? ", " + when.join(", ") : ", every day") + ".";
+    }
+
+    function nextRuns(c, count) {
+      var runs = [];
+      var t = new Date();
+      t.setSeconds(0, 0);
+      t.setMinutes(t.getMinutes() + 1);
+      var domAny = !c.dom.restricted, dowAny = !c.dow.restricted;
+      for (var i = 0; i < 750000 && runs.length < count; i++) {
+        var dayOk = (domAny && dowAny) ||
+          (!domAny && !dowAny && (c.dom.set[t.getDate()] || c.dow.set[t.getDay()])) ||
+          (!domAny && dowAny && c.dom.set[t.getDate()]) ||
+          (domAny && !dowAny && c.dow.set[t.getDay()]);
+        if (c.mon.set[t.getMonth() + 1] && dayOk && c.hour.set[t.getHours()] && c.min.set[t.getMinutes()]) {
+          runs.push(new Date(t));
+        }
+        t.setMinutes(t.getMinutes() + 1);
+      }
+      return runs;
+    }
+
+    function run() {
+      err.classList.remove("show");
+      var expr = input.value.trim();
+      if (!expr) { desc.textContent = "-"; runsBox.textContent = ""; return; }
+      try {
+        var c = parseCron(expr);
+        desc.textContent = describe(c, expr);
+        var runs = nextRuns(c, 5);
+        runsBox.textContent = runs.length
+          ? runs.map(function (d) { return d.toLocaleString(undefined, { weekday: "short", year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }); }).join("\n")
+          : "No runs in the next year, check the expression.";
+        C.hashState.save({ i: expr });
+      } catch (e) {
+        desc.textContent = "-";
+        runsBox.textContent = "";
+        err.textContent = e.message;
+        err.classList.add("show");
+      }
+    }
+    input.addEventListener("input", debounce(run, 200));
+    C.onRun(run);
+    C.onClear(function () { input.value = ""; run(); });
+    var st = C.hashState.load();
+    if (st && st.i) input.value = st.i;
+    run();
+  });
+
   /* ---------- UUID generator ---------- */
   C.register("dev/uuid", function (root) {
     var count = h("input", { type: "number", value: "1", min: "1", max: "1000", "aria-label": "How many UUIDs" });

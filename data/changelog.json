@@ -1,5 +1,16 @@
 [
   {
+    "date": "July 4, 2026",
+    "title": "HEIC, OCR and the missing power tools",
+    "items": [
+      "HEIC to JPG: convert iPhone photos in batches, decoded on your device",
+      "Image to Text: OCR for screenshots and documents, English and Hindi",
+      "Watermark PDF and Reorder/Delete PDF pages with thumbnails",
+      "SQL formatter, XML formatter and a cron expression explainer",
+      "Invoice generator: GST-ready PDF invoices with no watermark"
+    ]
+  },
+  {
     "date": "July 3, 2026",
     "title": "PDF to Markdown and community fixes",
     "items": [

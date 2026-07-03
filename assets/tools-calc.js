@@ -466,5 +466,168 @@
     run();
   });
 
+  /* ---------- Invoice generator ---------- */
+  C.register("calc/invoice-generator", function (root) {
+    var DRAFT_KEY = "convertze-invoice-draft";
+    function field(label, ph, wide) {
+      var input = h("input", { class: "single-input", type: "text", placeholder: ph || "", style: wide ? "width:100%" : "max-width:220px" });
+      return { input: input, wrap: h("label", { class: "field", style: wide ? "flex:1 1 100%" : "" }, [label + " ", input]) };
+    }
+    var seller = field("Your business", "Agent Null Studio");
+    var sellerGst = field("Your GSTIN", "optional");
+    var buyer = field("Bill to", "Client name");
+    var buyerAddr = field("Client address", "optional");
+    var invNo = field("Invoice #", "INV-001");
+    var invDate = h("input", { class: "single-input", type: "date", style: "max-width:180px" });
+    invDate.value = new Date().toISOString().slice(0, 10);
+    var gstRate = h("input", { class: "single-input", type: "number", value: "18", min: "0", max: "100", style: "max-width:80px" });
+
+    var itemsBody = h("tbody");
+    var addBtn = h("button", { class: "mini", type: "button", text: "+ Add item" });
+    var genBtn = h("button", { class: "btn", type: "button", text: "Generate PDF invoice" });
+    var totalLine = h("p", { class: "kbd-hint", style: "margin:10px 0 0" });
+    var status;
+
+    function itemRow(data) {
+      data = data || {};
+      var descr = h("input", { type: "text", placeholder: "Description", value: data.d || "", style: "width:100%" });
+      var qty = h("input", { type: "number", value: data.q != null ? data.q : "1", min: "0", step: "any", style: "width:64px" });
+      var rate = h("input", { type: "number", value: data.r != null ? data.r : "", placeholder: "0.00", min: "0", step: "any", style: "width:100px" });
+      var del = h("button", { class: "mini", type: "button", text: "✕", "aria-label": "Remove item" });
+      var tr = h("tr", null, [
+        h("td", null, [descr]), h("td", null, [qty]), h("td", null, [rate]),
+        h("td", { class: "row-total", text: "-" }), h("td", null, [del])
+      ]);
+      del.addEventListener("click", function () { tr.remove(); recalc(); });
+      [descr, qty, rate].forEach(function (el) { el.addEventListener("input", recalc); });
+      itemsBody.appendChild(tr);
+      return tr;
+    }
+
+    function readItems() {
+      return Array.prototype.map.call(itemsBody.querySelectorAll("tr"), function (tr) {
+        var ins = tr.querySelectorAll("input");
+        return { d: ins[0].value, q: parseFloat(ins[1].value) || 0, r: parseFloat(ins[2].value) || 0 };
+      }).filter(function (it) { return it.d || it.r; });
+    }
+
+    function inr(v) { return "₹ " + (Math.round(v * 100) / 100).toLocaleString("en-IN", { minimumFractionDigits: 2 }); }
+
+    function recalc() {
+      var sub = 0;
+      Array.prototype.forEach.call(itemsBody.querySelectorAll("tr"), function (tr) {
+        var ins = tr.querySelectorAll("input");
+        var line = (parseFloat(ins[1].value) || 0) * (parseFloat(ins[2].value) || 0);
+        tr.querySelector(".row-total").textContent = line ? inr(line) : "-";
+        sub += line;
+      });
+      var r = parseFloat(gstRate.value) || 0;
+      var gst = sub * r / 100;
+      totalLine.textContent = "Subtotal " + inr(sub) + " · GST " + inr(gst) + " · Total " + inr(sub + gst);
+      try {
+        localStorage.setItem(DRAFT_KEY, JSON.stringify({
+          s: seller.input.value, sg: sellerGst.input.value, b: buyer.input.value, ba: buyerAddr.input.value,
+          n: invNo.input.value, dt: invDate.value, g: gstRate.value, items: readItems()
+        }));
+      } catch (e) { /* draft saving is best-effort */ }
+      return { sub: sub, gst: gst, total: sub + gst, rate: r };
+    }
+
+    root.appendChild(h("div", { class: "opts" }, [seller.wrap, sellerGst.wrap, buyer.wrap, buyerAddr.wrap, invNo.wrap,
+      h("label", { class: "field" }, ["Date ", invDate]),
+      h("label", { class: "field" }, ["GST ", gstRate, " %"])
+    ]));
+    root.appendChild(h("table", { class: "kv", style: "margin-top:15px" }, [
+      h("thead", null, [h("tr", null, ["Item", "Qty", "Rate (₹)", "Amount", ""].map(function (t) { return h("th", { text: t }); }))]),
+      itemsBody
+    ]));
+    root.appendChild(h("div", { class: "opts", style: "margin-top:10px" }, [addBtn]));
+    root.appendChild(totalLine);
+    root.appendChild(h("div", { class: "actions-row" }, [genBtn]));
+    status = C.makeStatus(root);
+
+    addBtn.addEventListener("click", function () { itemRow(); });
+    [seller.input, sellerGst.input, buyer.input, buyerAddr.input, invNo.input, invDate, gstRate].forEach(function (el) {
+      el.addEventListener("input", recalc);
+    });
+
+    /* Restore draft or start with one row. */
+    var draft = null;
+    try { draft = JSON.parse(localStorage.getItem(DRAFT_KEY) || "null"); } catch (e) { /* ignore */ }
+    if (draft) {
+      seller.input.value = draft.s || "";
+      sellerGst.input.value = draft.sg || "";
+      buyer.input.value = draft.b || "";
+      buyerAddr.input.value = draft.ba || "";
+      invNo.input.value = draft.n || "";
+      if (draft.dt) invDate.value = draft.dt;
+      gstRate.value = draft.g || "18";
+      (draft.items && draft.items.length ? draft.items : [{}]).forEach(itemRow);
+    } else {
+      itemRow();
+    }
+    recalc();
+
+    function escHtml(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+    genBtn.addEventListener("click", async function () {
+      if (typeof html2canvas === "undefined" || !window.jspdf || !window.jspdf.jsPDF) {
+        status.set("error", "PDF libraries failed to load, check your connection and refresh.");
+        return;
+      }
+      var items = readItems();
+      if (!items.length) { status.set("error", "Add at least one line item."); return; }
+      var totals = recalc();
+      genBtn.disabled = true;
+      status.set("processing", "Rendering invoice...");
+      var host = document.createElement("div");
+      host.style.cssText = "position:absolute;left:-10000px;top:0;width:794px;background:#ffffff;color:#111827;padding:48px;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;";
+      var half = totals.gst / 2;
+      host.innerHTML =
+        '<div style="display:flex;justify-content:space-between;margin-bottom:28px">' +
+        '<div><div style="font-size:24px;font-weight:700">' + escHtml(seller.input.value || "Invoice") + "</div>" +
+        (sellerGst.input.value ? '<div style="color:#6b7280">GSTIN: ' + escHtml(sellerGst.input.value) + "</div>" : "") + "</div>" +
+        '<div style="text-align:right"><div style="font-size:20px;font-weight:700;color:#374151">INVOICE</div>' +
+        "<div>" + escHtml(invNo.input.value || "") + "</div><div>" + escHtml(invDate.value) + "</div></div></div>" +
+        '<div style="margin-bottom:20px"><b>Billed to:</b> ' + escHtml(buyer.input.value || "-") +
+        (buyerAddr.input.value ? '<div style="color:#6b7280">' + escHtml(buyerAddr.input.value) + "</div>" : "") + "</div>" +
+        '<table style="width:100%;border-collapse:collapse;margin-bottom:18px">' +
+        '<tr style="background:#f3f4f6"><th style="text-align:left;padding:8px;border:1px solid #e5e7eb">Item</th><th style="text-align:right;padding:8px;border:1px solid #e5e7eb">Qty</th><th style="text-align:right;padding:8px;border:1px solid #e5e7eb">Rate</th><th style="text-align:right;padding:8px;border:1px solid #e5e7eb">Amount</th></tr>' +
+        items.map(function (it) {
+          return "<tr><td style='padding:8px;border:1px solid #e5e7eb'>" + escHtml(it.d) + "</td><td style='text-align:right;padding:8px;border:1px solid #e5e7eb'>" + it.q + "</td><td style='text-align:right;padding:8px;border:1px solid #e5e7eb'>" + inr(it.r) + "</td><td style='text-align:right;padding:8px;border:1px solid #e5e7eb'>" + inr(it.q * it.r) + "</td></tr>";
+        }).join("") + "</table>" +
+        '<div style="margin-left:auto;width:280px">' +
+        '<div style="display:flex;justify-content:space-between;padding:4px 0"><span>Subtotal</span><b>' + inr(totals.sub) + "</b></div>" +
+        (totals.rate ? '<div style="display:flex;justify-content:space-between;padding:4px 0"><span>CGST (' + (totals.rate / 2) + '%)</span><span>' + inr(half) + "</span></div>" +
+        '<div style="display:flex;justify-content:space-between;padding:4px 0"><span>SGST (' + (totals.rate / 2) + '%)</span><span>' + inr(half) + "</span></div>" : "") +
+        '<div style="display:flex;justify-content:space-between;padding:8px 0;border-top:2px solid #111827;font-size:16px"><b>Total</b><b>' + inr(totals.total) + "</b></div></div>";
+      document.body.appendChild(host);
+      try {
+        var canvas = await html2canvas(host, { scale: 2, backgroundColor: "#ffffff", logging: false });
+        var doc = new window.jspdf.jsPDF("p", "pt", "a4");
+        var margin = 0;
+        var w = doc.internal.pageSize.getWidth();
+        doc.addImage(canvas.toDataURL("image/jpeg", 0.95), "JPEG", margin, margin, w, w * (canvas.height / canvas.width));
+        var name = (invNo.input.value || "invoice").replace(/[^\w.-]+/g, "_") + ".pdf";
+        C.download(doc.output("blob"), name);
+        status.set("done", "Downloaded " + name + " · Total " + inr(totals.total));
+        C.toast("ok", "Downloaded " + name);
+      } catch (e) {
+        status.set("error", e && e.message ? e.message : "Rendering failed.");
+      } finally {
+        host.remove();
+        genBtn.disabled = false;
+      }
+    });
+    C.onRun(function () { genBtn.click(); });
+    C.onClear(function () {
+      itemsBody.innerHTML = "";
+      itemRow();
+      [seller.input, sellerGst.input, buyer.input, buyerAddr.input, invNo.input].forEach(function (el) { el.value = ""; });
+      try { localStorage.removeItem(DRAFT_KEY); } catch (e) { /* ignore */ }
+      recalc();
+      status.set("idle", "Cleared.");
+    });
+  });
+
   C.boot();
 })();

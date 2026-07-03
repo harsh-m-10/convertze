@@ -281,6 +281,46 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://convertze.com/images/heic-to-jpg</loc>
+    <lastmod>2026-07-03</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://convertze.com/images/image-to-text</loc>
+    <lastmod>2026-07-03</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://convertze.com/pdf/watermark</loc>
+    <lastmod>2026-07-03</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://convertze.com/pdf/reorder</loc>
+    <lastmod>2026-07-03</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://convertze.com/dev/sql-formatter</loc>
+    <lastmod>2026-07-03</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://convertze.com/dev/xml-formatter</loc>
+    <lastmod>2026-07-03</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://convertze.com/dev/cron</loc>
+    <lastmod>2026-07-03</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://convertze.com/calc/invoice-generator</loc>
+    <lastmod>2026-07-03</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://convertze.com/about</loc>
     <lastmod>2026-07-03</lastmod>
     <priority>0.4</priority>

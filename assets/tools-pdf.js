@@ -649,6 +649,163 @@
     });
   });
 
+  /* ---------- Watermark PDF ---------- */
+  C.register("pdf/watermark", function (root) {
+    pdfTool(root, {
+      accept: "application/pdf,.pdf",
+      multiple: false,
+      filter: isPdf,
+      badFileMsg: "Please choose a PDF file.",
+      label: "Drop a PDF to watermark",
+      cta: "Watermark & download",
+      options: function (row) {
+        var text = h("input", { type: "text", value: "CONFIDENTIAL", style: "width:170px", "aria-label": "Watermark text" });
+        var opacity = h("input", { type: "range", min: "5", max: "60", value: "15" });
+        var ov = h("span", { text: "15" });
+        opacity.addEventListener("input", function () { ov.textContent = opacity.value; });
+        var angle = h("select", { "aria-label": "Orientation" }, [
+          h("option", { value: "diag", text: "Diagonal" }),
+          h("option", { value: "flat", text: "Horizontal" })
+        ]);
+        var range = h("input", { type: "text", placeholder: "all or 1-3,5", style: "width:110px" });
+        row.appendChild(h("label", { class: "field" }, ["Text ", text]));
+        row.appendChild(h("label", { class: "field" }, ["Opacity ", opacity, ov, "%"]));
+        row.appendChild(h("label", { class: "field" }, [angle]));
+        row.appendChild(h("label", { class: "field" }, ["Pages ", range]));
+        return function () {
+          return { text: text.value || "CONFIDENTIAL", opacity: parseInt(opacity.value, 10) / 100, diag: angle.value === "diag", range: range.value };
+        };
+      },
+      run: async function (files, s, status) {
+        needs("PDF", typeof PDFLib !== "undefined" && PDFLib.PDFDocument);
+        status.set("processing", "Reading PDF...");
+        var doc = await PDFLib.PDFDocument.load(await files[0].arrayBuffer(), { ignoreEncryption: true });
+        var font = await doc.embedFont(PDFLib.StandardFonts.HelveticaBold);
+        var pages = parsePageRange(s.range, doc.getPageCount());
+        pages.forEach(function (idx) {
+          var page = doc.getPage(idx);
+          var pw = page.getWidth(), ph = page.getHeight();
+          // Size the text to span most of the page diagonal or width.
+          var span = s.diag ? Math.sqrt(pw * pw + ph * ph) * 0.7 : pw * 0.8;
+          var size = span / Math.max(4, s.text.length * 0.55);
+          var tw = font.widthOfTextAtSize(s.text, size);
+          var angleDeg = s.diag ? Math.atan2(ph, pw) * 180 / Math.PI : 0;
+          var rad = angleDeg * Math.PI / 180;
+          // Center the rotated baseline on the page centre.
+          var x = pw / 2 - (tw / 2) * Math.cos(rad);
+          var y = ph / 2 - (tw / 2) * Math.sin(rad);
+          page.drawText(s.text, {
+            x: x, y: y, size: size, font: font,
+            color: PDFLib.rgb(0.45, 0.45, 0.45),
+            opacity: s.opacity,
+            rotate: PDFLib.degrees(angleDeg)
+          });
+        });
+        var out = await doc.save();
+        var name = C.baseName(files[0].name) + "_watermarked.pdf";
+        C.download(new Blob([out], { type: "application/pdf" }), name);
+        status.set("done", pages.length + " page(s) watermarked → " + name);
+        C.toast("ok", "Downloaded " + name);
+      }
+    });
+  });
+
+  /* ---------- Reorder / delete pages ---------- */
+  C.register("pdf/reorder", function (root) {
+    var state = { bytes: null, order: [], name: "" };
+    var status;
+    var grid = h("div", { class: "result-grid", style: "margin-top:14px" });
+    var btn = h("button", { class: "btn", type: "button", disabled: true, text: "Rebuild & download" });
+
+    C.dropzone(root, {
+      accept: "application/pdf,.pdf",
+      multiple: false,
+      label: "Drop a PDF to reorder or delete pages",
+      sub: "or click to browse",
+      onFiles: async function (files) {
+        var f = files.filter(isPdf)[0];
+        if (!f) { status.set("error", "Please choose a PDF file."); return; }
+        try {
+          needs("PDF rendering", typeof pdfjsLib !== "undefined");
+          state.name = f.name;
+          state.bytes = await f.arrayBuffer();
+          var pdf = await pdfjsLib.getDocument({ data: state.bytes.slice(0) }).promise;
+          state.order = [];
+          state.thumbs = [];
+          for (var p = 1; p <= pdf.numPages; p++) {
+            status.set("processing", "Rendering page " + p + " of " + pdf.numPages + "...");
+            var page = await pdf.getPage(p);
+            var vp1 = page.getViewport({ scale: 1 });
+            var viewport = page.getViewport({ scale: 110 / vp1.width });
+            var cv = document.createElement("canvas");
+            cv.width = viewport.width;
+            cv.height = viewport.height;
+            var ctx = cv.getContext("2d");
+            ctx.fillStyle = "#fff";
+            ctx.fillRect(0, 0, cv.width, cv.height);
+            await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+            state.order.push(p - 1);
+            state.thumbs.push(cv.toDataURL("image/jpeg", 0.7));
+          }
+          render();
+          btn.disabled = false;
+          status.set("done", pdf.numPages + " pages loaded. Reorder with the arrows, remove with ✕.");
+        } catch (err) {
+          status.set("error", err.message || "Could not read that PDF.");
+        }
+      }
+    });
+    root.appendChild(grid);
+    root.appendChild(h("div", { class: "actions-row" }, [btn]));
+    status = C.makeStatus(root);
+
+    function render() {
+      grid.innerHTML = "";
+      state.order.forEach(function (pageIdx, pos) {
+        grid.appendChild(h("div", { class: "result-item" }, [
+          h("img", { src: state.thumbs[pageIdx], alt: "Page " + (pageIdx + 1) }),
+          h("span", { class: "r-name", text: "Page " + (pageIdx + 1) }),
+          h("span", { class: "mini-btns", style: "justify-content:center;margin-top:5px" }, [
+            h("button", { class: "mini", type: "button", text: "←", "aria-label": "Move earlier", onclick: function () {
+              if (pos > 0) { state.order.splice(pos - 1, 0, state.order.splice(pos, 1)[0]); render(); }
+            } }),
+            h("button", { class: "mini", type: "button", text: "→", "aria-label": "Move later", onclick: function () {
+              if (pos < state.order.length - 1) { state.order.splice(pos + 1, 0, state.order.splice(pos, 1)[0]); render(); }
+            } }),
+            h("button", { class: "mini", type: "button", text: "✕", "aria-label": "Remove page", onclick: function () {
+              state.order.splice(pos, 1);
+              render();
+              btn.disabled = !state.order.length;
+            } })
+          ])
+        ]));
+      });
+      grid.style.display = state.order.length ? "" : "none";
+    }
+
+    btn.addEventListener("click", async function () {
+      if (!state.order.length || btn.disabled) return;
+      btn.disabled = true;
+      try {
+        needs("PDF", typeof PDFLib !== "undefined" && PDFLib.PDFDocument);
+        status.set("processing", "Rebuilding PDF...");
+        var src = await PDFLib.PDFDocument.load(state.bytes.slice(0), { ignoreEncryption: true });
+        var out = await PDFLib.PDFDocument.create();
+        var copied = await out.copyPages(src, state.order);
+        copied.forEach(function (pg) { out.addPage(pg); });
+        var bytes = await out.save();
+        var name = C.baseName(state.name) + "_reordered.pdf";
+        C.download(new Blob([bytes], { type: "application/pdf" }), name);
+        status.set("done", state.order.length + " page(s) → " + name);
+        C.toast("ok", "Downloaded " + name);
+      } catch (err) {
+        status.set("error", err.message || "Rebuild failed.");
+      }
+      btn.disabled = false;
+    });
+    C.onClear(function () { state.order = []; state.bytes = null; grid.innerHTML = ""; btn.disabled = true; status.set("idle", "Cleared."); });
+  });
+
   /* ---------- Sign PDF ---------- */
   C.register("pdf/sign", function (root) {
     needsSignSetup(root);

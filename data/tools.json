@@ -581,9 +581,18 @@
         "Know the limits before you rely on it: the structure is inferred from the layout, not read from the file, so complex documents need a review pass. Tables come out as plain text lines, multi-column layouts can interleave, and scanned PDFs return nothing because they have no text layer (that needs OCR). For clean, mostly linear documents it works well."
       ],
       "faq": [
-        { "q": "How does it know what is a heading?", "a": "By font size. The most common text size on the page is treated as body text, and noticeably larger lines become headings, biggest as #, next as ##, and so on. It is a good heuristic for reports and articles, less so for decorative layouts." },
-        { "q": "Why did my PDF produce messy or empty output?", "a": "Two usual reasons. Scanned PDFs are photographs with no text layer, so there is nothing to extract without OCR. And multi-column or table-heavy layouts read in visual order, which can interleave columns. This tool is at its best on linear, text-first documents." },
-        { "q": "Are tables converted to Markdown tables?", "a": "No, table cells come out as plain text lines. Reliable table detection from PDF geometry is genuinely hard, so rather than produce broken pipes-and-dashes, the tool keeps the text and leaves the table formatting to you." }
+        {
+          "q": "How does it know what is a heading?",
+          "a": "By font size. The most common text size on the page is treated as body text, and noticeably larger lines become headings, biggest as #, next as ##, and so on. It is a good heuristic for reports and articles, less so for decorative layouts."
+        },
+        {
+          "q": "Why did my PDF produce messy or empty output?",
+          "a": "Two usual reasons. Scanned PDFs are photographs with no text layer, so there is nothing to extract without OCR. And multi-column or table-heavy layouts read in visual order, which can interleave columns. This tool is at its best on linear, text-first documents."
+        },
+        {
+          "q": "Are tables converted to Markdown tables?",
+          "a": "No, table cells come out as plain text lines. Reliable table detection from PDF geometry is genuinely hard, so rather than produce broken pipes-and-dashes, the tool keeps the text and leaves the table formatting to you."
+        }
       ],
       "libs": [
         "pdfjs"
@@ -1766,6 +1775,285 @@
         "calc/percentage-calculator"
       ],
       "icon": "heart"
+    },
+    {
+      "path": "images/heic-to-jpg",
+      "cat": "images",
+      "name": "HEIC to JPG",
+      "h1": "Convert HEIC photos to JPG",
+      "short": "iPhone photos to universal JPG, in batches.",
+      "metaDescription": "Convert HEIC to JPG for free in your browser, single photos or whole batches with zip download. iPhone photos stay on your device, no upload.",
+      "about": [
+        "Drop the .heic photos your iPhone takes and get standard JPGs that open everywhere: Windows, Android, older software, web forms. Convert one or a whole camera roll batch; multiple results download as a zip, with a quality slider for the size/quality trade-off.",
+        "Decoding happens on your device using libheif compiled to WebAssembly, the same decoder Linux uses, running inside your browser. Your photos never leave your machine, which is exactly what you want for personal camera rolls."
+      ],
+      "faq": [
+        {
+          "q": "Why does my iPhone save photos as HEIC?",
+          "a": "HEIC stores the same quality as JPG in roughly half the space, so Apple made it the default. The catch is compatibility: many Windows apps, older tools and upload forms still want JPG, which is what this converter is for."
+        },
+        {
+          "q": "Do my photos get uploaded to convert?",
+          "a": "No. The HEIC decoder runs inside your browser as WebAssembly, so the photos are decoded and re-encoded on your own device. You can watch the network tab while converting to confirm."
+        },
+        {
+          "q": "What happens to Live Photos and bursts?",
+          "a": "A Live Photo converts to its still key frame. HEIC files that contain multiple images produce one JPG per image, numbered automatically."
+        }
+      ],
+      "libs": [
+        "heic2any",
+        "jszip"
+      ],
+      "related": [
+        "images/convert",
+        "images/compress",
+        "images/resize"
+      ],
+      "icon": "image"
+    },
+    {
+      "path": "images/image-to-text",
+      "cat": "images",
+      "name": "Image to Text (OCR)",
+      "h1": "Extract text from an image",
+      "short": "OCR for screenshots and photos, English and Hindi.",
+      "metaDescription": "Extract text from images for free with in-browser OCR. Screenshots, photos of documents, English and Hindi. The image never leaves your device.",
+      "about": [
+        "Drop a screenshot or a photo of a document and get its text, ready to copy or download. Recognition runs on Tesseract, the open source OCR engine, compiled to WebAssembly and executed inside your browser tab. English, Hindi, or both together.",
+        "One honest note: your image is never transmitted, but the recognition model itself (a few MB per language) is downloaded from a CDN the first time you use it. Accuracy is best on sharp, straight, high-contrast text; handwriting and low-light photos will be rough."
+      ],
+      "faq": [
+        {
+          "q": "Is my image uploaded for the OCR?",
+          "a": "No. The Tesseract engine runs as WebAssembly in your browser and processes the image on your device. What does get downloaded, once, is the language model itself, a generic few-MB file that is the same for everyone."
+        },
+        {
+          "q": "How accurate is the text recognition?",
+          "a": "On clean screenshots and scans it is very good. On photos it depends on lighting, focus and angle, and handwriting is mostly beyond it. Always give the output a quick read before using it."
+        },
+        {
+          "q": "Which languages are supported?",
+          "a": "English and Hindi, individually or combined for mixed documents. Each language model downloads on first use and is cached by your browser after that."
+        }
+      ],
+      "libs": [
+        "tesseract"
+      ],
+      "related": [
+        "pdf/pdf-to-text",
+        "pdf/pdf-to-markdown",
+        "text/word-counter"
+      ],
+      "icon": "scan"
+    },
+    {
+      "path": "pdf/watermark",
+      "cat": "pdf",
+      "name": "Watermark PDF",
+      "h1": "Add a watermark to a PDF",
+      "short": "Diagonal or flat text on every page, no upload.",
+      "metaDescription": "Add a text watermark to a PDF for free in your browser: CONFIDENTIAL, DRAFT or any text, diagonal or horizontal, with opacity control. No upload.",
+      "about": [
+        "Stamp CONFIDENTIAL, DRAFT, PAID or any text across your PDF: choose the opacity, diagonal or horizontal placement, and which pages get it. The text is sized automatically to span the page.",
+        "The watermark is written into the document by pdf-lib running in your browser, so the sensitive documents that most need watermarking, agreements, reports, drafts, never touch a server."
+      ],
+      "faq": [
+        {
+          "q": "Can the watermark be removed later?",
+          "a": "It is drawn into the page content, so casual viewers cannot remove it, but like any visible watermark a determined person with editing tools could. Treat it as labelling, not security."
+        },
+        {
+          "q": "Can I watermark only some pages?",
+          "a": "Yes, type a range like 1-3,5 the way you would in a print dialog, or leave it as all."
+        },
+        {
+          "q": "Does watermarking reduce the document quality?",
+          "a": "No, nothing is re-rendered. The pages keep their original text and images; the watermark text is simply drawn on top with the transparency you chose."
+        }
+      ],
+      "libs": [
+        "pdflib"
+      ],
+      "related": [
+        "pdf/sign",
+        "pdf/merge",
+        "pdf/compress"
+      ],
+      "icon": "stamp"
+    },
+    {
+      "path": "pdf/reorder",
+      "cat": "pdf",
+      "name": "Reorder PDF Pages",
+      "h1": "Reorder or delete PDF pages",
+      "short": "Thumbnails, move pages around, remove pages.",
+      "metaDescription": "Reorder PDF pages or delete pages for free in your browser, with page thumbnails. Rearrange and rebuild; the file stays on your device.",
+      "about": [
+        "Every page appears as a thumbnail: move pages earlier or later with the arrows, remove the ones you don't want with a click, then rebuild the document in the new order.",
+        "It doubles as a delete-pages tool: drop a PDF, remove the blank scans or the pages you don't need, download the rest. Rendering uses pdf.js and rebuilding uses pdf-lib, both in your browser."
+      ],
+      "faq": [
+        {
+          "q": "Does rearranging pages lose any quality?",
+          "a": "No. Pages are copied into the new document exactly as they are, text, images and formatting untouched. Only the order changes."
+        },
+        {
+          "q": "Can I just delete pages without reordering?",
+          "a": "Yes, click the ✕ on the pages you don't want and rebuild. The remaining pages keep their original order unless you move them."
+        },
+        {
+          "q": "Is my document uploaded while I rearrange it?",
+          "a": "No. The thumbnails are rendered by pdf.js in your browser and the new file is assembled by pdf-lib on your device. Nothing crosses the network."
+        }
+      ],
+      "libs": [
+        "pdfjs",
+        "pdflib"
+      ],
+      "related": [
+        "pdf/split",
+        "pdf/merge",
+        "pdf/rotate"
+      ],
+      "icon": "layers"
+    },
+    {
+      "path": "dev/sql-formatter",
+      "cat": "dev",
+      "name": "SQL Formatter",
+      "h1": "Format SQL queries",
+      "short": "Beautify SQL live, MySQL and PostgreSQL aware.",
+      "metaDescription": "Format SQL queries for free in your browser, live as you type, with MySQL, PostgreSQL and SQLite dialects and keyword casing. Queries stay on your device.",
+      "about": [
+        "Paste a one-line query and get it laid out properly: clauses on their own lines, sane indentation, keywords uppercased if you want. Dialect-aware formatting for standard SQL, MySQL, PostgreSQL and SQLite.",
+        "Queries frequently contain table names, filters and sometimes literal data you should not paste into random websites; here formatting runs entirely in your browser via the open source sql-formatter library."
+      ],
+      "faq": [
+        {
+          "q": "Which SQL dialects are supported?",
+          "a": "Standard SQL, MySQL, PostgreSQL and SQLite. Pick the one you use so dialect-specific syntax like backticks or casts formats correctly."
+        },
+        {
+          "q": "Does formatting change what the query does?",
+          "a": "No, it only changes whitespace, line breaks and keyword casing. The statement stays semantically identical."
+        },
+        {
+          "q": "Is it safe to paste production queries here?",
+          "a": "Yes. The formatter is a JavaScript library running in your browser tab; the query text is never transmitted anywhere."
+        }
+      ],
+      "libs": [
+        "sqlformatter"
+      ],
+      "related": [
+        "dev/json-formatter",
+        "dev/xml-formatter",
+        "dev/csv-json"
+      ],
+      "icon": "database"
+    },
+    {
+      "path": "dev/xml-formatter",
+      "cat": "dev",
+      "name": "XML Formatter",
+      "h1": "Format and validate XML",
+      "short": "Beautify or minify XML, with clear parse errors.",
+      "metaDescription": "Format, validate and minify XML for free in your browser, live as you type, with parse errors that say what is wrong. Your XML stays on your device.",
+      "about": [
+        "Paste XML and see it indented cleanly, or minified to a single line, live as you type. Invalid XML gets the parser's actual error message instead of silent failure, which makes this a quick validator too.",
+        "Config files, SOAP payloads, Android manifests, RSS feeds; parsing uses the browser's own XML engine and never leaves your machine."
+      ],
+      "faq": [
+        {
+          "q": "How do I find out why my XML is invalid?",
+          "a": "Paste it and the error line appears immediately, typically an unclosed tag, a stray ampersand, or mismatched nesting. Fix it and the formatted output appears the moment the document parses."
+        },
+        {
+          "q": "Are comments and CDATA sections preserved?",
+          "a": "Yes, comments and CDATA blocks survive both beautify and minify. Attribute order is kept as written."
+        },
+        {
+          "q": "What is the difference between beautify and minify here?",
+          "a": "Beautify indents nested elements two spaces per level for reading. Minify strips inter-element whitespace for compact storage or transmission. The document structure is identical either way."
+        }
+      ],
+      "libs": [],
+      "related": [
+        "dev/json-formatter",
+        "dev/sql-formatter",
+        "dev/json-yaml"
+      ],
+      "icon": "code"
+    },
+    {
+      "path": "dev/cron",
+      "cat": "dev",
+      "name": "Cron Explainer",
+      "h1": "Explain a cron expression",
+      "short": "Plain English plus the next 5 run times.",
+      "metaDescription": "Understand any cron expression: plain-English explanation and the next 5 run times in your local timezone, live as you type. Free, no sign-up.",
+      "about": [
+        "Type a five-field cron expression and read what it actually means in plain English, plus the next five times it will fire in your local timezone, which is the fastest way to catch the classic mistakes.",
+        "Handles steps, ranges, lists and names (mon, jan), and the subtle rule that day-of-month and day-of-week combine with OR. Presets cover the schedules everyone actually uses."
+      ],
+      "faq": [
+        {
+          "q": "What do the five fields of a cron expression mean?",
+          "a": "In order: minute (0-59), hour (0-23), day of month (1-31), month (1-12), day of week (0-7, where both 0 and 7 are Sunday). An asterisk means every value."
+        },
+        {
+          "q": "Why does my job run on more days than I expected?",
+          "a": "If you restrict both day-of-month and day-of-week, standard cron runs when either matches, not both. 0 0 13 * 5 fires on every 13th and on every Friday. This tool applies the same rule, so the next-runs list shows you the truth."
+        },
+        {
+          "q": "Which timezone are the next run times in?",
+          "a": "Your device's local timezone, shown explicitly. Remember the server running the real cron may be set to UTC, a classic source of off-by-5:30 surprises in India."
+        }
+      ],
+      "libs": [],
+      "related": [
+        "dev/timestamp",
+        "dev/regex",
+        "dev/uuid"
+      ],
+      "icon": "clock"
+    },
+    {
+      "path": "calc/invoice-generator",
+      "cat": "calc",
+      "name": "Invoice Generator",
+      "h1": "Generate a PDF invoice",
+      "short": "Line items, GST split, clean PDF, no watermark.",
+      "metaDescription": "Generate a professional PDF invoice for free: line items, GST with CGST/SGST split, no watermark, no sign-up. Your client data stays on your device.",
+      "about": [
+        "Fill in your business, the client, the line items and a GST rate, and download a clean A4 PDF invoice with the CGST/SGST split shown, no watermark, no account, no per-invoice fee.",
+        "Your draft autosaves in your own browser, so next month you change the invoice number and two line items and you are done. Client names and amounts are exactly the data that should not sit on some invoice site's server; here they never leave your device."
+      ],
+      "faq": [
+        {
+          "q": "Is the invoice really free and without a watermark?",
+          "a": "Yes to both. The PDF is generated on your device, so there is no service cost to recover through watermarks, accounts or monthly limits."
+        },
+        {
+          "q": "Where is my invoice data stored?",
+          "a": "Only in your own browser's local storage, as a draft convenience. It never reaches a server, and Clear wipes it. For bookkeeping, keep the downloaded PDFs."
+        },
+        {
+          "q": "Does it handle GST correctly?",
+          "a": "The rate you set is split into equal CGST and SGST lines, which is right for intra-state invoices. For inter-state invoices that need a single IGST line, set the full rate and relabel; a dedicated IGST toggle is on the roadmap."
+        }
+      ],
+      "libs": [
+        "jspdf",
+        "html2canvas"
+      ],
+      "related": [
+        "calc/gst-calculator",
+        "calc/percentage-calculator",
+        "calc/currency-converter"
+      ],
+      "icon": "receipt"
     }
   ]
 }
