@@ -789,7 +789,7 @@
   /* ---------- Markdown preview ---------- */
   C.register("dev/markdown-preview", function (root) {
     var input = h("textarea", { class: "ta", placeholder: "# Hello\n\nType **Markdown** here...", spellcheck: "false", style: "min-height:320px", "aria-label": "Markdown input" });
-    var preview = h("div", { class: "outbox md-preview", style: "max-height:none;min-height:320px;font-family:Inter,ui-sans-serif,sans-serif;font-size:14px" });
+    var preview = h("div", { class: "outbox md-preview", style: "max-height:72vh;min-height:320px;font-family:Inter,ui-sans-serif,sans-serif;font-size:14px" });
     var dlBtn = h("button", { class: "mini", type: "button", text: "Download HTML" });
     var copyBtn = h("button", { class: "mini primary", type: "button", text: "Copy HTML" });
     root.appendChild(h("div", { class: "duo" }, [

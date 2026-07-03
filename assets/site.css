@@ -52,7 +52,9 @@ html.light {
 }
 
 * { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; }
+/* Reserve scrollbar space so short pages (hubs) and long pages (tools)
+   don't shift the layout horizontally when navigating between them. */
+html { -webkit-text-size-adjust: 100%; scrollbar-gutter: stable; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; }
 }
@@ -374,13 +376,19 @@ html.light textarea.ta[readonly] { background: var(--surface-2); }
    undo the .outbox pre-wrap (it turns source newlines into phantom breaks)
    and keep wide content scrolling inside the pane instead of stretching it. */
 .md-preview { white-space: normal; word-break: normal; overflow-wrap: break-word; }
-.md-preview h1, .md-preview h2, .md-preview h3, .md-preview h4 { margin: 18px 0 10px; letter-spacing: -0.01em; }
+.md-preview h1, .md-preview h2, .md-preview h3, .md-preview h4, .md-preview h5, .md-preview h6 { margin: 18px 0 10px; letter-spacing: -0.01em; }
 .md-preview h1 { font-size: 1.5em; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
-.md-preview h2 { font-size: 1.25em; }
+.md-preview h2 { font-size: 1.25em; border-bottom: 1px solid var(--border); padding-bottom: 5px; }
 .md-preview h3 { font-size: 1.1em; }
+.md-preview h4 { font-size: 1em; }
+.md-preview h5 { font-size: 0.9em; }
+.md-preview h6 { font-size: 0.85em; color: var(--muted); }
 .md-preview > :first-child { margin-top: 0; }
 .md-preview pre { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--r-sm); padding: 10px 12px; overflow-x: auto; }
 .md-preview code { font-family: var(--mono); font-size: 0.92em; }
+.md-preview :not(pre) > code { background: var(--surface-2); border: 1px solid var(--border); border-radius: 4px; padding: 1px 5px; }
+.md-preview li:has(> input[type="checkbox"]) { list-style: none; margin-left: -20px; }
+.md-preview li > input[type="checkbox"] { margin-right: 6px; }
 .md-preview img { max-width: 100%; height: auto; }
 .md-preview table { border-collapse: collapse; display: block; max-width: 100%; overflow-x: auto; }
 .md-preview th, .md-preview td { border: 1px solid var(--border); padding: 6px 10px; text-align: left; }
