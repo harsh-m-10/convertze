@@ -1,10 +1,11 @@
-const CACHE_NAME = "convertze-136fad0a";
+const CACHE_NAME = "convertze-fba3f1e6";
 const APP_SHELL = [
   "/",
   "/images",
   "/pdf",
   "/dev",
   "/text",
+  "/calc",
   "/favicon.svg",
   "/manifest.webmanifest",
   "/assets/site.css",
@@ -12,7 +13,8 @@ const APP_SHELL = [
   "/assets/tools-image.js",
   "/assets/tools-pdf.js",
   "/assets/tools-dev.js",
-  "/assets/tools-text.js"
+  "/assets/tools-text.js",
+  "/assets/tools-calc.js"
 ];
 
 const CDN_ASSETS = [

@@ -19,7 +19,7 @@ const crypto = require("crypto");
 const ROOT = path.join(__dirname, "..");
 // Content hash of the shared assets. Used to version asset URLs and the
 // service worker cache so stale CSS/JS can never be served against new HTML.
-const ASSET_FILES = ["site.css", "app.js", "tools-image.js", "tools-pdf.js", "tools-dev.js", "tools-text.js"];
+const ASSET_FILES = ["site.css", "app.js", "tools-image.js", "tools-pdf.js", "tools-dev.js", "tools-text.js", "tools-calc.js"];
 const ASSET_HASH = crypto.createHash("md5")
   .update(ASSET_FILES.map((f) => fs.readFileSync(path.join(__dirname, "..", "assets", f))).join("\n"))
   .digest("hex").slice(0, 8);
@@ -40,7 +40,7 @@ const LIB_URLS = {
   sparkmd5: "https://cdnjs.cloudflare.com/ajax/libs/spark-md5/3.0.2/spark-md5.min.js",
   qrcode: "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"
 };
-const CAT_MODULE = { images: "tools-image.js", pdf: "tools-pdf.js", dev: "tools-dev.js", text: "tools-text.js" };
+const CAT_MODULE = { images: "tools-image.js", pdf: "tools-pdf.js", dev: "tools-dev.js", text: "tools-text.js", calc: "tools-calc.js" };
 
 const esc = (s) => String(s)
   .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -90,7 +90,9 @@ const TOOL_ICONS = {
   qr: stroke('<rect x="3" y="3" width="5" height="5"/><rect x="16" y="3" width="5" height="5"/><rect x="3" y="16" width="5" height="5"/><path d="M21 16h-3a2 2 0 0 0-2 2v3"/><path d="M21 21v.01"/><path d="M12 7v3a2 2 0 0 1-2 2H7"/><path d="M3 12h.01"/><path d="M12 3h.01"/><path d="M12 16v.01"/><path d="M16 12h1"/><path d="M21 12v.01"/><path d="M12 21v-1"/>'),
   type: stroke('<polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/>'),
   sort: stroke('<path d="M11 5h10"/><path d="M11 9h7"/><path d="M11 13h4"/><path d="M3 17l3 3 3-3"/><path d="M6 20V4"/>'),
-  quote: stroke('<path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/>')
+  quote: stroke('<path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/>'),
+  pen: stroke('<path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/>'),
+  currency: stroke('<circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/>')
 };
 const toolIcon = (t, lg) =>
   `<span class="t-icon${lg ? " lg" : ""} c-${t.cat}">${TOOL_ICONS[t.icon] || TOOL_ICONS.image}</span>`;
@@ -259,6 +261,11 @@ const STEPS = {
     "Paste or type your text into the box.",
     "The results update live as you type.",
     "Copy the output, or download it as a file."
+  ],
+  calc: [
+    "Type an amount and pick your currencies.",
+    "The result updates live as you type.",
+    "Swap the direction with one click."
   ]
 };
 

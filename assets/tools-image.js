@@ -82,6 +82,7 @@
         renderList();
         status.set("done", state.files.length + " file" + (state.files.length > 1 ? "s" : "") + " ready.");
         convertBtn.disabled = false;
+        if (cfg.onFilesAdded) cfg.onFilesAdded(state.files);
       }
     });
 
@@ -127,36 +128,130 @@
     }
     convertBtn.addEventListener("click", run);
     C.onRun(run);
-    C.onClear(function () { state.files = []; renderList(); results.clear(); convertBtn.disabled = true; status.set("idle", "Cleared."); });
+    C.onClear(function () {
+      state.files = [];
+      renderList();
+      results.clear();
+      convertBtn.disabled = true;
+      status.set("idle", "Cleared.");
+      if (cfg.onCleared) cfg.onCleared();
+    });
   }
 
   /* ---------- Convert (PNG / JPG / WebP) ---------- */
+
+  /* Sample an image at low resolution and report whether it uses transparency. */
+  async function hasTransparency(file) {
+    var loaded = await C.loadImage(file);
+    var img = loaded.img;
+    var w = Math.max(1, Math.min(64, img.naturalWidth));
+    var hgt = Math.max(1, Math.round(w * (img.naturalHeight / img.naturalWidth))) || 1;
+    var cv = document.createElement("canvas");
+    cv.width = w;
+    cv.height = hgt;
+    var ctx = cv.getContext("2d");
+    ctx.drawImage(img, 0, 0, w, hgt);
+    loaded.revoke();
+    var data = ctx.getImageData(0, 0, w, hgt).data;
+    for (var i = 3; i < data.length; i += 4) {
+      if (data[i] < 250) return true;
+    }
+    return false;
+  }
+
   C.register("images/convert", function (root) {
+    var fmt, hint, hintText, hintBtn, suggestedFmt = null;
+
     imageTool(root, {
       accept: "image/png,image/jpeg,image/webp",
       multiple: true,
       label: "Drop images here",
       options: function (row) {
-        var fmt = formatSelect("jpg");
+        fmt = formatSelect("jpg");
         var q = h("input", { type: "range", min: "10", max: "100", value: "92" });
         var qv = h("span", { text: "92" });
         q.addEventListener("input", function () { qv.textContent = q.value; });
         var qField = h("label", { class: "field" }, ["Quality ", q, qv, "%"]);
+        var fmtField = h("label", { class: "field" }, ["Convert to ", fmt]);
         fmt.addEventListener("change", function () { qField.style.display = fmt.value === "png" ? "none" : ""; });
-        row.appendChild(h("label", { class: "field" }, ["Convert to ", fmt]));
+
+        /* Conditional batch rule: route files by size to different formats. */
+        var ruleBox = h("input", { type: "checkbox" });
+        var ruleMB = h("input", { type: "number", value: "5", min: "0.1", step: "0.5", style: "width:64px" });
+        var bigSel = formatSelect("webp");
+        var smallSel = formatSelect("png");
+        var ruleDetail = h("span", { class: "field", style: "display:none" }, [
+          "over ", ruleMB, " MB → ", bigSel, ", others → ", smallSel
+        ]);
+        ruleBox.addEventListener("change", function () {
+          ruleDetail.style.display = ruleBox.checked ? "" : "none";
+          fmtField.style.display = ruleBox.checked ? "none" : "";
+          if (ruleBox.checked) qField.style.display = "";
+        });
+        row.appendChild(fmtField);
         row.appendChild(qField);
-        return function () { return { fmt: fmt.value, quality: parseInt(q.value, 10) / 100 }; };
+        row.appendChild(h("label", { class: "field" }, [ruleBox, "Split by size"]));
+        row.appendChild(ruleDetail);
+        return function () {
+          return {
+            fmt: fmt.value, quality: parseInt(q.value, 10) / 100,
+            rule: ruleBox.checked, ruleBytes: (parseFloat(ruleMB.value) || 5) * 1048576,
+            big: bigSel.value, small: smallSel.value
+          };
+        };
       },
+      onFilesAdded: async function (files) {
+        hint.style.display = "none";
+        suggestedFmt = null;
+        try {
+          var sample = files.slice(0, 12);
+          var opaquePng = 0, opaquePngBytes = 0, withAlpha = 0;
+          for (var i = 0; i < sample.length; i++) {
+            var f = sample[i];
+            var alpha = await hasTransparency(f);
+            if (alpha) withAlpha++;
+            else if (/png/i.test(f.type)) { opaquePng++; opaquePngBytes += f.size; }
+          }
+          if (opaquePng && opaquePngBytes > 150 * 1024 && fmt.value !== "webp") {
+            suggestedFmt = "webp";
+            hintText.textContent = "Smart suggestion: " + opaquePng + " PNG" + (opaquePng > 1 ? "s" : "") +
+              " (" + C.fmtKB(opaquePngBytes) + ") " + (opaquePng > 1 ? "use" : "uses") +
+              " no transparency. WebP keeps them looking identical at a fraction of the size.";
+            hintBtn.textContent = "Use WebP";
+            hint.style.display = "";
+          } else if (withAlpha && fmt.value === "jpg") {
+            suggestedFmt = "webp";
+            hintText.textContent = "Heads up: " + withAlpha + " image" + (withAlpha > 1 ? "s have" : " has") +
+              " transparency that JPG will flatten to white. WebP keeps it.";
+            hintBtn.textContent = "Use WebP";
+            hint.style.display = "";
+          }
+        } catch (e) { /* suggestion is best-effort, never block the tool */ }
+      },
+      onCleared: function () { hint.style.display = "none"; },
       transform: function (img, file, s) {
+        var outFmt = s.rule ? (file.size > s.ruleBytes ? s.big : s.small) : s.fmt;
         var canvas = document.createElement("canvas");
         canvas.width = img.naturalWidth;
         canvas.height = img.naturalHeight;
         var ctx = canvas.getContext("2d");
-        fillIfOpaque(ctx, s.fmt, canvas.width, canvas.height);
+        fillIfOpaque(ctx, outFmt, canvas.width, canvas.height);
         ctx.drawImage(img, 0, 0);
-        return { canvas: canvas, fmt: s.fmt, quality: s.quality };
+        return { canvas: canvas, fmt: outFmt, quality: s.quality };
       }
     });
+
+    hintText = h("span");
+    hintBtn = h("button", { class: "mini primary", type: "button", onclick: function () {
+      if (suggestedFmt) {
+        fmt.value = suggestedFmt;
+        fmt.dispatchEvent(new Event("change"));
+        hint.style.display = "none";
+      }
+    } });
+    hint = h("div", { class: "smart-hint", style: "display:none" }, [hintText, hintBtn]);
+    var optsRow = root.querySelector(".opts");
+    optsRow.parentNode.insertBefore(hint, optsRow);
   });
 
   /* ---------- Resize ---------- */

@@ -191,40 +191,96 @@
       label: "Drop a PDF to compress",
       cta: "Compress & download",
       options: function (row) {
+        var mode = h("select", { "aria-label": "Compression mode" }, [
+          h("option", { value: "quality", text: "Pick a quality" }),
+          h("option", { value: "target", text: "Hit a target size" })
+        ]);
         var q = h("input", { type: "range", min: "20", max: "90", value: "60" });
         var qv = h("span", { text: "60" });
         q.addEventListener("input", function () { qv.textContent = q.value; });
-        row.appendChild(h("label", { class: "field" }, ["Quality ", q, qv, "%"]));
-        row.appendChild(h("span", { class: "kbd-hint", text: "Lower quality = smaller file. Pages become images." }));
-        return function () { return { quality: parseInt(q.value, 10) / 100 }; };
+        var qWrap = h("label", { class: "field" }, ["Quality ", q, qv, "%"]);
+        var target = h("input", { type: "number", value: "200", min: "20", max: "20000", style: "width:80px" });
+        var tWrap = h("label", { class: "field", style: "display:none" }, ["Target ", target, " KB"]);
+        mode.addEventListener("change", function () {
+          qWrap.style.display = mode.value === "quality" ? "" : "none";
+          tWrap.style.display = mode.value === "target" ? "" : "none";
+        });
+        row.appendChild(h("label", { class: "field" }, ["Mode ", mode]));
+        row.appendChild(qWrap);
+        row.appendChild(tWrap);
+        row.appendChild(h("span", { class: "kbd-hint", text: "Pages become images; text stops being selectable." }));
+        return function () {
+          return { mode: mode.value, quality: parseInt(q.value, 10) / 100, targetKB: parseInt(target.value, 10) || 200 };
+        };
       },
       run: async function (files, s, status) {
         needs("PDF rendering", typeof pdfjsLib !== "undefined");
         needs("PDF writing", window.jspdf && window.jspdf.jsPDF);
         var file = files[0];
         var pdf = await pdfjsLib.getDocument({ data: await file.arrayBuffer() }).promise;
-        var doc = null;
+        var canvases = [];
         for (var p = 1; p <= pdf.numPages; p++) {
-          status.set("processing", "Compressing page " + p + " of " + pdf.numPages + "...");
+          status.set("processing", "Rendering page " + p + " of " + pdf.numPages + "...");
           var page = await pdf.getPage(p);
           var viewport = page.getViewport({ scale: 1.5 });
           var canvas = document.createElement("canvas");
           canvas.width = viewport.width;
           canvas.height = viewport.height;
           await page.render({ canvasContext: canvas.getContext("2d"), viewport: viewport }).promise;
-          var wPt = viewport.width * 0.48, hPt = viewport.height * 0.48; // back to ~72dpi points
-          if (!doc) {
-            doc = new window.jspdf.jsPDF({ unit: "pt", format: [wPt, hPt], orientation: wPt > hPt ? "l" : "p" });
-          } else {
-            doc.addPage([wPt, hPt], wPt > hPt ? "l" : "p");
-          }
-          doc.addImage(canvas.toDataURL("image/jpeg", s.quality), "JPEG", 0, 0, wPt, hPt);
+          canvases.push(canvas);
         }
-        var blob = doc.output("blob");
+        function build(quality, downscale) {
+          var doc = null;
+          canvases.forEach(function (cv) {
+            var src = cv;
+            if (downscale && downscale < 1) {
+              var small = document.createElement("canvas");
+              small.width = Math.max(1, Math.round(cv.width * downscale));
+              small.height = Math.max(1, Math.round(cv.height * downscale));
+              small.getContext("2d").drawImage(cv, 0, 0, small.width, small.height);
+              src = small;
+            }
+            var wPt = cv.width * 0.48, hPt = cv.height * 0.48; // back to ~72dpi points
+            if (!doc) {
+              doc = new window.jspdf.jsPDF({ unit: "pt", format: [wPt, hPt], orientation: wPt > hPt ? "l" : "p" });
+            } else {
+              doc.addPage([wPt, hPt], wPt > hPt ? "l" : "p");
+            }
+            doc.addImage(src.toDataURL("image/jpeg", quality), "JPEG", 0, 0, wPt, hPt);
+          });
+          return doc.output("blob");
+        }
+        var blob, note = "";
+        if (s.mode === "target") {
+          var limit = s.targetKB * 1024;
+          var scales = [1, 0.72, 0.5];
+          blob = null;
+          for (var si = 0; si < scales.length && !blob; si++) {
+            status.set("processing", "Searching for the best quality under " + s.targetKB + " KB...");
+            var floor = build(0.15, scales[si]);
+            if (floor.size > limit) continue; // even lowest quality too big at this scale
+            var lo = 0.15, hi = 0.9, best = floor;
+            for (var it = 0; it < 6; it++) {
+              var mid = (lo + hi) / 2;
+              var attempt = build(mid, scales[si]);
+              if (attempt.size <= limit) { best = attempt; lo = mid; }
+              else hi = mid;
+            }
+            blob = best;
+            if (si > 0) note = " (dimensions reduced to fit)";
+          }
+          if (!blob) {
+            blob = build(0.15, 0.5);
+            note = " (couldn't reach " + s.targetKB + " KB, this is the smallest achievable)";
+          }
+        } else {
+          status.set("processing", "Compressing " + canvases.length + " page(s)...");
+          blob = build(s.quality, 1);
+        }
         var name = C.baseName(file.name) + "_compressed.pdf";
         C.download(blob, name);
         var saved = Math.max(0, Math.round((1 - blob.size / file.size) * 100));
-        status.set("done", C.fmtKB(file.size) + " → " + C.fmtKB(blob.size) + " (" + saved + "% smaller). Downloaded " + name);
+        status.set("done", C.fmtKB(file.size) + " → " + C.fmtKB(blob.size) + " (" + saved + "% smaller)" + note + ". Downloaded " + name);
         C.toast("ok", saved + "% smaller, downloaded");
       }
     });
@@ -455,6 +511,294 @@
       }
     });
   });
+
+  /* ---------- Rotate PDF ---------- */
+  C.register("pdf/rotate", function (root) {
+    pdfTool(root, {
+      accept: "application/pdf,.pdf",
+      multiple: false,
+      filter: isPdf,
+      badFileMsg: "Please choose a PDF file.",
+      label: "Drop a PDF to rotate",
+      cta: "Rotate & download",
+      options: function (row) {
+        var angle = h("select", { "aria-label": "Rotation angle" }, [
+          h("option", { value: "90", text: "90° clockwise" }),
+          h("option", { value: "180", text: "180°" }),
+          h("option", { value: "270", text: "90° counter-clockwise" })
+        ]);
+        var range = h("input", { type: "text", placeholder: "all or 1-3,5", style: "width:130px" });
+        row.appendChild(h("label", { class: "field" }, ["Rotate ", angle]));
+        row.appendChild(h("label", { class: "field" }, ["Pages ", range]));
+        return function () { return { angle: parseInt(angle.value, 10), range: range.value }; };
+      },
+      run: async function (files, s, status) {
+        needs("PDF", typeof PDFLib !== "undefined" && PDFLib.PDFDocument);
+        status.set("processing", "Reading PDF...");
+        var doc = await PDFLib.PDFDocument.load(await files[0].arrayBuffer(), { ignoreEncryption: true });
+        var pages = parsePageRange(s.range, doc.getPageCount());
+        pages.forEach(function (idx) {
+          var page = doc.getPage(idx);
+          page.setRotation(PDFLib.degrees((page.getRotation().angle + s.angle) % 360));
+        });
+        var out = await doc.save();
+        var name = C.baseName(files[0].name) + "_rotated.pdf";
+        C.download(new Blob([out], { type: "application/pdf" }), name);
+        status.set("done", pages.length + " page(s) rotated → " + name);
+        C.toast("ok", "Downloaded " + name);
+      }
+    });
+  });
+
+  /* ---------- Sign PDF ---------- */
+  C.register("pdf/sign", function (root) {
+    needsSignSetup(root);
+  });
+
+  function needsSignSetup(root) {
+    var state = { pdfBytes: null, pdfDoc: null, pageCount: 0, pageIndex: 0, placed: null, fileName: "" };
+    var status;
+
+    /* Signature pad: transparent canvas, dark ink, white CSS background. */
+    var pad = h("canvas", { class: "sig-pad", "aria-label": "Draw your signature here" });
+    var padWrap = h("div", null, [
+      h("div", { class: "ta-label" }, [
+        h("span", { text: "1. Draw your signature" }),
+        h("span", { class: "mini-btns" }, [
+          h("button", { class: "mini", type: "button", text: "Clear", onclick: clearPad })
+        ])
+      ]),
+      pad
+    ]);
+    var padCtx, hasInk = false;
+    function setupPad() {
+      var dpr = window.devicePixelRatio || 1;
+      var w = Math.min(440, root.clientWidth - 30) || 440;
+      pad.style.width = w + "px";
+      pad.style.height = "150px";
+      pad.width = w * dpr;
+      pad.height = 150 * dpr;
+      padCtx = pad.getContext("2d");
+      padCtx.scale(dpr, dpr);
+      padCtx.lineWidth = 2.2;
+      padCtx.lineCap = "round";
+      padCtx.lineJoin = "round";
+      padCtx.strokeStyle = "#1e293b";
+      hasInk = false;
+    }
+    function clearPad() {
+      padCtx.clearRect(0, 0, pad.width, pad.height);
+      hasInk = false;
+      syncPlacedImage();
+    }
+    var drawing = false, lastX = 0, lastY = 0;
+    function padPos(e) {
+      var r = pad.getBoundingClientRect();
+      return [e.clientX - r.left, e.clientY - r.top];
+    }
+    pad.addEventListener("pointerdown", function (e) {
+      e.preventDefault();
+      try { pad.setPointerCapture(e.pointerId); } catch (err) { /* synthetic events have no active pointer */ }
+      drawing = true;
+      var p = padPos(e);
+      lastX = p[0]; lastY = p[1];
+    });
+    pad.addEventListener("pointermove", function (e) {
+      if (!drawing) return;
+      var p = padPos(e);
+      padCtx.beginPath();
+      padCtx.moveTo(lastX, lastY);
+      padCtx.lineTo(p[0], p[1]);
+      padCtx.stroke();
+      lastX = p[0]; lastY = p[1];
+      hasInk = true;
+    });
+    ["pointerup", "pointercancel"].forEach(function (ev) {
+      pad.addEventListener(ev, function () { drawing = false; syncPlacedImage(); });
+    });
+
+    /* Crop the pad to the inked bounding box so placement is tight. */
+    function signatureImage() {
+      if (!hasInk) return null;
+      var w = pad.width, hh = pad.height;
+      var data = pad.getContext("2d").getImageData(0, 0, w, hh).data;
+      var minX = w, minY = hh, maxX = 0, maxY = 0;
+      for (var y = 0; y < hh; y++) {
+        for (var x = 0; x < w; x++) {
+          if (data[(y * w + x) * 4 + 3] > 10) {
+            if (x < minX) minX = x;
+            if (x > maxX) maxX = x;
+            if (y < minY) minY = y;
+            if (y > maxY) maxY = y;
+          }
+        }
+      }
+      if (maxX <= minX || maxY <= minY) return null;
+      var pad2 = 6;
+      minX = Math.max(0, minX - pad2); minY = Math.max(0, minY - pad2);
+      maxX = Math.min(w, maxX + pad2); maxY = Math.min(hh, maxY + pad2);
+      var out = document.createElement("canvas");
+      out.width = maxX - minX;
+      out.height = maxY - minY;
+      out.getContext("2d").drawImage(pad, minX, minY, out.width, out.height, 0, 0, out.width, out.height);
+      return out;
+    }
+
+    /* Page stage: rendered page + draggable signature overlay. */
+    var stage = h("div", { class: "pdf-stage", style: "display:none" });
+    var pageCanvas = h("canvas");
+    var sigImg = h("img", { class: "sig-overlay", draggable: "false", alt: "Signature placement" });
+    stage.appendChild(pageCanvas);
+    stage.appendChild(sigImg);
+    var pageLabel = h("span", { text: "" });
+    var sizeSlider = h("input", { type: "range", min: "10", max: "60", value: "28", "aria-label": "Signature size" });
+    var controls = h("div", { class: "opts", style: "display:none;margin-top:13px" }, [
+      h("button", { class: "mini", type: "button", text: "← Prev", onclick: function () { showPage(state.pageIndex - 1); } }),
+      pageLabel,
+      h("button", { class: "mini", type: "button", text: "Next →", onclick: function () { showPage(state.pageIndex + 1); } }),
+      h("label", { class: "field", style: "margin-left:12px" }, ["Size ", sizeSlider]),
+      h("button", { class: "mini primary", type: "button", text: "Place signature here", onclick: placeOnPage })
+    ]);
+    var applyBtn = h("button", { class: "btn", type: "button", disabled: true, text: "Sign & download" });
+
+    C.dropzone(root, {
+      accept: "application/pdf,.pdf",
+      multiple: false,
+      label: "Drop the PDF to sign",
+      sub: "or click to browse",
+      onFiles: async function (files) {
+        var f = files.filter(isPdf)[0];
+        if (!f) { status.set("error", "Please choose a PDF file."); return; }
+        try {
+          needs("PDF rendering", typeof pdfjsLib !== "undefined");
+          state.fileName = f.name;
+          state.pdfBytes = await f.arrayBuffer();
+          state.pdfDoc = await pdfjsLib.getDocument({ data: state.pdfBytes.slice(0) }).promise;
+          state.pageCount = state.pdfDoc.numPages;
+          state.placed = null;
+          stage.style.display = "";
+          controls.style.display = "";
+          await showPage(0);
+          status.set("done", f.name + " loaded (" + state.pageCount + " pages). Draw a signature, pick a page, place it.");
+        } catch (err) {
+          status.set("error", err.message || "Could not read that PDF.");
+        }
+      }
+    });
+    root.appendChild(padWrap);
+    root.appendChild(h("div", { class: "ta-label", style: "margin-top:15px" }, [h("span", { text: "2. Pick the page and position" })]));
+    root.appendChild(controls);
+    root.appendChild(stage);
+    root.appendChild(h("div", { class: "actions-row" }, [applyBtn]));
+    status = C.makeStatus(root);
+    setupPad();
+
+    async function showPage(idx) {
+      if (!state.pdfDoc || idx < 0 || idx >= state.pageCount) return;
+      state.pageIndex = idx;
+      pageLabel.textContent = "Page " + (idx + 1) + " / " + state.pageCount;
+      var page = await state.pdfDoc.getPage(idx + 1);
+      var maxW = Math.min(680, root.clientWidth - 30);
+      var vp1 = page.getViewport({ scale: 1 });
+      var scale = maxW / vp1.width;
+      var viewport = page.getViewport({ scale: scale * (window.devicePixelRatio || 1) });
+      pageCanvas.width = viewport.width;
+      pageCanvas.height = viewport.height;
+      pageCanvas.style.width = Math.round(viewport.width / (window.devicePixelRatio || 1)) + "px";
+      pageCanvas.style.height = Math.round(viewport.height / (window.devicePixelRatio || 1)) + "px";
+      var ctx = pageCanvas.getContext("2d");
+      ctx.fillStyle = "#fff";
+      ctx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
+      await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+      syncPlacedImage();
+    }
+
+    function placeOnPage() {
+      var sig = signatureImage();
+      if (!sig) { status.set("error", "Draw a signature first (box above)."); return; }
+      if (!state.pdfDoc) { status.set("error", "Drop a PDF first."); return; }
+      state.placed = { page: state.pageIndex, xr: 0.55, yr: 0.75, wr: parseInt(sizeSlider.value, 10) / 100 };
+      applyBtn.disabled = false;
+      syncPlacedImage();
+      status.set("done", "Signature placed, drag it into position.");
+    }
+    sizeSlider.addEventListener("input", function () {
+      if (state.placed) { state.placed.wr = parseInt(sizeSlider.value, 10) / 100; syncPlacedImage(); }
+    });
+
+    function syncPlacedImage() {
+      var sig = signatureImage();
+      if (!state.placed || !sig || state.placed.page !== state.pageIndex) {
+        sigImg.style.display = "none";
+        return;
+      }
+      sigImg.src = sig.toDataURL("image/png");
+      var cw = pageCanvas.clientWidth;
+      var w = cw * state.placed.wr;
+      sigImg.style.display = "";
+      sigImg.style.width = w + "px";
+      sigImg.style.left = (state.placed.xr * cw) + "px";
+      sigImg.style.top = (state.placed.yr * pageCanvas.clientHeight) + "px";
+    }
+
+    var dragOff = null;
+    sigImg.addEventListener("pointerdown", function (e) {
+      e.preventDefault();
+      try { sigImg.setPointerCapture(e.pointerId); } catch (err) { /* synthetic events have no active pointer */ }
+      var r = sigImg.getBoundingClientRect();
+      dragOff = [e.clientX - r.left, e.clientY - r.top];
+    });
+    sigImg.addEventListener("pointermove", function (e) {
+      if (!dragOff || !state.placed) return;
+      var sr = pageCanvas.getBoundingClientRect();
+      var x = e.clientX - sr.left - dragOff[0];
+      var y = e.clientY - sr.top - dragOff[1];
+      x = Math.max(0, Math.min(x, sr.width - sigImg.clientWidth));
+      y = Math.max(0, Math.min(y, sr.height - sigImg.clientHeight));
+      state.placed.xr = x / sr.width;
+      state.placed.yr = y / sr.height;
+      sigImg.style.left = x + "px";
+      sigImg.style.top = y + "px";
+    });
+    ["pointerup", "pointercancel"].forEach(function (ev) {
+      sigImg.addEventListener(ev, function () { dragOff = null; });
+    });
+
+    applyBtn.addEventListener("click", async function () {
+      if (!state.placed || !state.pdfBytes) return;
+      var sig = signatureImage();
+      if (!sig) { status.set("error", "The signature pad is empty."); return; }
+      applyBtn.disabled = true;
+      try {
+        needs("PDF", typeof PDFLib !== "undefined" && PDFLib.PDFDocument);
+        status.set("processing", "Embedding signature...");
+        var doc = await PDFLib.PDFDocument.load(state.pdfBytes.slice(0), { ignoreEncryption: true });
+        var page = doc.getPage(state.placed.page);
+        var png = await doc.embedPng(sig.toDataURL("image/png"));
+        var pw = page.getWidth(), ph = page.getHeight();
+        var w = state.placed.wr * pw;
+        var hgt = w * (sig.height / sig.width);
+        var x = state.placed.xr * pw;
+        var y = ph - state.placed.yr * ph - hgt; // PDF origin is bottom-left
+        page.drawImage(png, { x: x, y: y, width: w, height: hgt });
+        var out = await doc.save();
+        var name = C.baseName(state.fileName) + "_signed.pdf";
+        C.download(new Blob([out], { type: "application/pdf" }), name);
+        status.set("done", "Signed page " + (state.placed.page + 1) + " → " + name);
+        C.toast("ok", "Downloaded " + name);
+      } catch (err) {
+        status.set("error", err.message || "Signing failed.");
+      }
+      applyBtn.disabled = false;
+    });
+
+    C.onClear(function () {
+      clearPad();
+      state.placed = null;
+      applyBtn.disabled = true;
+      status.set("idle", "Cleared.");
+    });
+  }
 
   C.boot();
 })();

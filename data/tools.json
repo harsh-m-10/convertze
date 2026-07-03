@@ -24,6 +24,12 @@
       "nav": "Text",
       "label": "Text tools",
       "blurb": "Count, clean, convert and generate text. Word counts, case changes, sorted lists, slugs and placeholder copy, all live as you type."
+    },
+    {
+      "id": "calc",
+      "nav": "Calc",
+      "label": "Calculators",
+      "blurb": "Everyday calculators and converters. Live currency conversion now, units and more on the way. Instant, free, no sign-up."
     }
   ],
   "tools": [
@@ -35,12 +41,13 @@
       "short": "Convert between PNG, JPG and WebP, alone or in batches.",
       "metaDescription": "Convert images between PNG, JPG and WebP for free in your browser. Batch convert with zip download. Files stay on your device, no watermark, no sign-up.",
       "about": [
-        "Pick an output format and drop any mix of PNG, JPG and WebP files, each one is redrawn and re-encoded by your browser. Transparent areas turn white when exporting to JPG; quality is adjustable for lossy formats.",
-        "Use it when a portal rejects WebP, an email needs smaller JPGs, or an editor wants lossless PNG. Two or more results are packaged into a single zip automatically. Because conversion is local, your images never travel over the network."
+        "Pick an output format and drop any mix of PNG, JPG and WebP files, each one is redrawn and re-encoded by your browser. The tool also inspects what you dropped and suggests a smarter format when one exists, for example WebP for large PNGs that use no transparency.",
+        "For big mixed batches there is a split-by-size rule: send files over a threshold to one format and the rest to another, in a single run. Two or more results are packaged into a zip automatically, and because conversion is local, your images never travel over the network."
       ],
       "faq": [
         { "q": "Are my images sent to a server?", "a": "No. The conversion runs inside your own browser tab using the canvas engine your browser already has. You can open this page, switch off your internet connection and the tool keeps working." },
-        { "q": "Which image formats can I convert between?", "a": "PNG, JPG and WebP, in any direction. You can mix formats in a single batch and everything comes out in the one output format you picked." },
+        { "q": "Can I convert different files to different formats in one batch?", "a": "Yes. Turn on the split-by-size rule and files over your threshold (say 5 MB) go to one format while the rest go to another, useful for large mixed uploads where only the heavy files need WebP." },
+        { "q": "What does the smart suggestion do?", "a": "When you drop files, the tool quickly checks them on your device, and if a better format is obvious, like WebP for large PNGs with no transparency, it tells you why and offers a one-click switch. It never changes your choice on its own." },
         { "q": "Why did my transparent PNG get a white background as JPG?", "a": "JPG has no concept of transparency, so transparent pixels have to become some color. This tool fills them with white, which is what most documents and portals expect. Convert to WebP or keep PNG if you need the transparency." }
       ],
       "libs": [
@@ -266,13 +273,13 @@
       "name": "Compress PDF",
       "h1": "Compress a PDF in your browser",
       "short": "Shrink heavy PDFs to a fraction of their size.",
-      "metaDescription": "Compress a PDF online for free, entirely in your browser. Reduce PDF file size for email and portal limits while the document stays on your device.",
+      "metaDescription": "Compress a PDF online for free, entirely in your browser. Pick a quality level, or target an exact size in KB for email and portal upload limits.",
       "about": [
-        "Shrinks heavy PDFs, especially scanned documents, by re-rendering each page as an optimised JPEG at the quality you choose and rebuilding the file. Compression of 60-90% is typical for scans.",
+        "Two modes. Pick a quality level yourself, or enter a target size in KB and the tool searches for the highest quality that fits under it, reducing dimensions only when quality alone is not enough. Pages are re-rendered as optimised JPEGs; 60-90% compression is typical for scans.",
         "The trade-off: pages become images, so text stops being selectable. For scanned PDFs that's no loss at all; for text-heavy digital PDFs, try a lighter setting and check the result. Either way the document is processed locally on your device."
       ],
       "faq": [
-        { "q": "How much smaller will my PDF get?", "a": "Scanned documents typically shrink by 60 to 90 percent. Digital PDFs that are mostly text compress less dramatically because there is less redundant image data to squeeze." },
+        { "q": "How do I compress a PDF to exactly 100 KB or 500 KB?", "a": "Switch the mode to target size and type the limit in KB. The tool tries progressively lower quality settings until the file fits, and shrinks page dimensions only as a last resort. If the target is physically unreachable it says so and gives you the smallest it could make." },
         { "q": "Why is the text not selectable after compressing?", "a": "This tool compresses by re-rendering each page as an optimized image, which is what makes scans so much smaller. The visual content is identical but the invisible text layer is gone. If you need selectable text, keep the original alongside the compressed copy." },
         { "q": "Is this safe for bank statements and signed contracts?", "a": "Yes. The document is rendered and rebuilt entirely by your browser. It never leaves your device, so there is no copy on anyone's server." }
       ],
@@ -286,6 +293,59 @@
         "pdf/pdf-to-images"
       ],
       "icon": "archive"
+    },
+    {
+      "path": "pdf/sign",
+      "cat": "pdf",
+      "name": "Sign PDF",
+      "h1": "Sign a PDF, draw and place your signature",
+      "short": "Draw a signature, drag it onto any page, download.",
+      "metaDescription": "Sign a PDF online for free: draw your signature, place it on any page and download. The document never leaves your device, no accounts, no watermark.",
+      "about": [
+        "Draw your signature with a mouse, finger or stylus, pick the page, place the signature exactly where it belongs by dragging it, set the size, and download the signed PDF. The signature is embedded into the document as a clean transparent image.",
+        "Contracts, agreements and forms are exactly the documents you should not be uploading to random websites. Here the PDF is rendered, signed and rebuilt entirely by your browser; it never crosses the network."
+      ],
+      "faq": [
+        { "q": "Is my contract uploaded while signing?", "a": "No, and that is the whole point of this tool. The PDF is rendered by pdf.js and rebuilt with your signature by pdf-lib, both running inside your browser tab. Nothing is transmitted anywhere." },
+        { "q": "Is this a legally binding signature?", "a": "It places a drawn signature image on the document, which is how most everyday PDFs are signed and widely accepted. It is not a cryptographic digital certificate; for certificate-based signing (like a notarised e-sign) you need a certificate authority service." },
+        { "q": "Can I sign on a specific page or sign multiple times?", "a": "Yes, use the page arrows to pick any page and drag the signature where you want it. For a second signature, run the tool again on the file you just downloaded, it takes seconds since nothing re-uploads." }
+      ],
+      "libs": [
+        "pdfjs",
+        "pdflib"
+      ],
+      "related": [
+        "pdf/merge",
+        "pdf/compress",
+        "pdf/split"
+      ],
+      "icon": "pen"
+    },
+    {
+      "path": "pdf/rotate",
+      "cat": "pdf",
+      "name": "Rotate PDF",
+      "h1": "Rotate PDF pages",
+      "short": "Turn pages 90°, 180° or 270°, all or a range.",
+      "metaDescription": "Rotate PDF pages online for free, 90, 180 or 270 degrees, every page or just a range like 1-3,5. The file stays on your device, no watermark.",
+      "about": [
+        "Fix scans that came in sideways or upside down: pick an angle, choose all pages or a range like 1-3,5, and download the corrected PDF. The rotation is written into the page properties, so quality is untouched.",
+        "Rotation runs on pdf-lib inside your browser. Nothing is re-rendered and nothing is uploaded; a 200-page document rotates in a couple of seconds."
+      ],
+      "faq": [
+        { "q": "Does rotating reduce the quality of my PDF?", "a": "No. The tool changes each page's rotation property rather than re-rendering anything, so text stays selectable and images keep every pixel." },
+        { "q": "Can I rotate just one page in the middle of the document?", "a": "Yes. Type the page numbers the way you would in a print dialog, for example 3 or 2-5,8, and only those pages turn." },
+        { "q": "My scan is rotated in some viewers but not others. Why?", "a": "Some scanners store the rotation as a hint that certain viewers ignore. Rotating here writes the orientation into the page itself, which every viewer respects." }
+      ],
+      "libs": [
+        "pdflib"
+      ],
+      "related": [
+        "images/rotate",
+        "pdf/split",
+        "pdf/merge"
+      ],
+      "icon": "rotate"
     },
     {
       "path": "pdf/images-to-pdf",
@@ -908,6 +968,30 @@
         "text/sort-lines"
       ],
       "icon": "link"
+    },
+    {
+      "path": "calc/currency-converter",
+      "cat": "calc",
+      "name": "Currency Converter",
+      "h1": "Convert currencies at daily rates",
+      "short": "160+ currencies, daily rates, instant conversion.",
+      "metaDescription": "Convert between 160+ currencies for free with daily updated exchange rates. USD to INR, EUR to USD, GBP, JPY and more. Instant, no sign-up.",
+      "about": [
+        "Type an amount, pick the two currencies and read the answer, updated live as you type, with the unit rate shown underneath and a one-click swap. Over 160 currencies are covered, with the popular ones at the top of the list.",
+        "One honest note: exchange rates are the single thing on Convertze that has to come from the internet. A public daily rates table is downloaded and cached on your device; the amounts you type are never sent anywhere, the math happens locally."
+      ],
+      "faq": [
+        { "q": "Where do the exchange rates come from?", "a": "From the open ExchangeRate-API feed, refreshed about once a day and cached in your browser for 24 hours. After the first load, the tool even works offline using the cached table." },
+        { "q": "Will I get exactly this rate at a bank or money changer?", "a": "No, treat these as mid-market reference rates. Banks, cards and transfer services add a margin of roughly 0.5 to 4 percent on top, so the amount you actually receive will be a little lower." },
+        { "q": "Is the amount I type sent to a server?", "a": "No. Only a generic rates table is downloaded, the same table for every visitor. Your amounts and currency choices stay on your device, where the conversion is calculated." }
+      ],
+      "libs": [],
+      "related": [
+        "dev/qr-code",
+        "dev/timestamp",
+        "text/word-counter"
+      ],
+      "icon": "currency"
     }
   ]
 }

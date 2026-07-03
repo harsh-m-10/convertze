@@ -4,17 +4,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CSV to JSON Converter, Free &amp; Private, In Your Browser | Convertze</title>
-  <meta name="description" content="Convert CSV to JSON and JSON to CSV for free in your browser. Quoted fields handled correctly, live output, and your data stays on your device.">
+  <title>Currency Converter, Free &amp; Private, In Your Browser | Convertze</title>
+  <meta name="description" content="Convert between 160+ currencies for free with daily updated exchange rates. USD to INR, EUR to USD, GBP, JPY and more. Instant, no sign-up.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://convertze.com/dev/csv-json">
+  <link rel="canonical" href="https://convertze.com/calc/currency-converter">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="manifest" href="/manifest.webmanifest">
   <meta name="theme-color" content="#0f172a">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://convertze.com/dev/csv-json">
-  <meta property="og:title" content="CSV to JSON Converter, Free &amp; Private, In Your Browser | Convertze">
-  <meta property="og:description" content="Convert CSV to JSON and JSON to CSV for free in your browser. Quoted fields handled correctly, live output, and your data stays on your device.">
+  <meta property="og:url" content="https://convertze.com/calc/currency-converter">
+  <meta property="og:title" content="Currency Converter, Free &amp; Private, In Your Browser | Convertze">
+  <meta property="og:description" content="Convert between 160+ currencies for free with daily updated exchange rates. USD to INR, EUR to USD, GBP, JPY and more. Instant, no sign-up.">
   <meta property="og:site_name" content="Convertze">
   <meta name="twitter:card" content="summary">
   <script>try{if(localStorage.getItem("convertze-theme")==="light")document.documentElement.classList.add("light")}catch(e){}</script>
@@ -28,7 +28,7 @@
   <header class="site-header">
     <div class="wrap bar">
       <a class="brand" href="/"><span class="brand-mark">C</span><b>Convertze</b></a>
-      <nav class="nav-links" aria-label="Categories"><a href="/images">Images</a><a href="/pdf">PDF</a><a href="/dev" aria-current="true">Dev Tools</a><a href="/text">Text</a><a href="/calc">Calc</a></nav>
+      <nav class="nav-links" aria-label="Categories"><a href="/images">Images</a><a href="/pdf">PDF</a><a href="/dev">Dev Tools</a><a href="/text">Text</a><a href="/calc" aria-current="true">Calc</a></nav>
       <span class="header-spacer"></span>
       <div class="header-search" data-tool-search>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
@@ -40,66 +40,52 @@
     </div>
   </header>
   <main class="wrap">
-    <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/dev">Developer tools</a> › CSV to JSON Converter</nav>
-    <div class="h1-row"><span class="t-icon lg c-dev"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg></span><h1 class="tool-h1">Convert between CSV and JSON</h1></div>
-    <p class="tool-tagline">Header-row CSV to a JSON array, and back.</p>
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/calc">Calculators</a> › Currency Converter</nav>
+    <div class="h1-row"><span class="t-icon lg c-calc"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg></span><h1 class="tool-h1">Convert currencies at daily rates</h1></div>
+    <p class="tool-tagline">160+ currencies, daily rates, instant conversion.</p>
     <p class="privacy-line"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg> Files stay on your device. No accounts. Free.</p>
     <div class="page-grid">
       <div>
-        <div class="panel" id="tool-root" data-tool="dev/csv-json">
+        <div class="panel" id="tool-root" data-tool="calc/currency-converter">
           <noscript>This tool runs entirely in your browser and needs JavaScript enabled.</noscript>
           <p style="color:var(--muted);font-size:13.5px;margin:0">Loading tool...</p>
         </div>
         <div class="panel about">
           <h2>About this tool</h2>
-          <p>CSV with a header row becomes a JSON array of objects; a JSON array of objects becomes properly quoted CSV. Embedded commas, quotes and line breaks inside fields are handled correctly in both directions.</p>
-          <p>The standard bridge between spreadsheets and code: export from Excel or Sheets, convert here, feed to your script, or the reverse. Your data is parsed locally and never leaves your browser.</p>
+          <p>Type an amount, pick the two currencies and read the answer, updated live as you type, with the unit rate shown underneath and a one-click swap. Over 160 currencies are covered, with the popular ones at the top of the list.</p>
+          <p>One honest note: exchange rates are the single thing on Convertze that has to come from the internet. A public daily rates table is downloaded and cached on your device; the amounts you type are never sent anywhere, the math happens locally.</p>
         </div>
         <div class="panel">
           <h2>How it works</h2>
           <ol class="steps">
-          <li>Paste your input, or drop a text file onto the box.</li>
-          <li>The output updates live as you type.</li>
-          <li>Copy it to the clipboard, or download it as a file.</li>
+          <li>Type an amount and pick your currencies.</li>
+          <li>The result updates live as you type.</li>
+          <li>Swap the direction with one click.</li>
           </ol>
         </div>
         <div class="panel">
           <h2>Frequently asked questions</h2>
-          <details class="faq-item"><summary>How does the tool know my column names?</summary><p>The first CSV row is treated as the header, and each following row becomes a JSON object using those headers as keys. Going the other way, the keys of your JSON objects become the header row.</p></details>
-          <details class="faq-item"><summary>What about commas and quotes inside my data?</summary><p>Fields containing commas, quotes or line breaks are handled with proper CSV quoting in both directions, the cases that break naive converters are exactly what this one is tested on.</p></details>
-          <details class="faq-item"><summary>Can I convert an Excel or Google Sheets file?</summary><p>Export the sheet as CSV first, which both apps do natively, then drop the CSV here. The JSON comes out ready for your script or API.</p></details>
+          <details class="faq-item"><summary>Where do the exchange rates come from?</summary><p>From the open ExchangeRate-API feed, refreshed about once a day and cached in your browser for 24 hours. After the first load, the tool even works offline using the cached table.</p></details>
+          <details class="faq-item"><summary>Will I get exactly this rate at a bank or money changer?</summary><p>No, treat these as mid-market reference rates. Banks, cards and transfer services add a margin of roughly 0.5 to 4 percent on top, so the amount you actually receive will be a little lower.</p></details>
+          <details class="faq-item"><summary>Is the amount I type sent to a server?</summary><p>No. Only a generic rates table is downloaded, the same table for every visitor. Your amounts and currency choices stay on your device, where the conversion is calculated.</p></details>
         </div>
         <div class="panel">
           <h2>Related tools</h2>
           <ul class="related-list">
-          <li><a href="/dev/json-formatter">JSON Formatter</a> <span style="color:var(--muted);font-weight:400">- Beautify or minify JSON live, with clear errors.</span></li>
-          <li><a href="/dev/json-yaml">JSON to YAML Converter</a> <span style="color:var(--muted);font-weight:400">- Both directions, live, with validation.</span></li>
-          <li><a href="/dev/diff">Text Diff</a> <span style="color:var(--muted);font-weight:400">- Side-by-side inputs, green/red line diff.</span></li>
+          <li><a href="/dev/qr-code">QR Code Generator</a> <span style="color:var(--muted);font-weight:400">- Any text or URL to a downloadable QR code.</span></li>
+          <li><a href="/dev/timestamp">Timestamp Converter</a> <span style="color:var(--muted);font-weight:400">- Seconds, millis, ISO and local, live.</span></li>
+          <li><a href="/text/word-counter">Word Counter</a> <span style="color:var(--muted);font-weight:400">- Live word, character, sentence and paragraph counts.</span></li>
           </ul>
         </div>
       </div>
-      <aside class="side-nav" aria-label="Developer tools">
-        <h3>Developer tools</h3>
-        <a href="/dev/json-formatter">JSON Formatter</a>
-        <a href="/dev/json-yaml">JSON to YAML Converter</a>
-        <a href="/dev/csv-json" aria-current="true">CSV to JSON Converter</a>
-        <a href="/dev/base64">Base64 Encode / Decode</a>
-        <a href="/dev/hash">Hash Generator</a>
-        <a href="/dev/jwt">JWT Decoder</a>
-        <a href="/dev/timestamp">Timestamp Converter</a>
-        <a href="/dev/diff">Text Diff</a>
-        <a href="/dev/regex">Regex Tester</a>
-        <a href="/dev/color">Color Converter</a>
-        <a href="/dev/url">URL Encode / Decode</a>
-        <a href="/dev/markdown-preview">Markdown Preview</a>
-        <a href="/dev/uuid">UUID Generator</a>
-        <a href="/dev/password">Password Generator</a>
-        <a href="/dev/qr-code">QR Code Generator</a>
+      <aside class="side-nav" aria-label="Calculators">
+        <h3>Calculators</h3>
+        <a href="/calc/currency-converter" aria-current="true">Currency Converter</a>
       </aside>
     </div>
   </main>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"CSV to JSON Converter","url":"https://convertze.com/dev/csv-json","description":"Convert CSV to JSON and JSON to CSV for free in your browser. Quoted fields handled correctly, live output, and your data stays on your device.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How does the tool know my column names?","acceptedAnswer":{"@type":"Answer","text":"The first CSV row is treated as the header, and each following row becomes a JSON object using those headers as keys. Going the other way, the keys of your JSON objects become the header row."}},{"@type":"Question","name":"What about commas and quotes inside my data?","acceptedAnswer":{"@type":"Answer","text":"Fields containing commas, quotes or line breaks are handled with proper CSV quoting in both directions, the cases that break naive converters are exactly what this one is tested on."}},{"@type":"Question","name":"Can I convert an Excel or Google Sheets file?","acceptedAnswer":{"@type":"Answer","text":"Export the sheet as CSV first, which both apps do natively, then drop the CSV here. The JSON comes out ready for your script or API."}}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Currency Converter","url":"https://convertze.com/calc/currency-converter","description":"Convert between 160+ currencies for free with daily updated exchange rates. USD to INR, EUR to USD, GBP, JPY and more. Instant, no sign-up.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Where do the exchange rates come from?","acceptedAnswer":{"@type":"Answer","text":"From the open ExchangeRate-API feed, refreshed about once a day and cached in your browser for 24 hours. After the first load, the tool even works offline using the cached table."}},{"@type":"Question","name":"Will I get exactly this rate at a bank or money changer?","acceptedAnswer":{"@type":"Answer","text":"No, treat these as mid-market reference rates. Banks, cards and transfer services add a margin of roughly 0.5 to 4 percent on top, so the amount you actually receive will be a little lower."}},{"@type":"Question","name":"Is the amount I type sent to a server?","acceptedAnswer":{"@type":"Answer","text":"No. Only a generic rates table is downloaded, the same table for every visitor. Your amounts and currency choices stay on your device, where the conversion is calculated."}}]}</script>
   <footer class="site-footer">
     <div class="wrap cols">
       <span>Convertze is a free, open source side project. Your files stay on your device. Found a bug? Tell us on GitHub.</span>
@@ -107,6 +93,6 @@
     </div>
   </footer>
   <script src="/assets/app.js?v=fba3f1e6" defer></script>
-  <script src="/assets/tools-dev.js?v=fba3f1e6" defer></script>
+  <script src="/assets/tools-calc.js?v=fba3f1e6" defer></script>
 </body>
 </html>
