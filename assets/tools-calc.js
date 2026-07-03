@@ -466,6 +466,90 @@
     run();
   });
 
+  /* ---------- Number to words ---------- */
+  C.register("calc/number-to-words", function (root) {
+    var ONES = ["", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve",
+      "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"];
+    var TENS = ["", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"];
+    function under100(n) { return n < 20 ? ONES[n] : (TENS[Math.floor(n / 10)] + (n % 10 ? "-" + ONES[n % 10] : "")); }
+    function under1000(n) {
+      var hh = Math.floor(n / 100), rest = n % 100;
+      return (hh ? ONES[hh] + " hundred" + (rest ? " " : "") : "") + (rest ? under100(rest) : "");
+    }
+    function indian(n) {
+      if (n === 0) return "zero";
+      var parts = [];
+      var crore = Math.floor(n / 1e7);
+      if (crore) { parts.push((crore > 99 ? indian(crore) : under100(crore)) + " crore"); n %= 1e7; }
+      var lakh = Math.floor(n / 1e5);
+      if (lakh) { parts.push(under100(lakh) + " lakh"); n %= 1e5; }
+      var thou = Math.floor(n / 1e3);
+      if (thou) { parts.push(under100(thou) + " thousand"); n %= 1e3; }
+      if (n) parts.push(under1000(n));
+      return parts.join(" ");
+    }
+    function intl(n) {
+      if (n === 0) return "zero";
+      var scales = [[1e12, "trillion"], [1e9, "billion"], [1e6, "million"], [1e3, "thousand"]];
+      var parts = [];
+      scales.forEach(function (sc) {
+        var q = Math.floor(n / sc[0]);
+        if (q) { parts.push(under1000(q) + " " + sc[1]); n %= sc[0]; }
+      });
+      if (n) parts.push(under1000(n));
+      return parts.join(" ");
+    }
+    function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+    var amount = h("input", { class: "single-input", type: "number", value: "4550000", step: "any", "aria-label": "Number", style: "max-width:220px" });
+    var system = h("select", { "aria-label": "Numbering system" }, [
+      h("option", { value: "in", text: "Indian (lakh, crore)" }),
+      h("option", { value: "intl", text: "International (million)" })
+    ]);
+    var currency = h("input", { type: "checkbox" });
+    var copyBtn = h("button", { class: "mini primary", type: "button", text: "Copy" });
+    var result = h("div", { class: "outbox", style: "font-family:Inter,ui-sans-serif,sans-serif;font-size:17px;font-weight:600;max-height:none", text: "-" });
+
+    root.appendChild(h("div", { class: "opts" }, [
+      h("label", { class: "field" }, ["Number ", amount]),
+      h("label", { class: "field" }, [system]),
+      h("label", { class: "field" }, [currency, "As rupees (for cheques)"])
+    ]));
+    root.appendChild(h("div", { class: "ta-label", style: "margin-top:13px" }, [h("span", { text: "In words" }), h("span", { class: "mini-btns" }, [copyBtn])]));
+    root.appendChild(result);
+
+    function run() {
+      var raw = parseFloat(amount.value);
+      if (!isFinite(raw) || Math.abs(raw) > 1e14) { result.textContent = "-"; return; }
+      var neg = raw < 0;
+      var n = Math.abs(raw);
+      var whole = Math.floor(n);
+      var toWords = system.value === "in" ? indian : intl;
+      var text;
+      if (currency.checked) {
+        var paise = Math.round((n - whole) * 100);
+        text = cap(toWords(whole)) + " rupee" + (whole === 1 ? "" : "s") +
+          (paise ? " and " + under100(paise) + " paise" : "") + " only";
+      } else {
+        var frac = String(n).split(".")[1];
+        text = cap(toWords(whole)) + (frac ? " point " + frac.split("").map(function (d) { return d === "0" ? "zero" : ONES[+d]; }).join(" ") : "");
+      }
+      result.textContent = (neg ? "Minus " : "") + text;
+      C.hashState.save({ a: amount.value, s: system.value, c: currency.checked ? 1 : 0 });
+    }
+    copyBtn.addEventListener("click", function () { if (result.textContent !== "-") C.copyText(result.textContent); });
+    [amount, system, currency].forEach(function (el) { el.addEventListener("input", run); el.addEventListener("change", run); });
+    C.onRun(run);
+    C.onClear(function () { amount.value = ""; result.textContent = "-"; });
+    var st = C.hashState.load();
+    if (st) {
+      if (st.a) amount.value = st.a;
+      if (st.s) system.value = st.s;
+      if (st.c) currency.checked = true;
+    }
+    run();
+  });
+
   /* ---------- Invoice generator ---------- */
   C.register("calc/invoice-generator", function (root) {
     var DRAFT_KEY = "convertze-invoice-draft";

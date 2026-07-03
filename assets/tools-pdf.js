@@ -491,6 +491,25 @@
     });
   });
 
+  /* ---------- Word to PDF ---------- */
+  C.register("pdf/word-to-pdf", function (root) {
+    pdfTool(root, {
+      accept: ".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      multiple: false,
+      filter: function (f) { return /\.docx$/i.test(f.name); },
+      badFileMsg: "Please choose a .docx file (legacy .doc isn't supported).",
+      label: "Drop a Word document (.docx) here",
+      cta: "Convert to PDF",
+      run: async function (files, s, status) {
+        needs("Word rendering", typeof mammoth !== "undefined");
+        status.set("processing", "Reading document...");
+        var result = await mammoth.convertToHtml({ arrayBuffer: await files[0].arrayBuffer() });
+        if (!result.value || !result.value.trim()) throw new Error("No readable content found in that document.");
+        await renderHtmlToPdf(result.value, status, C.baseName(files[0].name) + ".pdf", MD_STYLE);
+      }
+    });
+  });
+
   /* ---------- Markdown to PDF ---------- */
   C.register("pdf/markdown-to-pdf", function (root) {
     pdfTool(root, {

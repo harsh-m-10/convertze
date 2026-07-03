@@ -2054,6 +2054,76 @@
         "calc/currency-converter"
       ],
       "icon": "receipt"
+    },
+    {
+      "path": "pdf/word-to-pdf",
+      "cat": "pdf",
+      "name": "Word to PDF",
+      "h1": "Convert Word documents to PDF",
+      "short": "DOCX to a clean paged PDF, right in the browser.",
+      "metaDescription": "Convert Word (.docx) to PDF for free in your browser. Headings, lists and formatting rendered into an A4 PDF. The document stays on your device.",
+      "about": [
+        "Drop a .docx file and get an A4 PDF with headings, paragraphs, lists, bold and italics carried over. The document is parsed and rendered entirely inside your browser tab, so contracts and reports never touch a server.",
+        "Know the limits: it reads modern .docx files (not the legacy .doc format from pre-2007 Word), and it renders the content of the document rather than replicating Word page-for-page, so heavy layouts with columns, text boxes and floating images will simplify. For everyday text documents the output is clean."
+      ],
+      "faq": [
+        {
+          "q": "Is my document uploaded to convert it?",
+          "a": "No. The .docx is unpacked and rendered by JavaScript running in your browser, and the PDF is assembled on your device. Nothing crosses the network, which matters for exactly the contracts and letters people convert."
+        },
+        {
+          "q": "Why does my converted PDF look different from Word?",
+          "a": "The converter renders your content with clean styling rather than replicating Word's exact layout engine. Text, headings, lists and emphasis carry over; multi-column layouts, text boxes and precise page breaks may not. For pixel-perfect fidelity, Word's own Save as PDF is the right tool."
+        },
+        {
+          "q": "Can I convert old .doc files?",
+          "a": "Not directly, the tool reads the modern .docx format. Open the .doc in Word, Google Docs or LibreOffice, save it as .docx, and convert that."
+        }
+      ],
+      "libs": [
+        "mammoth",
+        "jspdf",
+        "html2canvas"
+      ],
+      "related": [
+        "pdf/markdown-to-pdf",
+        "pdf/html-to-pdf",
+        "pdf/merge"
+      ],
+      "icon": "filetext"
+    },
+    {
+      "path": "calc/number-to-words",
+      "cat": "calc",
+      "name": "Number to Words",
+      "h1": "Convert numbers to words",
+      "short": "Lakh/crore or millions, plus rupees for cheques.",
+      "metaDescription": "Convert numbers to words for free: Indian lakh and crore or international millions, with a rupees mode for cheques and invoices. Instant.",
+      "about": [
+        "Type any number and read it in words, in the Indian system (45,50,000 is forty-five lakh fifty thousand) or the international one (4.55 million). The rupees mode formats it the way cheques and invoices want: Forty-five lakh fifty thousand rupees only, with paise handled.",
+        "Everyone who has hesitated over a cheque or an invoice amount-in-words line knows why this exists. The conversion is instant, local and copyable with one click."
+      ],
+      "faq": [
+        {
+          "q": "How do lakh and crore map to millions?",
+          "a": "One lakh is 100,000 (0.1 million) and one crore is 10,000,000 (10 million). The same number reads differently in the two systems, which is why the tool offers both."
+        },
+        {
+          "q": "How should the amount in words be written on a cheque?",
+          "a": "Use the rupees mode: it produces the standard form ending in 'only', for example Twelve thousand five hundred rupees and fifty paise only. Write it exactly, and draw a line through leftover space."
+        },
+        {
+          "q": "How large a number can it convert?",
+          "a": "Up to 99,99,99,99,99,999 in the Indian system (about 100 trillion internationally). Decimals are read digit by digit, or as paise in rupees mode."
+        }
+      ],
+      "libs": [],
+      "related": [
+        "calc/invoice-generator",
+        "calc/gst-calculator",
+        "calc/percentage-calculator"
+      ],
+      "icon": "type"
     }
   ]
 }

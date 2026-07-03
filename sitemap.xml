@@ -321,6 +321,16 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://convertze.com/pdf/word-to-pdf</loc>
+    <lastmod>2026-07-03</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://convertze.com/calc/number-to-words</loc>
+    <lastmod>2026-07-03</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://convertze.com/about</loc>
     <lastmod>2026-07-03</lastmod>
     <priority>0.4</priority>
