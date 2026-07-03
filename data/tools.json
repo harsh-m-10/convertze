@@ -39,7 +39,7 @@
       "cat": "images",
       "name": "Image Converter",
       "h1": "Convert PNG, JPG and WebP",
-      "short": "Convert between PNG, JPG and WebP, alone or in batches.",
+      "short": "PNG, JPG and WebP in any direction, batches too.",
       "metaDescription": "Convert images between PNG, JPG and WebP for free in your browser. Batch convert with zip download. Files stay on your device, no watermark, no sign-up.",
       "about": [
         "Pick an output format and drop any mix of PNG, JPG and WebP files, each one is redrawn and re-encoded by your browser. The tool also inspects what you dropped and suggests a smarter format when one exists, for example WebP for large PNGs that use no transparency.",
@@ -393,7 +393,7 @@
       "cat": "pdf",
       "name": "Sign PDF",
       "h1": "Sign a PDF, draw and place your signature",
-      "short": "Draw, type or upload a signature, place it on any page.",
+      "short": "Draw, type or upload a signature, then place it.",
       "metaDescription": "Sign a PDF online for free: draw your signature, type your name in a script style, or upload a signature image, then place it on any page. The document never leaves your device.",
       "about": [
         "Three ways to make your signature: draw it with a mouse, finger or stylus, type your name and pick a handwriting style, or upload a photo of your real signature (white paper backgrounds are made transparent automatically). Then pick the page, drag the signature into position, set the size and download.",
