@@ -62,7 +62,21 @@
         </div>
         <div class="panel about" id="feedback">
           <h2>Request a tool, report a bug, or just say something</h2>
-          <p>The feedback form is warming up. In the meantime, <a href="https://github.com/harsh-m-10/convertze/issues/new" rel="noopener noreferrer" target="_blank">open a GitHub issue</a>, several tools on this site exist because someone did.</p>
+          <p>Not everyone wants a GitHub account, so here is a plain form. Feature requests genuinely drive the roadmap, and bug reports get fixed fast.</p>
+          <form data-feedback novalidate>
+            <input type="hidden" name="access_key" value="d1c7c16d-dd71-4881-8191-acde8b83cc1c">
+            <input type="hidden" name="subject" value="Convertze feedback">
+            <input type="hidden" name="from_name" value="Convertze feedback form">
+            <input type="checkbox" name="botcheck" class="fb-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+            <div class="fb-row">
+              <label class="field fb-field">Name <input type="text" name="name" placeholder="What should we call you?"></label>
+              <label class="field fb-field">Email <input type="text" name="email" inputmode="email" placeholder="Only if you want a reply"></label>
+              <label class="field fb-field">Type <select name="type"><option>Feature request</option><option>Bug or error</option><option>Feedback</option><option>Complaint</option></select></label>
+            </div>
+            <textarea class="ta fb-ta" name="message" rows="4" placeholder="What do you need, or what went wrong? If it is a bug, the tool name and what you dropped into it help a lot." aria-label="Your message"></textarea>
+            <div class="actions-row"><button class="btn" type="submit">Send it</button><span class="fb-status" role="status"></span></div>
+          </form>
+          <p class="fb-note">Honest note: this form is the one thing on this page that sends anything anywhere. Exactly what you type above goes to our inbox via Web3Forms, nothing else does.</p>
         </div>
       </div>
     </div>
