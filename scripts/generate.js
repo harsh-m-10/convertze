@@ -114,19 +114,21 @@ const TOOL_ICONS = {
 const toolIcon = (t, lg) =>
   `<span class="t-icon${lg ? " lg" : ""} c-${t.cat}">${TOOL_ICONS[t.icon] || TOOL_ICONS.image}</span>`;
 
-function head({ title, desc, canonicalPath, ogImage }) {
+function head({ title, desc, canonicalPath, ogImage, is404 }) {
   const url = canonicalPath ? `${SITE}/${canonicalPath}` : `${SITE}/`;
   const og = `${SITE}${ogImage || "/assets/og/default.png"}`;
+  // On the 404 page, count the path that actually failed (as "404-/bad/url")
+  // instead of the canonical, so broken links show up in the dashboard.
   const gc = DATA.goatcounter
-    ? `\n  <script data-goatcounter="https://${DATA.goatcounter}.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>`
+    ? `${is404 ? '\n  <script>window.goatcounter={path:function(){return "404-"+location.pathname+location.search}};</script>' : ""}\n  <script data-goatcounter="https://${DATA.goatcounter}.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>`
     : "";
   return `<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${esc(title)}</title>
   <meta name="description" content="${esc(desc)}">
-  <meta name="robots" content="index, follow">
-  <link rel="canonical" href="${url}">
+  <meta name="robots" content="${is404 ? "noindex, follow" : "index, follow"}">${is404 ? "" : `
+  <link rel="canonical" href="${url}">`}
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="manifest" href="/manifest.webmanifest">
   <meta name="theme-color" content="#0f172a">
@@ -208,11 +210,11 @@ function feedbackPanel() {
         </div>`;
 }
 
-function page({ title, desc, canonicalPath, activeCat, body, scripts, ogImage }) {
+function page({ title, desc, canonicalPath, activeCat, body, scripts, ogImage, is404 }) {
   return `<!DOCTYPE html>
 ${MARK}
 <html lang="en">
-${head({ title, desc, canonicalPath, ogImage })}
+${head({ title, desc, canonicalPath, ogImage, is404 })}
 <body>
   ${header(activeCat)}
   ${body}
@@ -425,6 +427,7 @@ function notFound() {
     title: "Page not found, Convertze",
     desc: "That page doesn't exist. Search Convertze's free in-browser file and developer tools.",
     canonicalPath: "404.html",
+    is404: true,
     body
   });
 }
