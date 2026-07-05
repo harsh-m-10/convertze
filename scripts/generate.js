@@ -171,9 +171,23 @@ function header(activeCat) {
 
 function footer() {
   return `<footer class="site-footer">
-    <div class="wrap cols">
-      <span>Convertze is a free, open source side project. Your files stay on your device. Found a bug? Tell us on GitHub. <button class="mini" id="install-app" type="button" style="display:none">Install app</button></span>
-      <span>${cats.map((c) => `<a href="/${c.id}">${esc(c.label)}</a>`).join(" · ")} · <a href="/about">About</a> · <a href="/changelog">What's new</a> · <a href="/about#feedback">Feedback</a> · <a href="https://github.com/harsh-m-10/convertze" rel="noopener noreferrer" target="_blank">GitHub</a></span>
+    <div class="wrap foot-grid">
+      <div class="foot-brand">
+        <a class="brand" href="/"><span class="brand-mark">C</span><b>Convertze</b></a>
+        <p>Free, open source tools that run in your browser. Your files never leave your device.</p>
+        <button class="mini" id="install-app" type="button" style="display:none">Install app</button>
+      </div>
+      <nav class="foot-col" aria-label="Tool categories">
+        <h4>Tools</h4>
+        ${cats.map((c) => `<a href="/${c.id}">${esc(c.label)}</a>`).join("\n        ")}
+      </nav>
+      <nav class="foot-col" aria-label="Site">
+        <h4>Site</h4>
+        <a href="/about">About</a>
+        <a href="/changelog">What's new</a>
+        <a href="/about#feedback">Feedback & requests</a>
+        <a href="https://github.com/harsh-m-10/convertze" rel="noopener noreferrer" target="_blank">GitHub</a>
+      </nav>
     </div>
   </footer>`;
 }
@@ -183,16 +197,18 @@ const privacyBadge = `<p class="privacy-line">${ICONS.shield} Files stay on your
 /* Feedback / feature request form (about + changelog). Posts to Web3Forms so
  * there is still no Convertze server; renders a GitHub fallback until the
  * access key is set in data/tools.json. */
-function feedbackPanel() {
+function feedbackPanel(heading, lead) {
+  heading = heading || "Request a tool, report a bug, or just say something";
+  lead = lead || "Not everyone wants a GitHub account, so here is a plain form. Feature requests genuinely drive the roadmap, and bug reports get fixed fast.";
   if (!DATA.web3forms) {
     return `<div class="panel about" id="feedback">
-          <h2>Request a tool, report a bug, or just say something</h2>
+          <h2>${esc(heading)}</h2>
           <p>The feedback form is warming up. In the meantime, <a href="https://github.com/harsh-m-10/convertze/issues/new" rel="noopener noreferrer" target="_blank">open a GitHub issue</a>, several tools on this site exist because someone did.</p>
         </div>`;
   }
   return `<div class="panel about" id="feedback">
-          <h2>Request a tool, report a bug, or just say something</h2>
-          <p>Not everyone wants a GitHub account, so here is a plain form. Feature requests genuinely drive the roadmap, and bug reports get fixed fast.</p>
+          <h2>${esc(heading)}</h2>
+          <p>${esc(lead)}</p>
           <form data-feedback novalidate>
             <input type="hidden" name="access_key" value="${esc(DATA.web3forms)}">
             <input type="hidden" name="subject" value="Convertze feedback">
@@ -421,6 +437,14 @@ function notFound() {
         <div class="search-pop"></div>
       </div>
       <p style="margin-top:18px"><a class="btn" href="/">Browse all tools</a></p>
+    </div>
+    <div class="page-grid" style="grid-template-columns:minmax(0,720px);justify-content:center;margin-top:6px">
+      <div>
+        ${feedbackPanel(
+          "And if the tool you wanted doesn't exist yet, ask for it",
+          "Tell us what you were looking for and there is a real chance it ships within days. Several tools on this site exist because someone asked."
+        )}
+      </div>
     </div>
   </main>`;
   return page({
