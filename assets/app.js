@@ -174,6 +174,48 @@
     }
   }
 
+  /* ---------- Feedback form (about + changelog) ---------- */
+  var fbForm = document.querySelector("form[data-feedback]");
+  if (fbForm) {
+    var fbStatus = fbForm.querySelector(".fb-status");
+    var fbBtn = fbForm.querySelector("button[type=submit]");
+    fbForm.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      var data = new FormData(fbForm);
+      if (data.get("botcheck")) return; /* honeypot */
+      data.delete("botcheck");
+      var msg = String(data.get("message") || "").trim();
+      var email = String(data.get("email") || "").trim();
+      if (!msg) {
+        fbStatus.className = "fb-status err";
+        fbStatus.textContent = "The message is the one part we actually need.";
+        return;
+      }
+      if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        fbStatus.className = "fb-status err";
+        fbStatus.textContent = "That email doesn't look right; fix it or leave it blank.";
+        return;
+      }
+      if (!email) data.delete("email");
+      data.set("subject", "Convertze " + (data.get("type") || "feedback").toLowerCase() + " from " + (String(data.get("name") || "").trim() || "anonymous"));
+      fbBtn.disabled = true;
+      fbStatus.className = "fb-status";
+      fbStatus.textContent = "Sending...";
+      try {
+        var res = await fetch("https://api.web3forms.com/submit", { method: "POST", body: data });
+        var out = await res.json();
+        if (!out.success) throw new Error(out.message || "send failed");
+        fbForm.innerHTML = "";
+        fbForm.appendChild(h("p", { class: "fb-thanks", text: "Got it, thank you" + (data.get("name") ? ", " + data.get("name") : "") + ". " + (email ? "We'll reply to " + email + " if there's news." : "It goes straight to the maker's inbox.") }));
+        toast("ok", "Feedback sent");
+      } catch (err) {
+        fbBtn.disabled = false;
+        fbStatus.className = "fb-status err";
+        fbStatus.textContent = "Couldn't send right now. Please retry, or open a GitHub issue.";
+      }
+    });
+  }
+
   /* ---------- Service worker ---------- */
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", function () {

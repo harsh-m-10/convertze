@@ -485,3 +485,15 @@ ol.steps li { margin: 6px 0; }
   .hero { padding: 34px 0 8px; }
   .toast-stack { left: 18px; }
 }
+
+/* Feedback form (about + changelog) */
+.fb-hp { position: absolute; left: -9999px; opacity: 0; }
+.fb-row { display: flex; flex-wrap: wrap; gap: 12px; margin: 4px 0 10px; }
+.fb-field { flex: 1 1 180px; }
+.fb-field input[type="text"], .fb-field select { flex: 1; min-width: 0; }
+form[data-feedback] .fb-ta { min-height: 96px; font-family: inherit; font-size: 13.5px; }
+form[data-feedback] .actions-row { margin-top: 10px; }
+.fb-status { font-size: 13px; color: var(--muted); }
+.fb-status.err { color: #f87171; }
+.fb-thanks { color: var(--ink); font-weight: 500; margin: 6px 0; }
+.fb-note { font-size: 12.5px; color: var(--muted); margin: 12px 0 0; }

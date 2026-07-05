@@ -1,6 +1,7 @@
 {
   "site": "https://convertze.com",
   "goatcounter": "agent-null",
+  "web3forms": "",
   "categories": [
     {
       "id": "images",
@@ -67,9 +68,9 @@
         "jszip"
       ],
       "related": [
+        "images/bulk-convert",
         "images/compress",
-        "images/resize",
-        "pdf/images-to-pdf"
+        "images/resize"
       ],
       "icon": "swap"
     },
@@ -102,9 +103,9 @@
         "jszip"
       ],
       "related": [
+        "images/bulk-convert",
         "images/crop",
-        "images/compress",
-        "images/convert"
+        "images/compress"
       ],
       "icon": "maximize"
     },
@@ -137,11 +138,46 @@
         "jszip"
       ],
       "related": [
+        "images/bulk-convert",
         "images/resize",
-        "images/convert",
         "pdf/compress"
       ],
       "icon": "minimize"
+    },
+    {
+      "path": "images/bulk-convert",
+      "cat": "images",
+      "name": "Bulk Image Converter",
+      "h1": "Batch convert images to one format and size",
+      "short": "One format, one size, one zip for a whole batch.",
+      "metaDescription": "Batch convert images to WebP, JPG or PNG at a set dimension, free and in your browser. Drop 20 photos, pick format, size and quality, download one zip. Files stay on your device.",
+      "about": [
+        "Drop a whole batch of photos and export every one of them with the same rules: a single output format (WebP, JPG or PNG), an optional size (fit inside a box, exact width, or exact height) and one quality setting. Twenty mixed photos become twenty compressed WebP files at 1600px wide, downloaded together as one zip.",
+        "It rolls the converter, resizer and compressor into a single pass for the common case of standardizing a folder of images for a website, product listing or gallery. Images already smaller than the target are converted but not enlarged by default, so nothing comes out blurry. And as with every tool here, the work happens in your own browser, so your photos never leave your device. This tool exists because someone asked for it on launch day."
+      ],
+      "faq": [
+        {
+          "q": "How many images can I convert in one batch?",
+          "a": "There is no fixed limit. Because the conversion runs on your own device, the practical ceiling is your browser's memory. Batches of 20 to 50 photos are routine; for hundreds of very large photos, split them into a few rounds."
+        },
+        {
+          "q": "Will small images be stretched up to the target size?",
+          "a": "Not unless you ask. The 'don't enlarge smaller images' option is on by default, so anything already below your target dimension is converted and compressed but keeps its original pixels. Untick it if you genuinely want everything scaled up to match."
+        },
+        {
+          "q": "Which format should I pick for web images?",
+          "a": "WebP is the safe default: it is sharper than JPG at the same file size, supports transparency, and every modern browser reads it. Use JPG when the files must open in older software, and PNG only when you need lossless quality or crisp text and line art."
+        }
+      ],
+      "libs": [
+        "jszip"
+      ],
+      "related": [
+        "images/convert",
+        "images/resize",
+        "images/compress"
+      ],
+      "icon": "files"
     },
     {
       "path": "images/crop",

@@ -171,12 +171,42 @@ function footer() {
   return `<footer class="site-footer">
     <div class="wrap cols">
       <span>Convertze is a free, open source side project. Your files stay on your device. Found a bug? Tell us on GitHub. <button class="mini" id="install-app" type="button" style="display:none">Install app</button></span>
-      <span>${cats.map((c) => `<a href="/${c.id}">${esc(c.label)}</a>`).join(" · ")} · <a href="/about">About</a> · <a href="/changelog">What's new</a> · <a href="https://github.com/harsh-m-10/convertze" rel="noopener noreferrer" target="_blank">GitHub</a></span>
+      <span>${cats.map((c) => `<a href="/${c.id}">${esc(c.label)}</a>`).join(" · ")} · <a href="/about">About</a> · <a href="/changelog">What's new</a> · <a href="/about#feedback">Feedback</a> · <a href="https://github.com/harsh-m-10/convertze" rel="noopener noreferrer" target="_blank">GitHub</a></span>
     </div>
   </footer>`;
 }
 
 const privacyBadge = `<p class="privacy-line">${ICONS.shield} Files stay on your device. No accounts. Free.</p>`;
+
+/* Feedback / feature request form (about + changelog). Posts to Web3Forms so
+ * there is still no Convertze server; renders a GitHub fallback until the
+ * access key is set in data/tools.json. */
+function feedbackPanel() {
+  if (!DATA.web3forms) {
+    return `<div class="panel about" id="feedback">
+          <h2>Request a tool, report a bug, or just say something</h2>
+          <p>The feedback form is warming up. In the meantime, <a href="https://github.com/harsh-m-10/convertze/issues/new" rel="noopener noreferrer" target="_blank">open a GitHub issue</a>, several tools on this site exist because someone did.</p>
+        </div>`;
+  }
+  return `<div class="panel about" id="feedback">
+          <h2>Request a tool, report a bug, or just say something</h2>
+          <p>Not everyone wants a GitHub account, so here is a plain form. Feature requests genuinely drive the roadmap, and bug reports get fixed fast.</p>
+          <form data-feedback novalidate>
+            <input type="hidden" name="access_key" value="${esc(DATA.web3forms)}">
+            <input type="hidden" name="subject" value="Convertze feedback">
+            <input type="hidden" name="from_name" value="Convertze feedback form">
+            <input type="checkbox" name="botcheck" class="fb-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+            <div class="fb-row">
+              <label class="field fb-field">Name <input type="text" name="name" placeholder="What should we call you?"></label>
+              <label class="field fb-field">Email <input type="text" name="email" inputmode="email" placeholder="Only if you want a reply"></label>
+              <label class="field fb-field">Type <select name="type"><option>Feature request</option><option>Bug or error</option><option>Feedback</option><option>Complaint</option></select></label>
+            </div>
+            <textarea class="ta fb-ta" name="message" rows="4" placeholder="What do you need, or what went wrong? If it is a bug, the tool name and what you dropped into it help a lot." aria-label="Your message"></textarea>
+            <div class="actions-row"><button class="btn" type="submit">Send it</button><span class="fb-status" role="status"></span></div>
+          </form>
+          <p class="fb-note">Honest note: this form is the one thing on this page that sends anything anywhere. Exactly what you type above goes to our inbox via Web3Forms, nothing else does.</p>
+        </div>`;
+}
 
 function page({ title, desc, canonicalPath, activeCat, body, scripts, ogImage }) {
   return `<!DOCTYPE html>
@@ -355,7 +385,7 @@ function toolPage(t) {
           <ul class="related-list">
           ${related}
           </ul>
-          <p style="margin:14px 0 0;font-size:12.8px"><a href="https://github.com/harsh-m-10/convertze/issues/new?title=${encodeURIComponent("[" + t.name + "] ")}" rel="noopener noreferrer" target="_blank">Missing something? Suggest a feature →</a></p>
+          <p style="margin:14px 0 0;font-size:12.8px">Missing something, or found a bug? <a href="https://github.com/harsh-m-10/convertze/issues/new?title=${encodeURIComponent("[" + t.name + "] ")}" rel="noopener noreferrer" target="_blank">Open a GitHub issue</a> or <a href="/about#feedback">use the feedback form</a>, no account needed.</p>
         </div>
       </div>
       <aside class="side-nav" aria-label="${esc(cat.label)}">
@@ -417,8 +447,9 @@ function aboutPage() {
         </div>
         <div class="panel about">
           <h2>Contact & contributions</h2>
-          <p>Found a bug, or missing a tool you need? <a href="https://github.com/harsh-m-10/convertze/issues/new" rel="noopener noreferrer" target="_blank">Open an issue on GitHub</a>. Several tools on this site exist because someone asked for them.</p>
+          <p>Found a bug, or missing a tool you need? Use the form below, or <a href="https://github.com/harsh-m-10/convertze/issues/new" rel="noopener noreferrer" target="_blank">open an issue on GitHub</a> if that is more your speed. Several tools on this site exist because someone asked for them.</p>
         </div>
+        ${feedbackPanel()}
       </div>
     </div>
   </main>`;
@@ -446,6 +477,7 @@ function changelogPage() {
     <div class="page-grid" style="grid-template-columns:minmax(0,720px);justify-content:center">
       <div>
         ${entries}
+        ${feedbackPanel()}
       </div>
     </div>
   </main>`;

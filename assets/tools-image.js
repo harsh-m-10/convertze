@@ -374,6 +374,83 @@
     });
   });
 
+  /* ---------- Bulk convert (one format + one size for a whole batch) ---------- */
+  C.register("images/bulk-convert", function (root) {
+    imageTool(root, {
+      accept: "image/png,image/jpeg,image/webp",
+      multiple: true,
+      label: "Drop your whole batch here",
+      sub: "or click to browse, 20 photos at once is the point",
+      cta: "Convert batch & download",
+      zipName: "convertze_bulk.zip",
+      options: function (row) {
+        var fmt = formatSelect("webp");
+        var q = h("input", { type: "range", min: "10", max: "100", value: "82" });
+        var qv = h("span", { text: "82" });
+        q.addEventListener("input", function () { qv.textContent = q.value; });
+        var qField = h("label", { class: "field" }, ["Quality ", q, qv, "%"]);
+        fmt.addEventListener("change", function () { qField.style.display = fmt.value === "png" ? "none" : ""; });
+
+        var mode = h("select", { "aria-label": "Resize mode" }, [
+          h("option", { value: "none", text: "Keep original size" }),
+          h("option", { value: "fit", text: "Fit inside box" }),
+          h("option", { value: "width", text: "Exact width" }),
+          h("option", { value: "height", text: "Exact height" })
+        ]);
+        var w = h("input", { type: "number", min: "1", max: "10000", value: "1600", style: "width:80px" });
+        var ht = h("input", { type: "number", min: "1", max: "10000", value: "1600", style: "width:80px" });
+        var noUp = h("input", { type: "checkbox", checked: true });
+        var wField = h("label", { class: "field", style: "display:none" }, ["Width ", w, "px"]);
+        var hField = h("label", { class: "field", style: "display:none" }, ["Height ", ht, "px"]);
+        var upField = h("label", { class: "field", style: "display:none" }, [noUp, " Don't enlarge smaller images"]);
+        mode.addEventListener("change", function () {
+          var m = mode.value;
+          wField.style.display = m === "fit" || m === "width" ? "" : "none";
+          hField.style.display = m === "fit" || m === "height" ? "" : "none";
+          upField.style.display = m === "none" ? "none" : "";
+        });
+
+        row.appendChild(h("label", { class: "field" }, ["Convert to ", fmt]));
+        row.appendChild(qField);
+        row.appendChild(h("label", { class: "field" }, ["Resize ", mode]));
+        row.appendChild(wField);
+        row.appendChild(hField);
+        row.appendChild(upField);
+        return function () {
+          var m = mode.value;
+          var wv = parseInt(w.value, 10), hv = parseInt(ht.value, 10);
+          if ((m === "fit" || m === "width") && !(wv > 0)) throw new Error("Enter a width in pixels.");
+          if ((m === "fit" || m === "height") && !(hv > 0)) throw new Error("Enter a height in pixels.");
+          return {
+            fmt: fmt.value, quality: parseInt(q.value, 10) / 100,
+            mode: m, w: wv, h: hv, noUp: noUp.checked
+          };
+        };
+      },
+      transform: function (img, file, s) {
+        var iw = img.naturalWidth, ih = img.naturalHeight;
+        var scale = 1;
+        if (s.mode === "fit") scale = Math.min(s.w / iw, s.h / ih);
+        else if (s.mode === "width") scale = s.w / iw;
+        else if (s.mode === "height") scale = s.h / ih;
+        if (s.noUp && scale > 1) scale = 1;
+        var tw = Math.max(1, Math.round(iw * scale));
+        var th = Math.max(1, Math.round(ih * scale));
+        var canvas = document.createElement("canvas");
+        canvas.width = tw;
+        canvas.height = th;
+        var ctx = canvas.getContext("2d");
+        fillIfOpaque(ctx, s.fmt, tw, th);
+        ctx.drawImage(img, 0, 0, tw, th);
+        return {
+          canvas: canvas, fmt: s.fmt, quality: s.quality,
+          suffix: s.mode === "none" || scale === 1 ? "" : "_" + tw + "x" + th,
+          meta: tw + "×" + th
+        };
+      }
+    });
+  });
+
   /* ---------- Crop (center) ---------- */
   C.register("images/crop", function (root) {
     imageTool(root, {

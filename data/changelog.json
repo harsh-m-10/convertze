@@ -1,5 +1,13 @@
 [
   {
+    "date": "July 5, 2026",
+    "title": "Bulk Image Converter",
+    "items": [
+      "Bulk Image Converter: drop a whole batch and export everything as one format at one size, requested on our Product Hunt launch day",
+      "Resize modes: fit inside a box, exact width or exact height, with upscaling off by default so small images stay sharp"
+    ]
+  },
+  {
     "date": "July 4, 2026",
     "title": "HEIC, OCR and the missing power tools",
     "items": [
