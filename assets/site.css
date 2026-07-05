@@ -78,6 +78,7 @@ html.light body {
   background-attachment: fixed;
 }
 main { flex: 1; width: 100%; }
+main.wrap { padding-bottom: 56px; }
 a { color: var(--accent-2); }
 ::selection { background: var(--mark); }
 
