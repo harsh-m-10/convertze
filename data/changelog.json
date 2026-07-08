@@ -1,6 +1,14 @@
 [
   {
     "date": "July 8, 2026",
+    "title": "Background Remover, running on your device",
+    "items": [
+      "New Background Remover: erase a photo's background and download a transparent PNG, with the segmentation model running right in your browser so your image is never uploaded",
+      "The model (a few MB) downloads once on first use and is then cached; the cut-out itself happens entirely on your device"
+    ]
+  },
+  {
+    "date": "July 8, 2026",
     "title": "Two new privacy tools: strip hidden metadata",
     "items": [
       "EXIF Remover: see the hidden GPS location, camera model and date stored inside your JPEG photos, then download clean copies with all of it removed, losslessly",

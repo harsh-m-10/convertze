@@ -478,7 +478,7 @@ function aboutPage() {
         </div>
         <div class="panel about">
           <h2>The privacy promise, precisely</h2>
-          <p>Your files, text and numbers never leave your device. The one exception on the whole site is the currency converter, which downloads a public exchange-rate table once a day; the amounts you type still stay local. You can verify all of this: open your browser's network tab while using any tool, or read the source code on GitHub.</p>
+          <p>Your files, text and numbers never leave your device. A few tools download a shared, generic helper once so they can do their work: the currency converter fetches a public exchange-rate table, the image-to-text tool downloads its OCR engine, and the background remover downloads its segmentation model. None of these ever receive your content; only your own device does the work on it. You can verify all of this: open your browser's network tab while using any tool, or read the source code on GitHub.</p>
         </div>
         <div class="panel about">
           <h2>Contact & contributions</h2>

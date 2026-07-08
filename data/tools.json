@@ -216,6 +216,39 @@
       "icon": "eye"
     },
     {
+      "path": "images/background-remover",
+      "cat": "images",
+      "name": "Background Remover",
+      "h1": "Remove an image background",
+      "short": "Erase a photo's background, right in your browser.",
+      "metaDescription": "Free background remover that runs entirely in your browser. Erase the background from a photo and download a transparent PNG. Your image is never uploaded, only a one-time AI model is downloaded.",
+      "about": [
+        "Drop a photo and this tool erases the background, leaving your subject on transparency you can drop onto any design, color or another photo. It runs a segmentation model right inside your browser, so unlike the usual online background removers, your photo is never uploaded to a server.",
+        "One honest note, in the spirit of the rest of the site: the AI model itself (a few megabytes, the same generic file for everyone) downloads once on first use and is then cached. Your actual image still never leaves the tab, the cut-out happens entirely on your device."
+      ],
+      "faq": [
+        {
+          "q": "Is my photo uploaded to remove the background?",
+          "a": "No. The background is removed by an AI model that runs inside your browser tab. The only thing downloaded is the model file itself, once, and it is a generic file that is identical for every user. Your image stays on your device, which you can confirm in the network tab."
+        },
+        {
+          "q": "Why does the first run take a little while?",
+          "a": "The first time you use it, the browser downloads the segmentation model, a few megabytes. That happens once and is then cached, so every background you remove afterwards is much faster."
+        },
+        {
+          "q": "What do I get back?",
+          "a": "A PNG with a transparent background, ready to place on any color, another image or a design. It works best on clear subjects like people, products and animals against a distinct background."
+        }
+      ],
+      "libs": [],
+      "related": [
+        "images/convert",
+        "images/crop",
+        "images/compress"
+      ],
+      "icon": "scissors"
+    },
+    {
       "path": "images/crop",
       "cat": "images",
       "name": "Image Cropper",

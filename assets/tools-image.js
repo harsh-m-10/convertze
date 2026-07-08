@@ -830,5 +830,88 @@
     });
   });
 
+  /* ---------- Background remover (segmentation model, runs on-device) ---------- */
+  C.register("images/background-remover", function (root) {
+    var state = { file: null };
+    var bgModule = null, lastUrl = null;
+    var status, btn, out;
+
+    C.dropzone(root, {
+      accept: "image/png,image/jpeg,image/webp",
+      multiple: false,
+      label: "Drop a photo here",
+      sub: "JPG, PNG or WebP with a clear subject",
+      onFiles: function (files) {
+        var f = files.filter(function (x) { return /^image\//.test(x.type) && !/svg/.test(x.type); })[0];
+        if (!f) { status.set("error", "Please choose an image file (JPG, PNG or WebP)."); return; }
+        state.file = f;
+        clearOut();
+        status.set("done", f.name + " ready. The model (a few MB) downloads on first use.");
+        btn.disabled = false;
+      }
+    });
+
+    root.appendChild(h("div", { class: "opts" }, [
+      h("p", { class: "kbd-hint", style: "margin:0", text: "Works best on people, products or animals against a distinct background." })
+    ]));
+    btn = h("button", { class: "btn", type: "button", disabled: true, text: "Remove background" });
+    root.appendChild(h("div", { class: "actions-row" }, [btn]));
+    status = C.makeStatus(root);
+    out = h("div");
+    root.appendChild(out);
+
+    function clearOut() {
+      if (lastUrl) { URL.revokeObjectURL(lastUrl); lastUrl = null; }
+      out.innerHTML = "";
+    }
+
+    /* Loaded on demand from esm.sh, which resolves the model runtime's own
+       dependencies. The image is processed locally; only the model downloads. */
+    function loadLib() {
+      if (bgModule) return Promise.resolve(bgModule);
+      status.set("processing", "Loading the background remover...");
+      return import("https://esm.sh/@imgly/background-removal@1.7.0").then(function (m) {
+        bgModule = m;
+        return m;
+      });
+    }
+
+    btn.addEventListener("click", async function () {
+      if (!state.file || btn.disabled) return;
+      btn.disabled = true;
+      clearOut();
+      try {
+        var mod = await loadLib();
+        var lastPct = -1;
+        var resultBlob = await mod.removeBackground(state.file, {
+          progress: function (key, current, total) {
+            if (/fetch|download/i.test(key) && total) {
+              var pct = Math.round(current / total * 100);
+              if (pct !== lastPct) { lastPct = pct; status.set("processing", "Downloading the model... " + pct + "%"); }
+            } else {
+              status.set("processing", "Removing the background...");
+            }
+          }
+        });
+        lastUrl = URL.createObjectURL(resultBlob);
+        var base = C.baseName(state.file.name);
+        out.appendChild(h("div", { class: "bg-result" }, [
+          h("div", { class: "bg-preview" }, [h("img", { src: lastUrl, alt: "Result with the background removed" })]),
+          h("div", { class: "actions-row", style: "margin-top:12px" }, [
+            h("a", { class: "btn", href: lastUrl, download: base + "_nobg.png", text: "Download PNG" })
+          ])
+        ]));
+        status.set("done", "Done. Transparent PNG ready to download.");
+        C.toast("ok", "Background removed");
+      } catch (e) {
+        status.set("error", e && e.message ? "Could not remove the background: " + e.message : "Could not remove the background.");
+      }
+      btn.disabled = false;
+    });
+
+    C.onRun(function () { btn.click(); });
+    C.onClear(function () { state.file = null; btn.disabled = true; clearOut(); status.set("idle", "Cleared."); });
+  });
+
   C.boot();
 })();
