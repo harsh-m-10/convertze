@@ -1751,10 +1751,10 @@
       "cat": "calc",
       "name": "GST Calculator",
       "h1": "Add or remove GST",
-      "short": "GST at 5, 12, 18 or 28%, with CGST/SGST split.",
-      "metaDescription": "Free GST calculator: add GST to a base amount or extract GST from a total, at 5, 12, 18 or 28 percent, with the CGST and SGST split shown.",
+      "short": "GST at 5, 18 or 40%, with CGST/SGST split.",
+      "metaDescription": "Free GST calculator: add GST to a base amount or extract GST from a total, at 5, 18 or 40 percent, with the CGST and SGST split shown. Any custom rate works too.",
       "about": [
-        "Two directions: add GST to a pre-tax amount to see the final price, or start from a tax-inclusive total and extract the base amount and the tax inside it. Quick buttons cover the standard 5, 12, 18 and 28 percent slabs, and any custom rate works too.",
+        "Two directions: add GST to a pre-tax amount to see the final price, or start from a tax-inclusive total and extract the base amount and the tax inside it. Quick buttons cover the current 5, 18 and 40 percent slabs, and any custom rate works too if you are calculating an older invoice.",
         "The CGST/SGST split (half and half for intra-state sales) is shown alongside, which is what invoices actually need. Calculated locally, instantly."
       ],
       "faq": [
@@ -1768,7 +1768,7 @@
         },
         {
           "q": "Which GST rates apply to what?",
-          "a": "Broadly: 5% for essentials and transport, 12% and 18% for most goods and services (18% is the most common), and 28% for luxury and sin goods. Rates change with council decisions, so check the current schedule for your specific item."
+          "a": "Since the September 2025 rationalisation there are two main slabs: 5% for essentials and 18% as the standard rate for most goods and services, plus a special 40% rate for luxury and sin goods like tobacco and aerated drinks. The older 12% and 28% slabs were removed. Rates change with council decisions, so check the current schedule for your specific item, and type any custom rate for a pre-2025 invoice."
         }
       ],
       "libs": [],

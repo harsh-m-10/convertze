@@ -429,6 +429,24 @@
     }
   });
 
+  function toolError(msg) {
+    return '<p style="color:var(--muted);font-size:13.5px;margin:0">' + msg +
+      ' Please refresh the page. If it keeps happening, tell us on the ' +
+      '<a href="/about#feedback">feedback form</a>.</p>';
+  }
+
+  // Safety net: if a tool module fails to load at all (network/parse error),
+  // Convertze.boot() never runs and the static "Loading tool..." text would sit
+  // there forever. Once the page has loaded, swap it for a clear message.
+  window.addEventListener("load", function () {
+    setTimeout(function () {
+      var root = document.getElementById("tool-root");
+      if (root && !root.getAttribute("data-booted")) {
+        root.innerHTML = toolError("This tool could not load, likely a network hiccup.");
+      }
+    }, 3000);
+  });
+
   window.Convertze = {
     register: function (slug, fn) { registry[slug] = fn; },
     boot: function () {
@@ -437,8 +455,17 @@
       var slug = root.getAttribute("data-tool");
       if (registry[slug]) {
         root.innerHTML = "";
-        registry[slug](root);
-        pushRecent(slug);
+        try {
+          registry[slug](root);
+          root.setAttribute("data-booted", "1");
+          pushRecent(slug);
+        } catch (e) {
+          root.setAttribute("data-booted", "1");
+          root.innerHTML = toolError("This tool hit an error while loading.");
+        }
+      } else {
+        root.setAttribute("data-booted", "1");
+        root.innerHTML = toolError("This tool could not start.");
       }
     },
     h: h,

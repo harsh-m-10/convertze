@@ -192,7 +192,14 @@ function footer() {
   </footer>`;
 }
 
-const privacyBadge = `<p class="privacy-line">${ICONS.shield} Files stay on your device. No accounts. Free.</p>`;
+// The privacy line adapts to the category: image and PDF tools handle files,
+// while text, dev and calculator tools work on text and numbers you type.
+function privacyBadge(cat) {
+  const line = (cat === "images" || cat === "pdf")
+    ? "Files stay on your device. No accounts. Free."
+    : "Everything runs on your device. No accounts. Free.";
+  return `<p class="privacy-line">${ICONS.shield} ${line}</p>`;
+}
 
 /* Feedback / feature request form (about + changelog). Posts to Web3Forms so
  * there is still no Convertze server; renders a GitHub fallback until the
@@ -296,7 +303,7 @@ function hubPage(cat) {
     <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › ${esc(cat.label)}</nav>
     <h1 class="tool-h1">${esc(cat.label)}</h1>
     <p class="tool-tagline">${esc(cat.blurb)}</p>
-    ${privacyBadge}
+    ${privacyBadge(cat.id)}
     <div class="grid" style="margin-top:8px">
       ${cards}
     </div>
@@ -381,7 +388,7 @@ function toolPage(t) {
     <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/${cat.id}">${esc(cat.label)}</a> › ${esc(t.name)}</nav>
     <div class="h1-row">${toolIcon(t, true)}<h1 class="tool-h1">${esc(t.h1)}</h1></div>
     <p class="tool-tagline">${esc(t.short)}</p>
-    ${privacyBadge}
+    ${privacyBadge(t.cat)}
     <div class="page-grid">
       <div>
         <div class="panel" id="tool-root" data-tool="${t.path}">

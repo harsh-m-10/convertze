@@ -7,6 +7,77 @@
   var C = window.Convertze;
   var h = C.h;
 
+  /* A friendlier date field. Native segmented date inputs made people click
+     day, month and year separately (user feedback); this lets them type a
+     whole date at once (dd/mm/yyyy, ddmmyyyy or yyyy-mm-dd) and still offers a
+     calendar button where the browser supports one. */
+  function pad2(n) { return (n < 10 ? "0" : "") + n; }
+  function dateField(opts) {
+    opts = opts || {};
+    var text = h("input", {
+      class: "single-input", type: "text", autocomplete: "off",
+      placeholder: "dd/mm/yyyy", "aria-label": opts.label || "Date",
+      style: "max-width:130px"
+    });
+    var listeners = [];
+    function emit() { for (var i = 0; i < listeners.length; i++) listeners[i](); }
+    function check(y, mo, d) {
+      if (mo < 1 || mo > 12 || d < 1 || d > 31) return "";
+      var dt = new Date(y, mo - 1, d);
+      if (dt.getFullYear() !== y || dt.getMonth() !== mo - 1 || dt.getDate() !== d) return "";
+      return y + "-" + pad2(mo) + "-" + pad2(d);
+    }
+    function iso() {
+      var s = (text.value || "").trim();
+      var m;
+      if ((m = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(s))) return check(+m[1], +m[2], +m[3]);
+      if ((m = /^(\d{1,2})[\/\-. ](\d{1,2})[\/\-. ](\d{4})$/.exec(s))) return check(+m[3], +m[2], +m[1]);
+      if ((m = /^(\d{2})(\d{2})(\d{4})$/.exec(s))) return check(+m[3], +m[2], +m[1]);
+      return "";
+    }
+    function display() {
+      var v = iso();
+      if (!v) return (text.value || "").trim();
+      var p = v.split("-");
+      return p[2] + "/" + p[1] + "/" + p[0];
+    }
+    function setISO(v) {
+      if (!v) { text.value = ""; return; }
+      var p = String(v).split("-");
+      text.value = p.length === 3 ? p[2] + "/" + p[1] + "/" + p[0] : String(v);
+    }
+    text.addEventListener("input", emit);
+    text.addEventListener("change", function () {
+      var v = iso();
+      if (v) setISO(v);
+      emit();
+    });
+
+    var children = [text];
+    if (HTMLInputElement.prototype && typeof HTMLInputElement.prototype.showPicker === "function") {
+      var native = h("input", {
+        type: "date", tabindex: "-1", "aria-hidden": "true",
+        style: "position:absolute;left:0;bottom:0;width:1px;height:1px;opacity:0;pointer-events:none"
+      });
+      var btn = h("button", { class: "mini date-cal", type: "button", "aria-label": "Pick from a calendar", text: "📅" });
+      btn.addEventListener("click", function () {
+        native.value = iso() || "";
+        try { native.showPicker(); } catch (e) { /* typing still works */ }
+      });
+      native.addEventListener("change", function () {
+        if (native.value) setISO(native.value);
+        emit();
+      });
+      children.push(btn, native);
+    }
+    var wrap = h("span", { class: "date-field" }, children);
+    return {
+      el: wrap, iso: iso, display: display, setISO: setISO,
+      on: function (fn) { listeners.push(fn); },
+      clear: function () { text.value = ""; emit(); }
+    };
+  }
+
   var RATES_URL = "https://open.er-api.com/v6/latest/USD";
   var CACHE_KEY = "convertze-fx-usd";
   var CACHE_MS = 24 * 60 * 60 * 1000;
@@ -304,23 +375,24 @@
 
   /* ---------- Age calculator ---------- */
   C.register("calc/age-calculator", function (root) {
-    var dob = h("input", { class: "single-input", type: "date", "aria-label": "Date of birth", style: "max-width:190px" });
-    var asOf = h("input", { class: "single-input", type: "date", "aria-label": "As of date", style: "max-width:190px" });
-    asOf.value = new Date().toISOString().slice(0, 10);
+    var dob = dateField({ label: "Date of birth" });
+    var asOf = dateField({ label: "As of date" });
+    asOf.setISO(new Date().toISOString().slice(0, 10));
     function row(label) {
       var td = h("td");
       return { tr: h("tr", null, [h("th", { text: label }), td]), set: function (v) { td.textContent = v; } };
     }
     var rows = { age: row("Age"), months: row("In months"), days: row("Total days"), next: row("Next birthday") };
     root.appendChild(h("div", { class: "opts" }, [
-      h("label", { class: "field" }, ["Date of birth ", dob]),
-      h("label", { class: "field" }, ["As of ", asOf])
+      h("label", { class: "field" }, ["Date of birth ", dob.el]),
+      h("label", { class: "field" }, ["As of ", asOf.el])
     ]));
     root.appendChild(h("table", { class: "kv" }, Object.keys(rows).map(function (k) { return rows[k].tr; })));
 
     function run() {
-      if (!dob.value || !asOf.value) return;
-      var b = new Date(dob.value + "T00:00:00"), n = new Date(asOf.value + "T00:00:00");
+      var dobISO = dob.iso(), asOfISO = asOf.iso();
+      if (!dobISO || !asOfISO) return;
+      var b = new Date(dobISO + "T00:00:00"), n = new Date(asOfISO + "T00:00:00");
       if (n < b) { rows.age.set("The as-of date is before the date of birth."); return; }
       var y = n.getFullYear() - b.getFullYear();
       var m = n.getMonth() - b.getMonth();
@@ -336,9 +408,9 @@
       rows.days.set(totalDays.toLocaleString() + " days");
       rows.next.set(toNext === 365 || toNext === 366 ? "Today. Happy birthday!" : "in " + toNext + " days");
     }
-    [dob, asOf].forEach(function (el) { el.addEventListener("change", run); el.addEventListener("input", run); });
+    dob.on(run); asOf.on(run);
     C.onRun(run);
-    C.onClear(function () { dob.value = ""; });
+    C.onClear(function () { dob.clear(); });
   });
 
   /* ---------- EMI calculator ---------- */
@@ -388,7 +460,7 @@
       h("option", { value: "remove", text: "Remove GST (amount includes tax)" })
     ]);
     var rate = h("input", { class: "single-input", type: "number", value: "18", min: "0", max: "100", step: "any", "aria-label": "GST rate", style: "max-width:90px" });
-    var slabs = h("span", { class: "mini-btns" }, [5, 12, 18, 28].map(function (r) {
+    var slabs = h("span", { class: "mini-btns" }, [5, 18, 40].map(function (r) {
       var b = h("button", { class: "mini", type: "button", text: r + "%" });
       b.addEventListener("click", function () { rate.value = String(r); run(); });
       return b;
@@ -562,8 +634,8 @@
     var buyer = field("Bill to", "Client name");
     var buyerAddr = field("Client address", "optional");
     var invNo = field("Invoice #", "INV-001");
-    var invDate = h("input", { class: "single-input", type: "date", style: "max-width:180px" });
-    invDate.value = new Date().toISOString().slice(0, 10);
+    var invDate = dateField({ label: "Invoice date" });
+    invDate.setISO(new Date().toISOString().slice(0, 10));
     var gstRate = h("input", { class: "single-input", type: "number", value: "18", min: "0", max: "100", style: "max-width:80px" });
 
     var itemsBody = h("tbody");
@@ -611,14 +683,14 @@
       try {
         localStorage.setItem(DRAFT_KEY, JSON.stringify({
           s: seller.input.value, sg: sellerGst.input.value, b: buyer.input.value, ba: buyerAddr.input.value,
-          n: invNo.input.value, dt: invDate.value, g: gstRate.value, items: readItems()
+          n: invNo.input.value, dt: invDate.iso(), g: gstRate.value, items: readItems()
         }));
       } catch (e) { /* draft saving is best-effort */ }
       return { sub: sub, gst: gst, total: sub + gst, rate: r };
     }
 
     root.appendChild(h("div", { class: "opts" }, [seller.wrap, sellerGst.wrap, buyer.wrap, buyerAddr.wrap, invNo.wrap,
-      h("label", { class: "field" }, ["Date ", invDate]),
+      h("label", { class: "field" }, ["Date ", invDate.el]),
       h("label", { class: "field" }, ["GST ", gstRate, " %"])
     ]));
     root.appendChild(h("table", { class: "kv", style: "margin-top:15px" }, [
@@ -631,9 +703,10 @@
     status = C.makeStatus(root);
 
     addBtn.addEventListener("click", function () { itemRow(); });
-    [seller.input, sellerGst.input, buyer.input, buyerAddr.input, invNo.input, invDate, gstRate].forEach(function (el) {
+    [seller.input, sellerGst.input, buyer.input, buyerAddr.input, invNo.input, gstRate].forEach(function (el) {
       el.addEventListener("input", recalc);
     });
+    invDate.on(recalc);
 
     /* Restore draft or start with one row. */
     var draft = null;
@@ -644,7 +717,7 @@
       buyer.input.value = draft.b || "";
       buyerAddr.input.value = draft.ba || "";
       invNo.input.value = draft.n || "";
-      if (draft.dt) invDate.value = draft.dt;
+      if (draft.dt) invDate.setISO(draft.dt);
       gstRate.value = draft.g || "18";
       (draft.items && draft.items.length ? draft.items : [{}]).forEach(itemRow);
     } else {
@@ -671,7 +744,7 @@
         '<div><div style="font-size:24px;font-weight:700">' + escHtml(seller.input.value || "Invoice") + "</div>" +
         (sellerGst.input.value ? '<div style="color:#6b7280">GSTIN: ' + escHtml(sellerGst.input.value) + "</div>" : "") + "</div>" +
         '<div style="text-align:right"><div style="font-size:20px;font-weight:700;color:#374151">INVOICE</div>' +
-        "<div>" + escHtml(invNo.input.value || "") + "</div><div>" + escHtml(invDate.value) + "</div></div></div>" +
+        "<div>" + escHtml(invNo.input.value || "") + "</div><div>" + escHtml(invDate.display()) + "</div></div></div>" +
         '<div style="margin-bottom:20px"><b>Billed to:</b> ' + escHtml(buyer.input.value || "-") +
         (buyerAddr.input.value ? '<div style="color:#6b7280">' + escHtml(buyerAddr.input.value) + "</div>" : "") + "</div>" +
         '<table style="width:100%;border-collapse:collapse;margin-bottom:18px">' +

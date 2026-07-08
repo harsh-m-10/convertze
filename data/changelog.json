@@ -1,5 +1,14 @@
 [
   {
+    "date": "July 8, 2026",
+    "title": "Friendlier dates and up-to-date GST",
+    "items": [
+      "Age calculator and invoice generator now take a full typed date (07/07/2026, 07072026 or 2026-07-07), with a calendar button, instead of clicking through day, month and year separately",
+      "GST calculator updated to the current 5%, 18% and 40% slabs after the 2025 rate rationalisation; any custom rate still works for older invoices",
+      "Clearer message if a tool ever fails to load, and privacy wording that fits each category"
+    ]
+  },
+  {
     "date": "July 5, 2026",
     "title": "Bulk Image Converter",
     "items": [
