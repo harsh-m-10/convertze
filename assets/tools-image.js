@@ -48,10 +48,19 @@
     var grid = h("div", { class: "result-grid" });
     var box = h("div", { class: "results" }, [grid]);
     parent.appendChild(box);
+    // Object URLs for previews and download links; revoked when results clear
+    // so repeated conversions don't leak memory.
+    var urls = [];
     return {
-      clear: function () { grid.innerHTML = ""; box.classList.remove("show"); },
+      clear: function () {
+        for (var i = 0; i < urls.length; i++) URL.revokeObjectURL(urls[i]);
+        urls = [];
+        grid.innerHTML = "";
+        box.classList.remove("show");
+      },
       add: function (item) {
         var url = URL.createObjectURL(item.blob);
+        urls.push(url);
         grid.appendChild(h("div", { class: "result-item" }, [
           item.noPreview ? null : h("img", { src: url, alt: item.name }),
           h("span", { class: "r-name", text: item.name }),
