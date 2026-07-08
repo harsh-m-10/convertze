@@ -696,5 +696,139 @@
     C.onClear(function () { state.file = null; btn.disabled = true; extra.innerHTML = ""; status.set("idle", "Cleared."); });
   });
 
+  /* ---------- EXIF viewer & remover ---------- */
+  C.register("images/exif-remover", function (root) {
+    var state = { items: [] };
+    var status, listWrap, cleanBtn;
+
+    function isJpeg(f) { return /\.jpe?g$/i.test(f.name) || /jpeg/i.test(f.type); }
+
+    /* Convert a GPS degrees/minutes/seconds rational array to a decimal. */
+    function toDecimal(dms, ref) {
+      if (!dms || dms.length < 3) return null;
+      function r(x) { return Array.isArray(x) ? (x[1] ? x[0] / x[1] : x[0]) : x; }
+      var dec = r(dms[0]) + r(dms[1]) / 60 + r(dms[2]) / 3600;
+      if (ref === "S" || ref === "W") dec = -dec;
+      return Math.round(dec * 1e6) / 1e6;
+    }
+
+    function readExif(dataUrl) {
+      var info = { gps: null, camera: null, date: null, software: null, count: 0 };
+      if (typeof piexif === "undefined") return info;
+      var ex;
+      try { ex = piexif.load(dataUrl); } catch (e) { return info; }
+      var z = ex["0th"] || {}, e = ex["Exif"] || {}, g = ex["GPS"] || {};
+      info.count = Object.keys(z).length + Object.keys(e).length + Object.keys(g).length;
+      var make = z[piexif.ImageIFD.Make], model = z[piexif.ImageIFD.Model];
+      if (make || model) info.camera = [make, model].filter(Boolean).join(" ").trim();
+      info.software = z[piexif.ImageIFD.Software] || null;
+      info.date = e[piexif.ExifIFD.DateTimeOriginal] || z[piexif.ImageIFD.DateTime] || null;
+      if (g[piexif.GPSIFD.GPSLatitude] && g[piexif.GPSIFD.GPSLongitude]) {
+        var lat = toDecimal(g[piexif.GPSIFD.GPSLatitude], g[piexif.GPSIFD.GPSLatitudeRef]);
+        var lon = toDecimal(g[piexif.GPSIFD.GPSLongitude], g[piexif.GPSIFD.GPSLongitudeRef]);
+        if (lat != null && lon != null) info.gps = { lat: lat, lon: lon };
+      }
+      return info;
+    }
+
+    function renderList() {
+      listWrap.innerHTML = "";
+      listWrap.style.display = state.items.length ? "" : "none";
+      state.items.forEach(function (it, i) {
+        var info = it.info;
+        var details = [];
+        if (info.gps) {
+          details.push(h("div", { class: "exif-gps" }, [
+            h("b", { text: "📍 Location: " }),
+            h("span", { text: info.gps.lat + ", " + info.gps.lon })
+          ]));
+        }
+        if (info.camera) details.push(h("div", { class: "exif-line", text: "Camera: " + info.camera }));
+        if (info.date) details.push(h("div", { class: "exif-line", text: "Taken: " + info.date }));
+        if (info.software) details.push(h("div", { class: "exif-line", text: "Software: " + info.software }));
+        if (!details.length) {
+          details.push(h("div", { class: "exif-line exif-clean", text: info.count ? "Minor metadata only, no location or camera details." : "No metadata found, this photo is already clean." }));
+        }
+        listWrap.appendChild(h("div", { class: "exif-card" }, [
+          h("div", { class: "exif-head" }, [
+            h("span", { class: "f-name", text: it.file.name }),
+            h("span", { class: "f-size", text: C.fmtKB(it.file.size) }),
+            h("button", { type: "button", class: "exif-x", "aria-label": "Remove " + it.file.name, text: "✕", onclick: function () {
+              state.items.splice(i, 1);
+              renderList();
+              cleanBtn.disabled = !state.items.length;
+              if (!state.items.length) status.set("idle", "Ready when you are.");
+            } })
+          ])
+        ].concat(details)));
+      });
+    }
+
+    C.dropzone(root, {
+      accept: ".jpg,.jpeg,image/jpeg",
+      multiple: true,
+      label: "Drop JPEG photos here",
+      sub: "or click to browse, whole batches welcome",
+      onFiles: function (files) {
+        var ok = files.filter(isJpeg);
+        if (!ok.length) { status.set("error", "Please choose JPEG photos (.jpg), that is where GPS and camera data lives."); return; }
+        status.set("processing", "Reading metadata...");
+        Promise.all(ok.map(function (f) {
+          return C.readFile(f, "dataurl").then(function (dataUrl) {
+            return { file: f, dataUrl: dataUrl, info: readExif(dataUrl) };
+          });
+        })).then(function (added) {
+          state.items = state.items.concat(added);
+          renderList();
+          cleanBtn.disabled = false;
+          var withGps = state.items.filter(function (x) { return x.info.gps; }).length;
+          status.set("done", state.items.length + " photo" + (state.items.length > 1 ? "s" : "") + " ready" +
+            (withGps ? ", " + withGps + " with GPS location" : "") + ".");
+        }).catch(function () {
+          status.set("error", "Could not read one of those files.");
+        });
+      }
+    });
+
+    listWrap = h("div", { class: "exif-list", style: "display:none" });
+    root.appendChild(listWrap);
+
+    cleanBtn = h("button", { class: "btn", type: "button", disabled: true, text: "Remove metadata & download" });
+    root.appendChild(h("div", { class: "actions-row" }, [cleanBtn]));
+    status = C.makeStatus(root);
+
+    async function clean() {
+      if (!state.items.length || cleanBtn.disabled) return;
+      if (typeof piexif === "undefined") { status.set("error", "Metadata library failed to load, check your connection and refresh."); return; }
+      cleanBtn.disabled = true;
+      status.set("processing", "Removing metadata...");
+      try {
+        var outputs = [];
+        for (var i = 0; i < state.items.length; i++) {
+          var it = state.items[i];
+          var cleanedUrl;
+          try { cleanedUrl = piexif.remove(it.dataUrl); }
+          catch (e) { cleanedUrl = it.dataUrl; } /* nothing to remove */
+          var blob = await fetch(cleanedUrl).then(function (r) { return r.blob(); });
+          outputs.push({ name: C.baseName(it.file.name) + "_clean.jpg", data: blob });
+        }
+        var delivered = await C.deliver(outputs, "convertze_clean_photos.zip");
+        status.set("done", "Done, downloaded " + delivered + ". Metadata removed.");
+        C.toast("ok", "Downloaded " + delivered);
+      } catch (err) {
+        status.set("error", err && err.message ? err.message : "Could not clean those photos.");
+      }
+      cleanBtn.disabled = false;
+    }
+    cleanBtn.addEventListener("click", clean);
+    C.onRun(clean);
+    C.onClear(function () {
+      state.items = [];
+      renderList();
+      cleanBtn.disabled = true;
+      status.set("idle", "Cleared.");
+    });
+  });
+
   C.boot();
 })();

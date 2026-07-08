@@ -180,6 +180,42 @@
       "icon": "files"
     },
     {
+      "path": "images/exif-remover",
+      "cat": "images",
+      "name": "EXIF Remover",
+      "h1": "See and remove hidden photo metadata",
+      "short": "Reveal and strip GPS location, camera and date from photos.",
+      "metaDescription": "Free EXIF remover: see the hidden GPS location, camera model and date stored inside your JPEG photos, then download clean copies with the metadata stripped. Runs in your browser, nothing is uploaded.",
+      "about": [
+        "Every photo your phone takes carries hidden EXIF metadata: the exact GPS coordinates of where it was shot, the camera or phone model, and the date and time. Share that photo and you may be quietly handing strangers your home or workplace. This tool reads that metadata so you can see exactly what is inside, then hands you a clean copy with all of it removed.",
+        "For JPEG photos the metadata is stripped losslessly, so the image itself is untouched and only the hidden data is gone. Everything happens inside your browser, so your photos are never uploaded, which is rather the whole point of a privacy tool. Drop a batch and download them all cleaned at once."
+      ],
+      "faq": [
+        {
+          "q": "What is EXIF metadata and why should I remove it?",
+          "a": "EXIF is hidden information cameras and phones embed in every photo: GPS coordinates, device model, and the date and time it was taken. Big social networks often strip it, but files you email, message or upload to forums and marketplaces usually keep it, which can quietly reveal where you live or work. Removing it before sharing protects your privacy."
+        },
+        {
+          "q": "Does this remove the GPS location from my photo?",
+          "a": "Yes. If a photo contains GPS coordinates they are shown to you first, then removed entirely from the downloaded copy along with the camera model, timestamp and other EXIF fields. You can re-check the cleaned file to confirm it reports no location data."
+        },
+        {
+          "q": "Will removing metadata reduce my photo's quality?",
+          "a": "No. For JPEG photos the metadata is stripped without touching the image data at all, so the picture is pixel-for-pixel identical. The file just gets slightly smaller because the hidden data is gone."
+        }
+      ],
+      "libs": [
+        "piexif",
+        "jszip"
+      ],
+      "related": [
+        "images/compress",
+        "images/convert",
+        "images/heic-to-jpg"
+      ],
+      "icon": "eye"
+    },
+    {
       "path": "images/crop",
       "cat": "images",
       "name": "Image Cropper",

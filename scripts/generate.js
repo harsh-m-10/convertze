@@ -42,7 +42,8 @@ const LIB_URLS = {
   heic2any: "https://cdnjs.cloudflare.com/ajax/libs/heic2any/0.0.4/heic2any.min.js",
   tesseract: "https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.1.1/tesseract.min.js",
   sqlformatter: "https://cdnjs.cloudflare.com/ajax/libs/sql-formatter/15.3.2/sql-formatter.min.js",
-  mammoth: "https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.8.0/mammoth.browser.min.js"
+  mammoth: "https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.8.0/mammoth.browser.min.js",
+  piexif: "https://cdnjs.cloudflare.com/ajax/libs/piexifjs/1.0.6/piexif.min.js"
 };
 const CAT_MODULE = { images: "tools-image.js", pdf: "tools-pdf.js", dev: "tools-dev.js", text: "tools-text.js", calc: "tools-calc.js" };
 

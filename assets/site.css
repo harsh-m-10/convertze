@@ -322,6 +322,18 @@ kbd {
 }
 .file-list button:hover { color: var(--ink); background: var(--surface); }
 
+/* EXIF viewer & remover */
+.exif-list { display: flex; flex-direction: column; gap: 9px; margin: 13px 0 0; }
+.exif-card { border: 1px solid var(--border); border-radius: var(--r-sm); background: var(--surface-2); padding: 9px 12px; }
+.exif-head { display: flex; align-items: center; gap: 9px; font-size: 13px; color: var(--ink); margin-bottom: 5px; }
+.exif-head .f-name { flex: 1; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.exif-head .f-size { color: var(--faint); font-size: 11.8px; flex: none; font-family: var(--mono); }
+.exif-x { flex: none; border: 0; background: none; cursor: pointer; color: var(--faint); font-size: 13px; line-height: 1; padding: 3px 6px; border-radius: 5px; font-family: inherit; }
+.exif-x:hover { color: var(--ink); background: var(--surface); }
+.exif-line { font-size: 12.5px; color: var(--ink-2); font-family: var(--mono); padding: 1px 0; }
+.exif-clean { color: var(--faint); font-family: inherit; }
+.exif-gps { font-size: 13px; color: var(--accent-2); font-family: var(--mono); padding: 2px 0; }
+
 /* Results */
 .results { margin-top: 16px; display: none; }
 .results.show { display: block; }

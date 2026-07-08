@@ -1,6 +1,14 @@
 [
   {
     "date": "July 8, 2026",
+    "title": "EXIF Remover: strip hidden metadata from photos",
+    "items": [
+      "New EXIF Remover: see the hidden GPS location, camera model and date stored inside your JPEG photos, then download clean copies with all of it removed",
+      "For JPEGs the metadata is stripped losslessly, so the picture is untouched, and as always nothing is uploaded"
+    ]
+  },
+  {
+    "date": "July 8, 2026",
     "title": "Friendlier dates and up-to-date GST",
     "items": [
       "Age calculator and invoice generator now take a full typed date (07/07/2026, 07072026 or 2026-07-07), with a calendar button, instead of clicking through day, month and year separately",
