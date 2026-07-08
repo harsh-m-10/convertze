@@ -1215,5 +1215,81 @@
     });
   }
 
+  /* ---------- Remove PDF metadata ---------- */
+  C.register("pdf/remove-metadata", function (root) {
+    function fmtDate(d) {
+      if (!d) return null;
+      try { return d.toISOString().slice(0, 10); } catch (e) { return String(d); }
+    }
+    /* Read the document Info fields worth surfacing to the user. */
+    function readMeta(doc) {
+      var m = {};
+      try { m.title = doc.getTitle(); } catch (e) {}
+      try { m.author = doc.getAuthor(); } catch (e) {}
+      try { m.subject = doc.getSubject(); } catch (e) {}
+      try { m.keywords = doc.getKeywords(); } catch (e) {}
+      try { m.producer = doc.getProducer(); } catch (e) {}
+      try { m.creator = doc.getCreator(); } catch (e) {}
+      try { m.created = fmtDate(doc.getCreationDate()); } catch (e) {}
+      try { m.modified = fmtDate(doc.getModificationDate()); } catch (e) {}
+      var out = [];
+      if (m.author) out.push("Author: " + m.author);
+      if (m.title) out.push("Title: " + m.title);
+      if (m.creator) out.push("Created with: " + m.creator);
+      if (m.producer) out.push("Producer: " + m.producer);
+      if (m.subject) out.push("Subject: " + m.subject);
+      if (m.keywords) out.push("Keywords: " + m.keywords);
+      if (m.created) out.push("Created: " + m.created);
+      if (m.modified) out.push("Modified: " + m.modified);
+      return out;
+    }
+    /* Delete every Info entry and the XMP metadata stream. */
+    function scrub(doc) {
+      var infoRef = doc.context.trailerInfo.Info;
+      if (infoRef) {
+        var info = doc.context.lookup(infoRef);
+        if (info && info.delete) {
+          ["Title", "Author", "Subject", "Keywords", "Producer", "Creator", "CreationDate", "ModDate"]
+            .forEach(function (k) { try { info.delete(PDFLib.PDFName.of(k)); } catch (e) {} });
+        }
+      }
+      try { doc.catalog.delete(PDFLib.PDFName.of("Metadata")); } catch (e) {}
+    }
+
+    pdfTool(root, {
+      accept: "application/pdf,.pdf",
+      multiple: true,
+      filter: isPdf,
+      badFileMsg: "Please choose PDF files.",
+      label: "Drop PDFs to clean",
+      sub: "or click to browse, multiple files supported",
+      cta: "Remove metadata & download",
+      run: async function (files, s, status, extra) {
+        needs("PDF", typeof PDFLib !== "undefined" && PDFLib.PDFDocument);
+        status.set("processing", "Reading PDF metadata...");
+        extra.innerHTML = "";
+        var report = h("div", { class: "exif-list" });
+        extra.appendChild(report);
+        var outputs = [];
+        for (var i = 0; i < files.length; i++) {
+          var file = files[i];
+          var doc = await PDFLib.PDFDocument.load(await file.arrayBuffer(), { ignoreEncryption: true, updateMetadata: false });
+          var found = readMeta(doc);
+          scrub(doc);
+          var out = await doc.save({ updateMetadata: false });
+          outputs.push({ name: C.baseName(file.name) + "_clean.pdf", data: new Blob([out], { type: "application/pdf" }) });
+          report.appendChild(h("div", { class: "exif-card" }, [
+            h("div", { class: "exif-head" }, [h("span", { class: "f-name", text: file.name })])
+          ].concat(found.length
+            ? found.map(function (line) { return h("div", { class: "exif-line", text: line }); })
+            : [h("div", { class: "exif-line exif-clean", text: "No document metadata found, this PDF was already clean." })])));
+        }
+        var delivered = await C.deliver(outputs, "convertze_clean_pdfs.zip");
+        status.set("done", "Done, downloaded " + delivered + ". Metadata removed.");
+        C.toast("ok", "Downloaded " + delivered);
+      }
+    });
+  });
+
   C.boot();
 })();

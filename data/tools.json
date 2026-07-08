@@ -2128,6 +2128,42 @@
       "icon": "receipt"
     },
     {
+      "path": "pdf/remove-metadata",
+      "cat": "pdf",
+      "name": "PDF Metadata Remover",
+      "h1": "Remove hidden metadata from a PDF",
+      "short": "Strip author, title, software and dates from PDF files.",
+      "metaDescription": "Free PDF metadata remover: see and strip the hidden author, title, creation software and dates stored inside a PDF, then download a clean copy. Runs in your browser, nothing is uploaded.",
+      "about": [
+        "PDFs quietly record who made them and how: the author's name, the software that created them, the title, and the creation and modification dates. When you send a contract, resume or report, that hidden metadata travels with it and can reveal more than you intended. This tool shows you what is inside, then hands back a clean copy with the document metadata removed.",
+        "It reads and rewrites the PDF entirely in your browser using the same engine as the other PDF tools here, so your file is never uploaded. Drop several at once and download them all cleaned together."
+      ],
+      "faq": [
+        {
+          "q": "What metadata does a PDF store?",
+          "a": "Beyond the visible pages, a PDF keeps a document information block: author, title, subject, keywords, the application that produced it, and creation and modification timestamps. Many PDFs also embed an XMP metadata stream. This tool clears both."
+        },
+        {
+          "q": "Does removing metadata change the pages of my PDF?",
+          "a": "No. Only the hidden document information and XMP metadata are removed. The pages, text, images and layout are untouched, and the tool does not stamp its own name onto the file either."
+        },
+        {
+          "q": "Can it remove a password from a protected PDF?",
+          "a": "No, this tool removes metadata, not passwords. It can open PDFs that carry usage restrictions in order to clean their metadata, but adding or removing a password needs a different tool."
+        }
+      ],
+      "libs": [
+        "pdflib",
+        "jszip"
+      ],
+      "related": [
+        "images/exif-remover",
+        "pdf/compress",
+        "pdf/watermark"
+      ],
+      "icon": "eye"
+    },
+    {
       "path": "pdf/word-to-pdf",
       "cat": "pdf",
       "name": "Word to PDF",

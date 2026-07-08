@@ -1,10 +1,11 @@
 [
   {
     "date": "July 8, 2026",
-    "title": "EXIF Remover: strip hidden metadata from photos",
+    "title": "Two new privacy tools: strip hidden metadata",
     "items": [
-      "New EXIF Remover: see the hidden GPS location, camera model and date stored inside your JPEG photos, then download clean copies with all of it removed",
-      "For JPEGs the metadata is stripped losslessly, so the picture is untouched, and as always nothing is uploaded"
+      "EXIF Remover: see the hidden GPS location, camera model and date stored inside your JPEG photos, then download clean copies with all of it removed, losslessly",
+      "PDF Metadata Remover: reveal and strip the author, title, creation software and dates hidden inside a PDF before you share it",
+      "Both run entirely in your browser, nothing is uploaded"
     ]
   },
   {
