@@ -2,6 +2,7 @@
   "site": "https://convertze.com",
   "goatcounter": "agent-null",
   "web3forms": "d1c7c16d-dd71-4881-8191-acde8b83cc1c",
+  "donate": "",
   "categories": [
     {
       "id": "images",
@@ -264,7 +265,7 @@
       "short": "Center-crop images to an exact frame size.",
       "metaDescription": "Center-crop images to exact pixel dimensions for free in your browser. Ideal for avatars, thumbnails and fixed-frame uploads. Everything stays on your device.",
       "about": [
-        "Enter the frame you need, 500×500 for an avatar, 1280×720 for a thumbnail, and the tool scales your image to fill it, then cuts that exact region from the centre. The frame is always filled edge to edge.",
+        "Enter the frame you need, 500Ã—500 for an avatar, 1280Ã—720 for a thumbnail, and the tool scales your image to fill it, then cuts that exact region from the centre. The frame is always filled edge to edge.",
         "It works on batches too, applying the same frame to every file and zipping the results. Like every Convertze tool, cropping happens locally in your browser tab."
       ],
       "faq": [
@@ -295,8 +296,8 @@
       "path": "images/rotate",
       "cat": "images",
       "name": "Image Rotator",
-      "h1": "Rotate images 90°, 180° or 270°",
-      "short": "Fix sideways photos in exact 90° steps.",
+      "h1": "Rotate images 90Â°, 180Â° or 270Â°",
+      "short": "Fix sideways photos in exact 90Â° steps.",
       "metaDescription": "Rotate images by 90, 180 or 270 degrees for free in your browser. Batch rotate with zip download. Photos stay on your device, no quality loss games.",
       "about": [
         "Fix sideways phone photos and scans by rotating them in exact 90-degree steps, then export in the format you choose. The geometry is exact, no resampling artifacts from arbitrary angles.",
@@ -366,10 +367,10 @@
       "cat": "images",
       "name": "SVG to PNG Converter",
       "h1": "Convert SVG to PNG at any scale",
-      "short": "Rasterize SVG vectors at 1× to 8× scale.",
+      "short": "Rasterize SVG vectors at 1Ã— to 8Ã— scale.",
       "metaDescription": "Convert SVG to PNG for free in your browser, at 1x to 8x scale for crisp high-resolution output. Your vector never leaves your device.",
       "about": [
-        "Rasterize any SVG into a PNG at the resolution you need, pick a scale factor up to 8× for crisp exports of icons and logos headed for documents, slides or app stores.",
+        "Rasterize any SVG into a PNG at the resolution you need, pick a scale factor up to 8Ã— for crisp exports of icons and logos headed for documents, slides or app stores.",
         "Rendering uses your browser's own SVG engine, so the output matches exactly what you see in a browser tab, and the file never leaves your machine."
       ],
       "faq": [
@@ -546,7 +547,7 @@
       "cat": "pdf",
       "name": "Rotate PDF",
       "h1": "Rotate PDF pages",
-      "short": "Turn pages 90°, 180° or 270°, all or a range.",
+      "short": "Turn pages 90Â°, 180Â° or 270Â°, all or a range.",
       "metaDescription": "Rotate PDF pages online for free, 90, 180 or 270 degrees, every page or just a range like 1-3,5. The file stays on your device, no watermark.",
       "about": [
         "Fix scans that came in sideways or upside down: pick an angle, choose all pages or a range like 1-3,5, and download the corrected PDF. The rotation is written into the page properties, so quality is untouched.",
@@ -619,7 +620,7 @@
       "short": "Every page rendered as a JPG or PNG.",
       "metaDescription": "Convert PDF to JPG or PNG for free in your browser, every page rendered at 2x resolution, multi-page output zipped. Your PDF stays on your device.",
       "about": [
-        "Renders each page of your PDF at 2× resolution and exports it as JPG (smaller) or PNG (lossless, better for text and line art). Single pages download directly; multi-page documents arrive as one zip rather than a stream of blocked downloads.",
+        "Renders each page of your PDF at 2Ã— resolution and exports it as JPG (smaller) or PNG (lossless, better for text and line art). Single pages download directly; multi-page documents arrive as one zip rather than a stream of blocked downloads.",
         "Rendering uses Mozilla's pdf.js inside your browser, the same engine Firefox uses, your document never goes anywhere."
       ],
       "faq": [
@@ -996,7 +997,7 @@
       "path": "dev/timestamp",
       "cat": "dev",
       "name": "Timestamp Converter",
-      "h1": "Unix timestamp ⇄ human-readable date",
+      "h1": "Unix timestamp â‡„ human-readable date",
       "short": "Seconds, millis, ISO and local, live.",
       "metaDescription": "Convert Unix timestamps to readable dates and back, free in your browser. Seconds or milliseconds, ISO 8601 and local time, live as you type.",
       "about": [
@@ -1095,7 +1096,7 @@
       "path": "dev/color",
       "cat": "dev",
       "name": "Color Converter",
-      "h1": "Convert colors, HEX ⇄ RGB ⇄ HSL",
+      "h1": "Convert colors, HEX â‡„ RGB â‡„ HSL",
       "short": "Paste any CSS color, get every format.",
       "metaDescription": "Convert colors between HEX, RGB and HSL for free in your browser, with a live swatch preview. Paste any CSS color format.",
       "about": [
@@ -1433,7 +1434,7 @@
       "short": "Clean, lowercase, hyphenated slugs from any text.",
       "metaDescription": "Generate URL slugs from any text for free in your browser, lowercase, hyphenated and accent-free, live as you type.",
       "about": [
-        "Type a headline or product name and get a clean slug instantly: lowercased, accents stripped, punctuation removed, words joined with single hyphens. 'Crème Brûlée: A How-To!' becomes creme-brulee-a-how-to.",
+        "Type a headline or product name and get a clean slug instantly: lowercased, accents stripped, punctuation removed, words joined with single hyphens. 'CrÃ¨me BrÃ»lÃ©e: A How-To!' becomes creme-brulee-a-how-to.",
         "Slugs made this way are safe in URLs, filenames and IDs across every system. The conversion runs live on your device as you type."
       ],
       "faq": [
@@ -1443,7 +1444,7 @@
         },
         {
           "q": "What happens to accents and special characters?",
-          "a": "Accented letters are converted to their plain equivalents, é to e, ü to u, and anything that is not a letter or digit becomes a hyphen, with repeats collapsed. The result is pure lowercase ASCII that works everywhere."
+          "a": "Accented letters are converted to their plain equivalents, Ã© to e, Ã¼ to u, and anything that is not a letter or digit becomes a hyphen, with repeats collapsed. The result is pure lowercase ASCII that works everywhere."
         },
         {
           "q": "Are hyphens or underscores better in URLs?",
@@ -1870,7 +1871,7 @@
       "faq": [
         {
           "q": "How is BMI calculated?",
-          "a": "Weight in kilograms divided by height in metres squared. A 70 kg person at 175 cm has a BMI of 70 / 1.75² = 22.9, which falls in the healthy range."
+          "a": "Weight in kilograms divided by height in metres squared. A 70 kg person at 175 cm has a BMI of 70 / 1.75Â² = 22.9, which falls in the healthy range."
         },
         {
           "q": "What are the healthy BMI ranges?",
@@ -2013,7 +2014,7 @@
         },
         {
           "q": "Can I just delete pages without reordering?",
-          "a": "Yes, click the ✕ on the pages you don't want and rebuild. The remaining pages keep their original order unless you move them."
+          "a": "Yes, click the âœ• on the pages you don't want and rebuild. The remaining pages keep their original order unless you move them."
         },
         {
           "q": "Is my document uploaded while I rearrange it?",
