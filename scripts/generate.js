@@ -189,7 +189,7 @@ function footer() {
         <a href="/changelog">What's new</a>
         <a href="/about#feedback">Feedback & requests</a>
         <a href="https://github.com/harsh-m-10/convertze" rel="noopener noreferrer" target="_blank">GitHub</a>${hasDonate() ? `
-        <a href="/about#support">Buy me a coffee</a>` : ""}
+        <a class="donate-foot" href="/about#support"><span class="donate-word">Buy me a coffee</span></a>` : ""}
       </nav>
     </div>
   </footer>`;
@@ -494,9 +494,9 @@ function aboutPage() {
         </div>${hasDonate() ? `
         <div class="panel about donate-panel" id="support">
           <h2>Keep it free</h2>
-          <p>Convertze has no ads, no tracking and nothing to sell, and the plan is to keep it that way. If a tool here saved you some time and you feel like saying thanks, a coffee covers the domain bill and fuels the next tool.</p>
+          <p>Convertze has no ads, no tracking and nothing to sell, and the plan is to keep it that way. If a tool here saved you some time and you feel like saying thanks, a chai or a coffee covers the domain bill and fuels the next tool.</p>
           <div class="donate-row">${DATA.donate.razorpay ? `
-            <a class="donate-btn" href="${esc(DATA.donate.razorpay)}" rel="noopener noreferrer" target="_blank">${ICONS.coffee} Buy me a coffee <span class="donate-tag">UPI · India</span></a>` : ""}${DATA.donate.paypal ? `
+            <a class="donate-btn" href="${esc(DATA.donate.razorpay)}" rel="noopener noreferrer" target="_blank">${ICONS.coffee} <span class="donate-word">Buy me a coffee</span> <span class="donate-tag">UPI · card</span></a>` : ""}${DATA.donate.paypal ? `
             <a class="donate-btn" href="${esc(DATA.donate.paypal)}" rel="noopener noreferrer" target="_blank">${ICONS.coffee} Buy me a coffee <span class="donate-tag">PayPal · International</span></a>` : ""}
           </div>
         </div>` : ""}

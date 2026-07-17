@@ -216,6 +216,25 @@
     });
   }
 
+  /* ---------- Donate button: chai wording for India, hidden elsewhere
+     until international cards are activated on the Razorpay account ---------- */
+  var DONATE_INTL = false; /* flip to true once Razorpay approves international payments */
+  (function () {
+    var els = document.querySelectorAll(".donate-panel, .donate-foot");
+    if (!els.length) return;
+    var tz = "";
+    try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ""; } catch (e) {}
+    var inIndia = tz === "Asia/Kolkata" || tz === "Asia/Calcutta";
+    for (var i = 0; i < els.length; i++) {
+      if (inIndia) {
+        var words = els[i].querySelectorAll(".donate-word");
+        for (var j = 0; j < words.length; j++) words[j].textContent = "Buy me a chai";
+      } else if (!DONATE_INTL) {
+        els[i].style.display = "none";
+      }
+    }
+  })();
+
   /* ---------- Service worker ---------- */
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", function () {
