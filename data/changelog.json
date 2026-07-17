@@ -1,5 +1,14 @@
 [
   {
+    "date": "July 18, 2026",
+    "title": "A tip jar, and answers people actually search for",
+    "items": [
+      "If Convertze saves you time, you can now buy the maker a chai: a small support button on the about page and in the footer, powered by a hosted Razorpay page, so the no-server promise still holds",
+      "No ads, no tracking and no paid tiers, that stays the plan; tips are entirely optional",
+      "New FAQ answers on the EXIF Remover and PDF Metadata Remover for the questions people actually type into Google, like checking where a photo was taken"
+    ]
+  },
+  {
     "date": "July 8, 2026",
     "title": "Background Remover, running on your device",
     "items": [
