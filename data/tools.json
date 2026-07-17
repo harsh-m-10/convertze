@@ -202,6 +202,14 @@
         {
           "q": "Will removing metadata reduce my photo's quality?",
           "a": "No. For JPEG photos the metadata is stripped without touching the image data at all, so the picture is pixel-for-pixel identical. The file just gets slightly smaller because the hidden data is gone."
+        },
+        {
+          "q": "How do I remove EXIF data from a photo online for free?",
+          "a": "Drop your photos on this page, review the metadata it finds, and download the cleaned copies. It is free with no signup and no watermark, and because the stripping happens in your browser the photos are never uploaded anywhere, so there is no server keeping a copy."
+        },
+        {
+          "q": "How can I check where a photo was taken?",
+          "a": "Drop the photo here and, if it contains GPS metadata, the tool shows the coordinates of where it was shot along with the camera model and timestamp. If nothing appears, the photo carries no location data, which is common for images saved from social networks or screenshots."
         }
       ],
       "libs": [
@@ -2183,6 +2191,14 @@
         {
           "q": "Can it remove a password from a protected PDF?",
           "a": "No, this tool removes metadata, not passwords. It can open PDFs that carry usage restrictions in order to clean their metadata, but adding or removing a password needs a different tool."
+        },
+        {
+          "q": "How do I remove PDF metadata for free?",
+          "a": "Drop your PDF on this page, review the hidden fields it finds, and download the clean copy. It is free with no signup, no watermark and no file limits, and because everything runs in your browser the document is never uploaded, so it works for sensitive files like contracts and resumes."
+        },
+        {
+          "q": "Can I check what metadata a PDF contains without removing it?",
+          "a": "Yes. As soon as you drop a file the tool lists everything it finds, author, title, subject, keywords, the software that produced it and the creation and modification dates, before anything is changed. Downloading the cleaned copy is a separate step, so you can use it purely as a metadata viewer."
         }
       ],
       "libs": [
