@@ -2,7 +2,7 @@
   "site": "https://convertze.com",
   "goatcounter": "agent-null",
   "web3forms": "d1c7c16d-dd71-4881-8191-acde8b83cc1c",
-  "donate": { "razorpay": "", "paypal": "" },
+  "donate": { "razorpay": "https://razorpay.me/@convertze", "paypal": "" },
   "categories": [
     {
       "id": "images",
