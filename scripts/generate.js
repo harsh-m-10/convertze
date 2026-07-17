@@ -188,11 +188,17 @@ function footer() {
         <a href="/about">About</a>
         <a href="/changelog">What's new</a>
         <a href="/about#feedback">Feedback & requests</a>
-        <a href="https://github.com/harsh-m-10/convertze" rel="noopener noreferrer" target="_blank">GitHub</a>${DATA.donate ? `
-        <a href="${esc(DATA.donate)}" rel="noopener noreferrer" target="_blank">Buy me a coffee</a>` : ""}
+        <a href="https://github.com/harsh-m-10/convertze" rel="noopener noreferrer" target="_blank">GitHub</a>${hasDonate() ? `
+        <a href="/about#support">Buy me a coffee</a>` : ""}
       </nav>
     </div>
   </footer>`;
+}
+
+// Donation links are optional; the footer link and about panel only render
+// when at least one payment page URL is set in data/tools.json.
+function hasDonate() {
+  return !!(DATA.donate && (DATA.donate.razorpay || DATA.donate.paypal));
 }
 
 // The privacy line adapts to the category: image and PDF tools handle files,
@@ -485,11 +491,14 @@ function aboutPage() {
         <div class="panel about">
           <h2>Contact & contributions</h2>
           <p>Found a bug, or missing a tool you need? Use the form below, or <a href="https://github.com/harsh-m-10/convertze/issues/new" rel="noopener noreferrer" target="_blank">open an issue on GitHub</a> if that is more your speed. Several tools on this site exist because someone asked for them.</p>
-        </div>${DATA.donate ? `
-        <div class="panel about donate-panel">
+        </div>${hasDonate() ? `
+        <div class="panel about donate-panel" id="support">
           <h2>Keep it free</h2>
           <p>Convertze has no ads, no tracking and nothing to sell, and the plan is to keep it that way. If a tool here saved you some time and you feel like saying thanks, a coffee covers the domain bill and fuels the next tool.</p>
-          <a class="donate-btn" href="${esc(DATA.donate)}" rel="noopener noreferrer" target="_blank">${ICONS.coffee} Buy me a coffee</a>
+          <div class="donate-row">${DATA.donate.razorpay ? `
+            <a class="donate-btn" href="${esc(DATA.donate.razorpay)}" rel="noopener noreferrer" target="_blank">${ICONS.coffee} Buy me a coffee <span class="donate-tag">UPI · India</span></a>` : ""}${DATA.donate.paypal ? `
+            <a class="donate-btn" href="${esc(DATA.donate.paypal)}" rel="noopener noreferrer" target="_blank">${ICONS.coffee} Buy me a coffee <span class="donate-tag">PayPal · International</span></a>` : ""}
+          </div>
         </div>` : ""}
         ${feedbackPanel()}
       </div>

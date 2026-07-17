@@ -549,3 +549,6 @@ form[data-feedback] .actions-row { margin-top: 10px; }
   transform: translateY(-1px);
 }
 .donate-btn svg { flex: none; }
+.donate-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
+.donate-row .donate-btn { margin-top: 0; }
+.donate-tag { font-size: 11px; font-weight: 500; color: var(--muted); }
