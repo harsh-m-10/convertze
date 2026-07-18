@@ -186,6 +186,7 @@ function footer() {
       <nav class="foot-col" aria-label="Site">
         <h4>Site</h4>
         <a href="/about">About</a>
+        <a href="/pricing">Pricing</a>
         <a href="/changelog">What's new</a>
         <a href="/about#feedback">Feedback & requests</a>
         <a href="https://github.com/harsh-m-10/convertze" rel="noopener noreferrer" target="_blank">GitHub</a>${hasDonate() ? `
@@ -512,6 +513,37 @@ function aboutPage() {
   });
 }
 
+/* ---------- Pricing ---------- */
+function pricingPage() {
+  const body = `<main class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › Pricing</nav>
+    <h1 class="tool-h1" style="text-align:center">Pricing</h1>
+    <p class="tool-tagline" style="text-align:center">The short version: everything is free.</p>
+    <div class="page-grid" style="grid-template-columns:minmax(0,720px);justify-content:center">
+      <div>
+        <div class="panel about">
+          <h2>Every tool is free</h2>
+          <p>All ${tools.length} tools on Convertze are free to use, with no accounts, no subscriptions, no trials, no usage limits and no watermarks. There is no paid tier and nothing on this site is for sale. Because every tool runs inside your own browser, there is no per-use cost to pass on to you.</p>
+        </div>
+        <div class="panel about">
+          <h2>Optional tips</h2>
+          <p>The only payment on this site is a voluntary tip, if you choose to support the project. You pick any amount you like; there is no minimum, no fixed price and nothing unlocked in return, since everything is already free. Tips are processed securely by <a href="https://razorpay.com" rel="noopener noreferrer" target="_blank">Razorpay</a>; Convertze never sees or stores your payment details. There are no recurring charges of any kind.</p>
+        </div>
+        <div class="panel about">
+          <h2>Refunds and contact</h2>
+          <p>Tips are voluntary contributions rather than purchases, so they are not normally refunded. If you sent a tip by mistake or were charged incorrectly, write to <a href="mailto:harsh.m.1004@gmail.com">harsh.m.1004@gmail.com</a> within 7 days and it will be sorted out. The same address, or the <a href="/about#feedback">feedback form</a>, works for any other question.</p>
+        </div>
+      </div>
+    </div>
+  </main>`;
+  return page({
+    title: "Pricing, Convertze",
+    desc: "Convertze pricing: every tool is free with no accounts or limits. The only payment is an optional tip of any amount, processed by Razorpay.",
+    canonicalPath: "pricing",
+    body
+  });
+}
+
 /* ---------- Changelog ---------- */
 function changelogPage() {
   const log = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "changelog.json"), "utf8"));
@@ -547,6 +579,7 @@ function sitemap() {
     ...cats.map((c) => ({ loc: `${SITE}/${c.id}`, pri: "0.9" })),
     ...tools.map((t) => ({ loc: `${SITE}/${t.path}`, pri: "0.8" })),
     { loc: `${SITE}/about`, pri: "0.4" },
+    { loc: `${SITE}/pricing`, pri: "0.3" },
     { loc: `${SITE}/changelog`, pri: "0.4" }
   ];
   return `<?xml version="1.0" encoding="UTF-8"?>
@@ -572,6 +605,7 @@ write("index.html", homepage());
 for (const c of cats) write(path.join(c.id, "index.html"), hubPage(c));
 for (const t of tools) write(path.join(t.path, "index.html"), toolPage(t));
 write(path.join("about", "index.html"), aboutPage());
+write(path.join("pricing", "index.html"), pricingPage());
 write(path.join("changelog", "index.html"), changelogPage());
 write("404.html", notFound());
 write("sitemap.xml", sitemap());
